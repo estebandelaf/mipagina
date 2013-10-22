@@ -1,0 +1,5 @@
+RewriteEngine on
+#RewriteBase /~usuario/website/
+RewriteRule (.*) webroot/$1 [L]
+RewriteRule  ^$ webroot/ [L]
+Options -MultiViews

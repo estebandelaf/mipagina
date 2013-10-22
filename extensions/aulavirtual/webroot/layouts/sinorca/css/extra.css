@@ -1,0 +1,128 @@
+p { text-align: justify; }
+pre { overflow: auto; }
+img { border: 0; }
+.clear { clear: both; }
+.hidden { display: none; }
+.center { text-align: center; }
+.fleft { float: left; margin-right: 10px; }
+.fright { float: right; margin-left: 10px; }
+
+pre {
+	background: #DCDFFF;
+	color: black;
+	padding: 1em;
+	border: 1px dashed #73C5EF;
+	font-family: monospace;
+	font-size: 11pt;
+	overflow: auto;
+}
+
+#main-copy h1 {
+	text-transform: uppercase;
+	font-size: 140%;
+	margin-bottom: 1em;
+}
+
+#main-copy h2, #main-copy h3, #main-copy h4 {
+	color: white;
+	background-color: rgb(100,135,220);
+	font-weight: bold;
+	margin: 3em 0 0 0;
+	padding: 0.5ex 0 0.5ex 1ex;
+	margin-bottom: 1em;
+}
+
+#main-copy h2 {
+	font-size: 120%;
+}
+
+#main-copy h3 {
+	font-size: 100%;
+}
+
+#main-copy h4 {
+	font-size: 80%;
+}
+
+#banners {
+	float: right;
+	width: 170px;
+}
+
+#main-copy {
+	margin-right: 170px;
+}
+
+#main-copy p, #main-copy li {
+	font-size: 11pt;
+	margin-bottom: 1em;
+}
+
+.timestamp {
+	text-align: right;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.urgente {
+	border: 2px dashed black;
+	padding: 1em;
+	font-size: 2em;
+	color: white;
+	background: red;
+	text-align: center;
+}
+
+.adsense {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+/** Formularios */
+form .label {
+	width: 200px;
+	float: left;
+	text-align: right;
+}
+form .field {
+	margin-left: 212px;
+}
+input[type="text"], textarea {
+	border: 1px solid black;
+	width: 400px;
+	padding: 0.5em;
+}
+
+/** Tablas **/
+table { color: #333; margin-bottom: 10px; width: 100%; }
+th { border-bottom: 2px solid #555; text-align: left; padding: 4px; }
+table tr td { padding: 6px; text-align: left; vertical-align: top; border-bottom:1px solid #ddd; }
+table tr:nth-child(even) { background: #f9f9f9; }
+table span { display: block; font-style: italic; font-size: 0.85em; }
+
+/** errors */
+.exception_message, .exception_trace {
+	border: 1px dashed gray;
+	padding: 1em;
+	margin-bottom: 1em;
+}
+
+.exception_message {
+	background: #F6CECE;
+	font-weight: bold;
+}
+
+.exception_trace {
+	background: #BCF5A9;
+}
+
+/* Mensajes mediante flash */
+.session_message {
+	font-weight: bold;
+	text-align: center;
+	padding: 0.5em;
+	margin-top: 1em;
+	border: 1px dashed #333;
+	background: #eee;
+}

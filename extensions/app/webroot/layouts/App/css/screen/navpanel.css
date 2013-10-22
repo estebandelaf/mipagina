@@ -1,0 +1,28 @@
+#navpanel {  text-align: center;  vertical-align: middle; }
+#navpanel div.icon { margin: 9px; }
+#navpanel div.icon a { 
+	display: block;
+	float: left;
+	height: 97px !important;
+	height: 100px;
+	width: 108px !important;
+	width: 110px;
+	vertical-align: middle; 
+	text-decoration : none;
+	border: 1px solid #DDD;
+	padding: 2px 5px 1px 5px;
+	font-size: 0.7em;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+#navpanel div.icon a:link {  color : #000033;  }
+#navpanel div.icon a:hover { 
+	color : #333; 
+	background-color: #EAF0E1;
+	border: 1px dotted #A5C45B;
+	padding: 3px 4px 0px 6px; 
+}
+#navpanel div.icon a:active {  color : #000033;  }
+#navpanel div.icon a:visited {  color : #000033;  }
+#navpanel div.icon img { margin-top: 13px; }
+#navpanel div.icon span { display: block; padding-top: 3px; }

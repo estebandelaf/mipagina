@@ -1,0 +1,62 @@
+Instalación
+===========
+
+Procedimientos para la puesta en marcha del framework, se adjuntan
+ejemplos de como llevar a cabo cada uno de los pasos.
+
+Requerimientos
+--------------
+
+Se asumirá instalación en GNU/Linux.
+
+1.	Obligatorios
+
+	- Servidor web Apache (con *mod_rewrite*).
+	- PHP 5.3 o superior.
+
+2.	Alternativamente (depende de lo que se quiera hacer):
+
+	- PEAR: Mail, Mail_mime, Net_SMTP
+	- Base de datos: como PostgreSQL (recomendada versión 9.x)
+
+Procedimiento
+-------------
+
+1.	Mover todos los archivos del directorio donde se encuentra este
+	fichero README (incluyendo) a /usr/share/mipagina. O dicho de
+	otra forma, mover el directorio que contiene este README a
+	*/usr/share/*
+
+		# mv mipagina /usr/share/
+
+	Aquí se asumió un ambiente de instalación compartido, si no se puede
+	o quiere instalar en */usr/share*, simplemente copiar todo el
+	directorio *mipagina* al servidor web y pasar al punto 4.
+
+2.	Copiar directorio website a la ubicación donde se desea crear el
+	nuevo sitio web. Esta ubicación debe ser accesible mediante el
+	servidor web. Puede ser el DocummentRoot, o bien un subdirectorio
+	dentro del mismo.
+
+		$ cp -avr /usr/share/mipagina/website ~/www/delaf.cl/htdocs/www
+
+3.	Agregar dominio virtual a Apache (luego reiniciar el servicio):
+
+	Si esto ya existe, o bien se utilizará un subdirectorio dentro de
+	algún DocumentRoot ya definidio, omitir y pasar al punto 4.
+
+		<VirtualHost *:80>
+			ServerAdmin webmaster@example.com
+			ServerName delaf.cl
+			DocumentRoot /home/delaf/www/delaf.cl/htdocs/www
+			LogLevel warn
+		</VirtualHost>
+
+4.	Definir parámetros de configuración por defecto en el archivo
+	*config.php*, revisar archivo */usr/share/mipagina/standard/config.php*
+	para ver que opciones de configuración existen y sus valores por
+	defecto. Si no se define ninguno se utilizarán dichos valores.
+
+5.	Crear página de inicio *View/Pages/inicio.php*
+
+		$ vim /home/delaf/www/delaf.cl/htdocs/www/pages/inicio.php

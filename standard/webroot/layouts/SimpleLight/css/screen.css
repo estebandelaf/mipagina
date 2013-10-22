@@ -1,0 +1,101 @@
+/**
+ * Diseño del sitio web
+ */
+
+* { top: 0; left: 0; }
+body { background: #ccc; color: black; font-family: monospace; }
+a { color: blue; text-decoration: none; }
+a:hover { color: darkblue; text-decoration: underline; }
+pre { background: #aaa; color: black; padding: 10px; border: 2px solid #555; overflow: auto; }
+p { text-align: justify; }
+.center { text-align: center; }
+
+#page {
+	width: 950px;
+	margin: 0 auto;
+}
+
+#header, #navigation, #content, #footer {
+	background: #eee;
+	border: 1px dashed #111;
+	margin-bottom: 10px;
+}
+
+#header .title_normal {
+	font-size: 2.2em;
+	padding: 20px;
+}
+
+#header .title_ascii {
+	font-family: monospace;
+	white-space: pre;
+	font-size: 14px;
+	margin-left: 10px;
+}
+
+#navigation, #footer {
+	padding: 10px;
+	text-align: center;
+}
+
+#navigation a {
+	margin-right: 20px
+}
+
+#content {
+	padding: 10px;
+}
+
+#content .chart {
+	text-align: center;
+}
+
+#content form .input label {
+	float: left;
+	width: 200px;
+}
+
+#content form .input input[type="text"], #content form .input select {
+	width: 300px;
+	border: 1px solid #ccc;
+}
+
+#content .adsense {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+#content .aviso {
+	text-align: center;
+	color: red;
+	font-weight: bold;
+}
+
+.session_message {
+	border: 1px dashed #999;
+	background: #ccc;
+	padding: 1em;
+	text-align: center;
+}
+
+/** Tablas */
+table { width: 100%; }
+th { background: #333; }
+tr { background: #aaa; }
+tr:hover { background: #ccc; }
+td { text-align: center; color: black; }
+td a{ color: black; }
+
+/** Formularios */
+form .label {
+	float: left;
+	width: 200px;
+}
+form .field {
+	margin-left: 200px;
+}
+input[type="text"], input[type="password"], select, textarea {
+	width: 300px;
+	border: 1px solid #ccc;
+}
