@@ -386,7 +386,7 @@ final class MySQL extends DatabaseManager {
 	 * Listado de tablas de la base de datos
 	 * @return Array Arreglo con las tablas (nombre y comentario)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2013-10-23
 	 */
 	public function getTables () {
 		return $this->getTable ('
@@ -394,7 +394,7 @@ final class MySQL extends DatabaseManager {
 			FROM information_schema.tables
 			WHERE
 				table_schema = "'.$this->config['name'].'"
-				AND table_name NOT LIKE "v_%" -- omitir vistas
+				AND table_type != \'VIEW\'
 			ORDER BY table_name
 		');
 	}
