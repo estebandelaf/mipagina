@@ -27,7 +27,7 @@
  *   Debian: php5-pgsql
  *   CentOS: php-pgsql
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-09-21
+ * @version 2013-10-22
  */
 final class PostgreSQL extends DatabaseManager {
 
@@ -55,22 +55,26 @@ final class PostgreSQL extends DatabaseManager {
 			'sche' => 'public',
 		), $config);
 		// realizar conexión a la base de datos
-		$this->id = @pg_connect(
+		$this->link = @pg_connect(
 			'host='.$this->config['host'].
 			' port='.$this->config['port'].
 			' user='.$this->config['user'].
 			' password='.$this->config['pass'].
 			' dbname='.$this->config['name'].
-			' options=\'--client_encoding='.$this->config['char'].'\'',
+			' options=\'--client_encoding='.
+				$this->config['char'].'\'',
 			PGSQL_CONNECT_FORCE_NEW
 		);
 		// si no se logró conectar => error
-		if (!$this->id) {
+		if (!$this->link) {
 			$this->error('Can\'t connect to database!');
 		}
-		// definir esquema que se utilizará (solo si es diferente a public)
+		// definir esquema que se utilizará (solo si es diferente a
+		// public)
 		if ($this->config['sche'] != 'public') {
-			$this->query('SET search_path TO '.$this->config['sche']);
+			$this->query(
+				'SET search_path TO '.$this->config['sche']
+			);
 		}
 	}
 
@@ -79,12 +83,15 @@ final class PostgreSQL extends DatabaseManager {
 	 * 
 	 * Cierra la conexión con la base de datos.
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
 	public function __destruct () {
 		// si el identificador es un recurso de PostgreSQL se cierra
-		if(is_resource($this->id) && get_resource_type($this->id)=='pgsql link') {
-			pg_close($this->id);
+		if (
+			is_resource($this->link) &&
+			get_resource_type($this->link)=='pgsql link'
+		) {
+			pg_close($this->link);
 		}
 	}
 	
@@ -101,12 +108,12 @@ final class PostgreSQL extends DatabaseManager {
 			$this->error('Query can not be empty!');
 		}
 		// realizar consulta
-		$queryId = @pg_query($this->id, $sql);
+		$queryId = @pg_query($this->link, $sql);
 		// si hubo error al realizar la consulta se muestra y termina el
 		// script
 		if(!$queryId) {
 			$this->error(
-				'QUERY: '.$sql."\n".pg_last_error($this->id)
+				'QUERY: '.$sql."\n".pg_last_error($this->link)
 			);
 		}
 		// retornar identificador de la consulta
@@ -199,7 +206,7 @@ final class PostgreSQL extends DatabaseManager {
 		// se quitan espacios al inicio y final
 		if($trim) $string = trim($string);
 		// se proteje
-		return pg_escape_string($this->id, $string);
+		return pg_escape_string($this->link, $string);
 	}
 
 	/**
@@ -234,13 +241,15 @@ final class PostgreSQL extends DatabaseManager {
 	 * @param procedure Procedimiento almacenado que se quiere ejecutar
 	 * @return Mixed Valor que retorna el procedimeinto almacenado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
 	public function exec ($procedure) {
 		$parameters = func_get_args();
 		$procedure = $this->sanitize(array_shift($parameters));
-		foreach($parameters as &$parameter) $parameter = $this->sanitize($parameter);
-		$parameters = count($parameters) ? "'".implode("', '", $parameters)."'" : '';
+		foreach($parameters as &$parameter)
+			$parameter = $this->sanitize($parameter);
+		$parameters = isset($parameters[0]) ?
+			"'".implode("', '", $parameters)."'" : '';
 		return $this->getValue("SELECT $procedure($parameters)");
 	}
 	
@@ -249,18 +258,20 @@ final class PostgreSQL extends DatabaseManager {
 	 * @param procedure Procedimiento almacenado que se desea ejecutar
 	 * @return Array Arreglo bidimensional con la tabla y sus datos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
 	public function getTableFromSP ($procedure) {
 		// recuperar parámetros pasados y extraer procedimiento
 		$parameters = func_get_args();
 		$procedure = array_shift($parameters);
 		// limpiar parametros pasados
-		foreach($parameters as &$parameter) $parameter = $this->sanitize($parameter);
+		foreach($parameters as &$parameter)
+			$parameter = $this->sanitize($parameter);
 		// agregar parámetro para el cursor que se usa para el resultado
 		array_unshift($parameters, 'c_result');
 		// preparar parámetros
-		$parameters = "'".implode("', '", $parameters)."'";
+		$parameters = isset($parameters[0]) ?
+			"'".implode("', '", $parameters)."'" : '';
 		// realizar consulta
 		$queryId = $this->query("BEGIN; SELECT * FROM $procedure($parameters); FETCH ALL FROM c_result;");
 		$table = pg_fetch_all($queryId);
@@ -276,18 +287,20 @@ final class PostgreSQL extends DatabaseManager {
 	 * @param procedure Procedimiento almacenado que se desea ejecutar
 	 * @return Array Arreglo unidimensional con la fila
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
 	public function getRowFromSP($procedure) {
 		// recuperar parámetros pasados y extraer procedimiento
 		$parameters = func_get_args();
 		$procedure = array_shift($parameters);
 		// limpiar parametros pasados
-		foreach($parameters as &$parameter) $parameter = $this->sanitize($parameter);
+		foreach($parameters as &$parameter)
+			$parameter = $this->sanitize($parameter);
 		// agregar parámetro para el cursor que se usa para el resultado
 		array_unshift($parameters, 'c_result');
 		// preparar parámetros
-		$parameters = "'".implode("', '", $parameters)."'";
+		$parameters = isset($parameters[0]) ?
+			"'".implode("', '", $parameters)."'" : '';
 		// realizar consulta
 		$queryId = $this->query("BEGIN; SELECT * FROM $procedure($parameters); FETCH ALL FROM c_result;");
 		$row = pg_fetch_assoc($queryId);
@@ -303,18 +316,20 @@ final class PostgreSQL extends DatabaseManager {
 	 * @param procedure Procedimiento almacenado que se desea ejecutar
 	 * @return Array Arreglo unidimensional con la columna
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
 	public function getColFromSP($procedure) {
 		// recuperar parámetros pasados y extraer procedimiento
 		$parameters = func_get_args();
 		$procedure = array_shift($parameters);
 		// limpiar parametros pasados
-		foreach($parameters as &$parameter) $parameter = $this->sanitize($parameter);
+		foreach($parameters as &$parameter)
+			$parameter = $this->sanitize($parameter);
 		// agregar parámetro para el cursor que se usa para el resultado
 		array_unshift($parameters, 'c_result');
 		// preparar parámetros
-		$parameters = "'".implode("', '", $parameters)."'";
+		$parameters = isset($parameters[0]) ?
+			"'".implode("', '", $parameters)."'" : '';
 		// realizar consulta
 		$queryId = $this->query("BEGIN; SELECT * FROM $procedure($parameters); FETCH ALL FROM c_result;");
 		$col = pg_fetch_all_columns($queryId);
@@ -323,17 +338,6 @@ final class PostgreSQL extends DatabaseManager {
 		pg_free_result($queryId);
 		// retornar tabla
 		return $col;
-	}
-	
-	/**
-	 * Obtener un solo valor mediante un procedimiento almacenado
-	 * @param procedure Procedimiento almacenado que se desea ejecutar
-	 * @return Mixed Valor devuelto por el procedimiento
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
-	 */
-	public function getValueFromSP($procedure) {
-		return call_user_func_array(array($this, 'exec'), func_get_args());
 	}
 
 	/**
@@ -387,7 +391,7 @@ final class PostgreSQL extends DatabaseManager {
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-26
 	 */
-	public function getTables() {
+	public function getTables () {
 		// obtener solo tablas del esquema indicado de la base de datos
 		$tables = $this->getTable("
 			SELECT t.table_name AS name
@@ -543,49 +547,6 @@ final class PostgreSQL extends DatabaseManager {
 	}
 
 	/**
-	 * Entrega información de una tabla (nombre, comentario, columnas,
-	 * pks y fks)
-	 * @param table Tabla a buscar sus datos
-	 * @return Arreglo con los datos de la tabla
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
-	 */
-	public function getInfoFromTable ($tablename) {
-		// nombre de la tabla
-		$table['name'] = $tablename;
-		// obtener comentario de la tabla
-		$table['comment'] = $this->getCommentFromTable($table['name']);
-		// obtener pks de la tabla
-		$table['pk'] = $this->getPksFromTable($table['name']);
-		// obtener fks de la tabla
-		$fkAux = $this->getFksFromTable($table['name']);
-		$fk = array();
-		foreach($fkAux as &$aux) {
-			$fk[array_shift($aux)] = $aux;
-		}
-		unset($fkAux);
-		// obtener columnas de la tabla
-		$columns = $this->getColsFromTable($table['name']);
-		// recorrer columnas para definir pk, fk, auto, null/not null, default, comentario
-		foreach($columns as &$column) {
-			// definir null o not null
-			$column['null'] = $column['null']=='YES' ? true : false;
-			// definir si es auto_increment
-			$column['auto'] = substr($column['default'], 0, 7)=='nextval' ? true : false;
-			// limpiar default, quitar lo que viene despues de ::
-			if(!$column['auto']) {
-				$aux = explode('::', $column['default']);
-				$column['default'] = trim(array_shift($aux), '\'');
-				if($column['default']=='NULL') $column['default'] = null;
-			}
-			// definir fk
-			$column['fk'] = array_key_exists($column['name'], $fk) ? $fk[$column['name']] : null;
-		}
-		$table['columns'] = $columns;
-		return $table;	
-	}
-
-	/**
 	 * Seleccionar una tabla con los nombres de las columnas
 	 * @param sql Consulta SQL que se desea realizar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
@@ -624,44 +585,37 @@ final class PostgreSQL extends DatabaseManager {
 	/**
 	 * Exportar una consulta a un archivo CSV y descargar
 	 *
+	 * Se requiere que el usuario que ejecuta COPY sea super usuario:
+	 *	ALTER USER <usuario> WITH SUPERUSER;
+	 *
 	 * La cantidad de campos seleccionados en la query debe ser igual
 	 * al largo del arreglo de columnas
 	 * @param sql Consulta SQL
 	 * @param file Nombre para el archivo que se descargará
-	 * @param cols Arreglo con los nombres de las columnas a utilizar en la tabla
-	 * @todo Utilizar nombres de columnas y eliminar el archivo generado
+	 * @param cols Arreglo con los nombres de las columnas (no usado)
+	 * @todo Eliminar el archivo generado o bien generar uno random
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-10-22
 	 */
-	public function toCSV ($sql, $file, $cols) {
+	public function toCSV ($sql, $file, $cols = null) {
 		// definir ruta del archivo
 		if(defined('TMP')) $tmp = TMP;
 		else if(defined('DIR_TMP')) $tmp = DIR_TMP;
 		else $tmp = sys_get_temp_dir();
 		$file = $tmp.DIRECTORY_SEPARATOR.$file.'.csv';
-		// si no se paso el arreglo con columnas se obtiene
-		if(!is_array($cols)) {
-			$colsInfo = $this->getColsFromTable($cols);
-			$cols = array();
-			foreach($colsInfo as &$col)
-				$cols[] = $col['name'];
-		}
 		// realizar consulta
 		$this->query("
 			COPY (
-				-- SELECT '".implode("', '", $cols)."'
-				-- UNION
 				".$sql."
-			) TO '".$file."' CSV
+			) TO '".$file."' CSV HEADER
 		");
 		// enviar archivo
 		ob_clean();
 		header ('Content-Disposition: attachment; filename='.basename($file));
 		header ('Content-Type: text/csv');
 		header ('Content-Length: '.filesize($file));
-		readfile($file);
-		// eliminar archivo (se debe eliminar desde el motor de la base de datos)
-		// ?
+		readfile ($file);
+		exit;
 	}
 
 }

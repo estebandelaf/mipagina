@@ -27,7 +27,7 @@
  * Capa de abstracción para base de datos, la clase puede ser fácilmente
  * utilizada fuera del framework MiPaGiNa sin mayores modificaciones.
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-19
+ * @version 2013-10-22
  */
 final class Database {
 
@@ -45,7 +45,7 @@ final class Database {
 	 * @param database La base de datos que se desea cargar,
 	 * @return Object Objeto con la base de datos seleccionada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-19
+	 * @version 2013-10-22
 	 */
 	public static function &get ($database = 'default', $config = array()) {
 		// si $database es un string entonces se asume que se está
@@ -103,7 +103,7 @@ final class Database {
 		// crear objeto de la base de datos
 		self::$_databases[$database] = new $config['type']($config);
 		// si hubo algún error mostrar mensaje y terminar script
-		if(!self::$_databases[$database]->getId()) {
+		if(!self::$_databases[$database]->getLink()) {
 			$config = self::$_databases[$database]->getConfig();
 			throw new DatabaseException(array(
 				'msg' =>'Conexión a '.$config['type'].' falló!'."\n".

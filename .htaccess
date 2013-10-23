@@ -1,0 +1,4 @@
+RewriteEngine on
+#RewriteBase /~usuario/website/
+RewriteRule  (.*) website/webroot/$1 [L]
+RewriteRule  ^$ website/webroot/ [L]

@@ -42,7 +42,7 @@ final class Oracle extends DatabaseManager {
 	 * conexión
 	 * @param config Arreglo con los parámetros de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-26
+	 * @version 2013-10-22
 	 */
 	public function __construct ($config) {
 		// verificar que existe el soporte para Oracle en PHP
@@ -61,7 +61,7 @@ final class Oracle extends DatabaseManager {
 		// realizar conexión a la base de datos
 		// la forma de conectar utilizada es la de Oracle 11g
 		// http://php.net/manual/es/function.oci-connect.php
-		$this->id = @oci_connect(
+		$this->link = @oci_connect(
 			$this->config['user'],
 			$this->config['pass'],
 			$this->config['host'].':'.$this->config['port'].'/'.$this->config['serv'].'/'.$this->config['name'],
@@ -74,12 +74,12 @@ final class Oracle extends DatabaseManager {
 	 * 
 	 * Cierra la conexión con la base de datos.
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-26
+	 * @version 2013-10-22
 	 */
 	public function __destruct () {
 		// si el identificador es un recurso de Oracle se cierra
-		if(is_resource($this->id) && get_resource_type($this->id)=='oci8 connection') {
-			oci_close($this->id);
+		if(is_resource($this->link) && get_resource_type($this->link)=='oci8 connection') {
+			oci_close($this->link);
 		}
 	}
 	
@@ -88,7 +88,7 @@ final class Oracle extends DatabaseManager {
 	 * @param sql Consulta SQL que se desea realizar
 	 * @return Resource Identificador de la consulta
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-26
+	 * @version 2013-10-22
 	 */
 	public function query ($sql) {
 		// verificar que exista una consulta
@@ -96,17 +96,17 @@ final class Oracle extends DatabaseManager {
 			$this->error('Query can not be empty!');
 		}
 		// se prepara la consulta
-		$queryId = oci_parse($this->id, $sql);
+		$queryId = oci_parse($this->link, $sql);
 		// se verifican errores por oci_parse
 		if (!$queryId) {
-			$error = oci_error($this->id);
+			$error = oci_error($this->link);
 			$this->error($error['message'].'. '.$error['sqltext']);
 		}
 		// se realiza la consulta
 		$queryRs = oci_execute($queryId);
 		// se verifican errores por oci_execute
 		if (!$queryRs) {
-			$error = oci_error($this->id);
+			$error = oci_error($this->link);
 			$this->error($error['message'].'. '.$error['sqltext']);
 		}
 		// se retorna el id de la consulta
@@ -255,17 +255,6 @@ final class Oracle extends DatabaseManager {
 	 * @version 2012-12-24
 	 */
 	public function getColFromSP ($procedure) {
-		
-	}
-	
-	/**
-	 * Obtener un solo valor mediante un procedimiento almacenado
-	 * @param procedure Procedimiento almacenado que se desea ejecutar
-	 * @return Mixed Valor devuelto por el procedimiento
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	public function getValueFromSP ($procedure) {
 		
 	}
 
