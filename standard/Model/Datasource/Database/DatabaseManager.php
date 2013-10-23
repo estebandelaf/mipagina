@@ -27,12 +27,12 @@
  * Define métodos que deberán ser implementados, clases específicas para
  * la conexión con X base de datos deberán extender esta clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-10
+ * @version 2013-10-22
  */
 abstract class DatabaseManager {
 	
 	protected $config; ///< Configuración de la base de datos
-	protected $id; ///< Identificador de la conexión
+	protected $link = null; ///< Conexión a la base de datos
 
 	/**
 	 * Retorna la configuración de la conexión a la base de datos
@@ -48,10 +48,10 @@ abstract class DatabaseManager {
 	 * Retorna el identificador de la conexión
 	 * @return Resource Identificador de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
+	 * @version 2013-10-22
 	 */
-	final public function getId () {
-		return $this->id;
+	final public function getLink () {
+		return $this->link;
 	}
 
 	/**
@@ -80,6 +80,68 @@ abstract class DatabaseManager {
 			$array[array_shift($row)] = array_shift($row);
 		}
 		return $array;
+	}
+
+	/**
+	 * Obtener un solo valor mediante un procedimiento almacenado
+	 * @param procedure Procedimiento almacenado que se desea ejecutar
+	 * @return Mixed Valor devuelto por el procedimiento
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-10-22
+	 */
+	final public function getValueFromSP($procedure) {
+		return call_user_func_array (
+			array($this, 'exec'),
+			func_get_args()
+		);
+	}
+
+	/**
+	 * Entrega información de una tabla (nombre, comentario, columnas,
+	 * pks y fks)
+	 * @param table Tabla a buscar sus datos
+	 * @return Arreglo con los datos de la tabla
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2012-09-09
+	 */
+	public function getInfoFromTable ($tablename) {
+		// nombre de la tabla
+		$table['name'] = $tablename;
+		// obtener comentario de la tabla
+		$table['comment'] = $this->getCommentFromTable($table['name']);
+		// obtener pks de la tabla
+		$table['pk'] = $this->getPksFromTable($table['name']);
+		// obtener fks de la tabla
+		$fkAux = $this->getFksFromTable($table['name']);
+		$fk = array();
+		foreach($fkAux as &$aux) {
+			$fk[array_shift($aux)] = $aux;
+		}
+		unset($fkAux);
+		// obtener columnas de la tabla
+		$columns = $this->getColsFromTable($table['name']);
+		// recorrer columnas para definir pk, fk, auto, null/not null, default, comentario
+		foreach($columns as &$column) {
+			// definir null o not null
+			$column['null'] = $column['null']=='YES' ? 1 : 0;
+			// definir si es auto_increment (depende de la base de datos como se hace)
+			if ($this->config['type']=='PostgreSQL') {
+				$column['auto'] = substr($column['default'], 0, 7)=='nextval' ? 1 : 0;
+			} else if ($this->config['type']=='MySQL') {
+				$column['auto'] = $column['extra']=='auto_increment' ? 1 : 0;
+				unset ($column['extra']);
+			}
+			// limpiar default, quitar lo que viene despues de ::
+			if(!$column['auto']) {
+				$aux = explode('::', $column['default']);
+				$column['default'] = trim(array_shift($aux), '\'');
+				if($column['default']=='NULL') $column['default'] = null;
+			}
+			// definir fk
+			$column['fk'] = array_key_exists($column['name'], $fk) ? $fk[$column['name']] : null;
+		}
+		$table['columns'] = $columns;
+		return $table;
 	}
 
 	/**
@@ -216,15 +278,6 @@ abstract class DatabaseManager {
 	abstract public function getColFromSP ($procedure);
 	
 	/**
-	 * Obtener un solo valor mediante un procedimiento almacenado
-	 * @param procedure Procedimiento almacenado que se desea ejecutar
-	 * @return Mixed Valor devuelto por el procedimiento
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	abstract public function getValueFromSP ($procedure);
-
-	/**
 	 * Asigna un límite para la obtención de filas en la consulta SQL
 	 * @param sql Consulta SQL a la que se le agrega el límite
 	 * @return String Consulta con el límite agregado
@@ -299,16 +352,6 @@ abstract class DatabaseManager {
 	 * @version 2012-12-24
 	 */
 	abstract public function getFksFromTable ($table);
-
-	/**
-	 * Entrega información de una tabla (nombre, comentario, columnas,
-	 * pks y fks)
-	 * @param table Tabla a buscar sus datos
-	 * @return Arreglo con los datos de la tabla
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	abstract public function getInfoFromTable ($tablename);
 
 	/**
 	 * Seleccionar una tabla con los nombres de las columnas

@@ -257,17 +257,6 @@ final class Oracle extends DatabaseManager {
 	public function getColFromSP ($procedure) {
 		
 	}
-	
-	/**
-	 * Obtener un solo valor mediante un procedimiento almacenado
-	 * @param procedure Procedimiento almacenado que se desea ejecutar
-	 * @return Mixed Valor devuelto por el procedimiento
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	public function getValueFromSP ($procedure) {
-		
-	}
 
 	/**
 	 * Asigna un límite para la obtención de filas en la consulta SQL
