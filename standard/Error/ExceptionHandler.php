@@ -28,7 +28,7 @@ App::uses('ErrorController', 'Controller');
  * Clase que permite manejar las excepciones que aparecen durante
  * la ejecución de la aplicación.
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-12
+ * @version 2013-11-21
  */
 class ExceptionHandler {
 
@@ -38,7 +38,7 @@ class ExceptionHandler {
 	 * Método para manejar las excepciones ocurridos en la aplicación
 	 * @todo Ver como mostrar la excepción dentro de la misma página y no una en blanco.
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-10
+	 * @version 2013-11-21
 	 */
 	public static function handle (Exception $exception) {
 		// obtener controlador
@@ -52,6 +52,7 @@ class ExceptionHandler {
 			'trace' => $exception->getTraceAsString()
 		);
 		// Renderizar
+		ob_clean();
 		self::$controller->display($data);
 	}
 

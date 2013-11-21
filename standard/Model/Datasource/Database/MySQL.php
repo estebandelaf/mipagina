@@ -51,7 +51,7 @@ final class MySQL extends DatabaseManager {
 		), $config);
 		// realizar conexión a la base de datos
 		$this->link = mysqli_init();
-		$conexion = mysqli_real_connect(
+		$conexion = @mysqli_real_connect(
 			$this->link,
 			$this->config['host'],
 			$this->config['user'],

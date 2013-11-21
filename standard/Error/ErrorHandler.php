@@ -25,14 +25,14 @@
  * Clase que permite manejar los errores que aparecen durante
  * la ejecución de la aplicación.
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-27
+ * @version 2013-11-21
  */
 class ErrorHandler {
 
 	/**
 	 * Método para manejar los errores ocurridos en la aplicación
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-27
+	 * @version 2013-11-21
 	 */
 	public static function handle($code, $description, $file = null, $line = null, $context = null) {
 		// Si no se deben mostrar errores, omitir
@@ -52,6 +52,7 @@ class ErrorHandler {
 			'context' => $context
 		);
 		// Renderizar
+		ob_clean();
 		self::render($data);
 	}
 
