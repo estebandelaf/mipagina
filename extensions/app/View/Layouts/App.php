@@ -72,15 +72,10 @@ if($message) echo '<div class="session_message">',$message,'</div>';
 			<div id="footer">
 				<div>
 					<div class="fleft">
-						Desarrollado por:
-						<a href="http://sasco.cl"
-title="Sitio web y aplicación desarrollada por SASCO">SASCO </a>
+						<?php echo Configure::read('page.footer.left'); ?>
 					</div>
 					<div class="fright">
-						Con tecnología:
-						<a href="http://www.apache.org" title="Servidor web Apache">Apache</a>
-						<a href="http://www.php.net" title="Lenguaje de programación PHP">PHP</a>
-						<a href="http://www.postgresql.org" title="Base de datos PostgreSQL">PostgreSQL</a>
+						<?php echo Configure::read('page.footer.right'); ?>
 					</div>
 				</div>
 			</div>

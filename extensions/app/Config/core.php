@@ -24,6 +24,12 @@
 // Tema de la página (diseño)
 Configure::write('page.layout', 'App');
 
+// Textos de la página
+Configure::write('page.footer', array(
+	'left'	=> '',
+	'right'	=> 'Página web generada utilizando el framework <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>'
+));
+
 // Menú principal del sitio web
 Configure::write('nav.website', array(
 	'/inicio'=>'Inicio',
