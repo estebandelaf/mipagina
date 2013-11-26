@@ -24,7 +24,7 @@
 /**
  * Helper para la creación de formularios en HTML
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-07-04
+ * @version 2013-11-25
  */
 class FormHelper {
 
@@ -157,7 +157,7 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el elemento
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-01
+	 * @version 2013-11-25
 	 */
 	public function input ($config) {
 		// transformar a arreglo en caso que no lo sea
@@ -168,12 +168,17 @@ class FormHelper {
 			array(
 				'type'=>'text',
 				'value'=>'',
+				'autoValue'=>false,
 				'class' => '',
 				'attr' => '',
 				'check' => null,
 				'help' => '',
 			), $config
 		);
+		// si no se indico un valor y existe uno por POST se usa
+		if (!isset($config['value'][0]) && isset($_POST[$config['name']])) {
+			$config['value'] = $_POST[$config['name']];
+		}
 		// si label no existe se usa el nombre de la variable
 		if(!isset($config['label'])) $config['label'] = $config['name'];
 		// si se paso check se usa
