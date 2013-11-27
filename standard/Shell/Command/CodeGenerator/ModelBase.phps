@@ -111,20 +111,6 @@ abstract class {class}Base extends AppModel {
 	}
 	
 	/**
-	 * Setea los atributos del objeto {class}Model mediante un arreglo,
-	 * la key del arreglo es el nombre del atributo, si la key no existe
-	 * el campo quedará seteado a null
-	 * @param array Array Arreglo con la relacion columna=>valor
-	 * @param clear Boolean Verdadero para limpiar atributos antes de hacer el set
-	 * @author {author}
-	 * @version {version}
-	 */
-	public function set ($array) {
-		// asignar atributos con los valores del arreglo
-		{columns_set}
-	}
-	
-	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author {author}
 	 * @version {version}

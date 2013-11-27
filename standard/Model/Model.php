@@ -27,7 +27,7 @@ App::import('Model/ModelInterface');
 /**
  * Clase abstracta para todos los modelos
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-10
+ * @version 2013-11-27
  */
 abstract class Model extends Object implements ModelInterface {
 	
@@ -35,6 +35,9 @@ abstract class Model extends Object implements ModelInterface {
 	protected $_database = 'default'; ///< Base de datos del modelo
 	protected $_table; ///< Tabla del modelo
 	protected $db; ///< Conexión a base de datos
+
+	// Información de las columnas de la tabla en la base de datos
+	public static $columnsInfo = array();
 	
 	/**
 	 * Constructor de la clase abstracta
@@ -64,6 +67,19 @@ abstract class Model extends Object implements ModelInterface {
 		if(isset($this->{$this->_table}))
 			return $this->{$this->_table};
 		else return get_class($this);
+	}
+
+	/**
+	 * Método para setear los atributos de la clase
+	 * @param array Arreglo con los datos que se deben asignar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-11-27
+	 */
+	public function set ($array) {
+		foreach (self::$columnsInfo as $a => $data) {
+			if (isset($array[$a]))
+				$this->$a = $array[$a];
+		}
 	}
 	
 	/**

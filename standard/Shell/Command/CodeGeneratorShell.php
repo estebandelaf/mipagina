@@ -215,7 +215,6 @@ class CodeGeneratorShell extends AppShell {
 			$values_sql_insert = array();
 			$columns_sql_update = array();
 			$columns_clear = array();
-			$columns_set = array();
 			$columnsInfo = array();
 			foreach($info['columns'] as &$column) {
 				// generar atributo
@@ -274,8 +273,6 @@ class CodeGeneratorShell extends AppShell {
 				}
 				// generar columnas para clear
 				$columns_clear[] = '$this->'.$column['name'].' = null;';
-				// procesar set
-				$columns_set[] = "if(isset(\$array['".$column['name']."']))\n\t\t\t\$this->".$column['name']." = \$array['".$column['name']."'];";
 			}
 			$columns = implode("\n\t", $columns);
 			$columnsInfo = implode('', $columnsInfo);
@@ -284,7 +281,6 @@ class CodeGeneratorShell extends AppShell {
 			$values_sql_insert = implode(",\n\t\t\t\t", $values_sql_insert);
 			$columns_sql_update = implode(",\n\t\t\t\t", $columns_sql_update);
 			$columns_clear = implode("\n\t\t", $columns_clear);
-			$columns_set = implode("\n\t\t", $columns_set);
 			// procesar pks
 			$pk_parameter = array();
 			$pk_set_from_parameter = array();
@@ -320,7 +316,6 @@ class CodeGeneratorShell extends AppShell {
 				'values_sql_insert' => $values_sql_insert,
 				'columns_sql_update' => $columns_sql_update,
 				'columns_clear' => $columns_clear,
-				'columns_set' => $columns_set,
 			));
 			// guardar archivo en el directorio de modelos
 			file_put_contents(self::$destination.DS.'Model'.DS.$class.'Base.php', $file);
