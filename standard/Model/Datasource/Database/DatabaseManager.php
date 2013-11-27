@@ -27,7 +27,7 @@
  * Define métodos que deberán ser implementados, clases específicas para
  * la conexión con X base de datos deberán extender esta clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-10-22
+ * @version 2013-11-27
  */
 abstract class DatabaseManager {
 	
@@ -102,9 +102,9 @@ abstract class DatabaseManager {
 	 * @param table Tabla a buscar sus datos
 	 * @return Arreglo con los datos de la tabla
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-11-27
 	 */
-	public function getInfoFromTable ($tablename) {
+	final public function getInfoFromTable ($tablename) {
 		// nombre de la tabla
 		$table['name'] = $tablename;
 		// obtener comentario de la tabla
