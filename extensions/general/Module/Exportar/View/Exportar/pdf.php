@@ -19,8 +19,10 @@ $pdf = new PDF();
 $pdf->AddPage();
 
 // agregar logo
-$logo = file_get_contents(DIR_WEBSITE.'/webroot/img/logo.png');
-$pdf->MemImage($logo, 10, 10);
+if (file_exists(DIR_WEBSITE.'/webroot/img/logo.png')) {
+	$logo = file_get_contents(DIR_WEBSITE.'/webroot/img/logo.png');
+	$pdf->MemImage($logo, 10, 10);
+}
 
 // generar títulos
 $titulo = 'Listado de '.$id;
@@ -36,8 +38,14 @@ $pdf->SetX(80);
 $pdf->MultiCell(130, 5, $subtitulo, 0, 'C');
 $pdf->Ln(15);
 
+// convertir codificación títulos (por si acaso)
+$titulos = array_shift($data);
+foreach ($titulos as &$titulo) {
+	$titulo = utf8_decode ($titulo);
+}
+
 // agregar tabla con los datos
-$pdf->addTable (array_shift($data), $data, array('fontsize' => 8));
+$pdf->addTable ($titulos, $data, array('fontsize' => 8));
 
 // enviar pdf al navegador
 $pdf->Output($id, 'I');

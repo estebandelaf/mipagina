@@ -25,17 +25,30 @@
  * Helper para la creación de tablas en HTML
  * @todo Arreglar tablas para paginar, exportar, etc
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-07-08
+ * @version 2013-12-02
  */
 class TableHelper {
 
-	private $_id = 'table'; ///< Identificador de la tabla
+	private $_id; ///< Identificador de la tabla
 	private $_class = ''; ///< Atributo class para la tabla
-	private $_export = false; ///< Crear o no datos para exportar
+	private $_export; ///< Crear o no datos para exportar
 	private $_exportRemove = array(); ///< Datos que se removeran al exportar
 	private $_display = true; ///< Indica si se debe o no mostrar la tabla
 
-	public function __construct ($table = null) {
+	/**
+	 * Constructor de la clase para crear una tabla
+	 * @param table Datos con la tabla que se desea generar
+	 * @param id Identificador de la tabla
+	 * @param export Si se desea poder exportar los datos de la tabla
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
+	public function __construct ($table = null, $id = 'table',
+							$export = false) {
+		// asignar identificador de la tabla
+		$this->_id = $id;
+		// asignar flag para exportar o no exportar la tabla
+		$this->_export = $export;
 		// si se paso una tabla se genera directamente y se imprime
 		// esto evita una línea de programación em muchos casos
 		if(is_array($table)) {
@@ -43,26 +56,62 @@ class TableHelper {
 		}
 	}
 
+	/**
+	 * Asigna un identificador a la tabla
+	 * @param id Identificador para asignar a la tabla
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	public function setId ($id) {
 		$this->_id = $id;
 	}
 
+	/**
+	 * Asignar el atributo class para la tabla
+	 * @param class Atributo class (o varios) que se asignarán
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	public function setClass ($class) {
 		$this->_class = $class;
 	}
 
-	public function setExport ($export) {
+	/**
+	 * Asignar si se deberán generar o no iconos para exportar la tabla
+	 * @param export Flag para indicar si se debe o no exportar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
+	public function setExport ($export = true) {
 		$this->_export = $export;
 	}
 
+	/**
+	 * Definir que se deberá remover de la tabla antes de poder exportarla
+	 * @param remove Atributo con lo que se desea extraer antes de exportar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	public function setExportRemove ($remove) {
 		$this->_exportRemove = $remove;
 	}
 
-	public function setDisplay ($display) {
+	/**
+	 * Asignar si se debe o no mostrar la tabla (o se usa más para mostrar)
+	 * @param display Flag para indicar si se debe o no mostrar la tabla
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
+	public function setDisplay ($display = true) {
 		$this->_display = $display;
 	}
-	
+
+	/**
+	 * Método que genera la tabla en HTML a partir de un arreglo
+	 * @param table Tabla que se generará
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	public function generate ($table) {
 		// si el arreglo esta vacio o no es arreglo retornar nada
 		if(!is_array($table) || !count($table)) {
@@ -106,6 +155,12 @@ class TableHelper {
 		return $buffer;
 	}
 
+	/**
+	 * Crea los datos de la sesión de la tabla para poder exportarla
+	 * @param table Tabla que se está exportando
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	private function export (&$table) {
 		// si no se debe exportar retornar vacío
 		if(!$this->_export) return '';
@@ -156,6 +211,12 @@ class TableHelper {
 		return $buffer;
 	}
 
+	/**
+	 * Botones para mostrar y ocular la tabla (+/-)
+	 * @param
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2013-12-02
+	 */
 	public function showAndHide () {
 		$_base = Request::getBase();
 		$buffer = '';

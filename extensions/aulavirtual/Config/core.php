@@ -25,3 +25,8 @@ Configure::write('banners.google.ads', array(
 		'468x60' => '',
 	),
 ));
+
+// Módulos que usará esta aplicación
+Module::uses(array(
+	'Exportar',
+));

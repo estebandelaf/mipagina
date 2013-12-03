@@ -25,7 +25,7 @@
  * Clase para trabajar con una base de datos MySQL (o MariaDB)
  * @todo Se deben completar los métodos para la clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-10-22
+ * @version 2013-11-21
  */
 final class MySQL extends DatabaseManager {
 	
@@ -36,7 +36,7 @@ final class MySQL extends DatabaseManager {
 	 * conexión
 	 * @param config Arreglo con los parámetros de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2013-11-21
 	 */
 	public function __construct ($config) {
 		// verificar que existe el soporte para MySQL en PHP

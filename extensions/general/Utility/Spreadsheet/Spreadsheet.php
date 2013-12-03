@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar planillas de cálculo
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-07-05
+ * @version 2013-12-02
  */
 final class Spreadsheet {
 
@@ -212,12 +212,13 @@ final class Spreadsheet {
 	/**
 	 * Método que lee una hoja de cálculo y dibuja una tabla en HTML
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-04-04
+	 * @version 2013-12-02
 	 */
 	public static function file2html ($file, $sheet = -1, $options = array()) {
 		// helper
 		App::uses('TableHelper', 'View/Helper');
 		$table = new TableHelper();
+		$table->setExport();
 		// opciones
 		$options = array_merge(array(
 			'id' => 'file2html',
@@ -241,6 +242,7 @@ final class Spreadsheet {
 		// agregar hojas
 		foreach($sheets as $id => &$name) {
 			echo '<div id="',$options['id'],'_',string2url($name),'">',"\n";
+			$table->setId(string2url($name));
 			echo $table->generate(self::read(DIR_WEBSITE.DS.$file, $id));
 			echo '</div>';
 		}

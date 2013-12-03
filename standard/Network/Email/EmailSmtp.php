@@ -63,7 +63,7 @@ class EmailSmtp {
 		// Datos
 		$this->_data = $data;
 	}
-	
+
 	/**
 	 * Método que envía el correo
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
