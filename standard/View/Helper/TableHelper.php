@@ -213,7 +213,6 @@ class TableHelper {
 
 	/**
 	 * Botones para mostrar y ocular la tabla (+/-)
-	 * @param
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-12-02
 	 */
