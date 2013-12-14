@@ -242,7 +242,11 @@ class FormHelper {
 	}
 
 	private function _date ($config) {
-		$options = 'dateFormat: "yy-mm-dd", changeYear: true, yearRange: "1900:'.date('Y').'"';
+		$config = array_merge (array(
+			'yearFrom' => date('Y')-100,
+			'yearTo' => date('Y')+1
+		), $config);
+		$options = 'dateFormat: "yy-mm-dd", changeYear: true, yearRange: "'.$config['yearFrom'].':'.$config['yearTo'].'"';
 		$buffer = '<script type="text/javascript">$(function() { $("#'.$config['name'].'Field").datepicker({ '.$options.' }); }); </script>';
 		$buffer .= '<input type="text" name="'.$config['name'].'" value="'.$config['value'].'" id="'.$config['name'].'Field"'.$config['class'].' '.$config['attr'].' />';
 		return $buffer;
