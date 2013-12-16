@@ -22,7 +22,7 @@
  */
 
 // desactivar errores (ya que Mail genera problemas al estar E_STRICT activo)
-ini_set('error_reporting', 0);
+ini_set('error_reporting', E_ALL & ~E_STRICT);
 
 /**
  * Clase para enviar correo electrónico mediante SMTP
