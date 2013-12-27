@@ -1,3 +1,4 @@
+<link type="text/css" href="<?php echo $_base; ?>/css/contact.css" media="screen, print" rel="stylesheet" />
 <h1>Contacto</h1>
 <p>Por favor enviar su mensaje a través del siguiente formulario, será contactado a la brevedad.</p>
 

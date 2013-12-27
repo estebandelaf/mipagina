@@ -1,3 +1,10 @@
-@import url("_/css/screen.css");
+@import url("../../../css/general.css");
+@import url("../../../css/form.css");
+@import url("../../../css/table.css");
 @import url("screen/base.css");
+@import url("screen/errors.css");
+@import url("screen/form.css");
+@import url("screen/tables.css");
+@import url("screen/session_message.css");
 @import url("screen/navpanel.css");
+@import url("screen/mantenedor.css");

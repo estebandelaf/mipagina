@@ -5,8 +5,8 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title><?php echo $_header_title; ?></title>
 		<link rel="shortcut icon" href="<?php echo $_base; ?>/img/favicon.png" />
-		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" title="screen" rel="stylesheet" />
-		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/print.css" media="print" title="print" rel="stylesheet" />
+		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" rel="stylesheet" />
+		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/print.css" media="print" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/jquery.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/js.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/form.js"></script>

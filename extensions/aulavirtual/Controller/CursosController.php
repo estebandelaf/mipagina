@@ -66,7 +66,7 @@ class  CursosController extends AppController {
 	 */
 	private function planilla ($curso, $planilla) {
 		App::uses('Spreadsheet', 'Utility/Spreadsheet');
-		$p = 'Model/Datasource/cursos'.DS.$curso.DS.$planilla;
+		$p = 'Model/Data/cursos'.DS.$curso.DS.$planilla;
 		foreach (Spreadsheet::$exts as $ext) {
 			if (file_exists(DIR_WEBSITE.DS.$p.'.'.$ext)) {
 				$this->set(array(

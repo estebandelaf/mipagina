@@ -1,0 +1,26 @@
+.cubox {
+        float: left;
+        width: 213px;
+}
+.cubox + .cubox {
+        margin-left: 30px;
+}
+.cubox .title {
+        padding: 10px 15px 5px 15px;
+        font-size: 1em;
+        font-weight: bold;
+}
+.cubox .body {
+        border-top: 1px solid rgba(100,100,100,0.3);
+        height: 100px;
+        padding: 5px 15px 0 15px;
+        text-align: justify;
+}
+.cubox .body .more {
+        text-align: right;
+        font-size: 0.8em;
+}
+.cubox .body .more a {
+        font-weight: normal;
+        color: #fff;
+}

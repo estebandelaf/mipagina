@@ -1,0 +1,8 @@
+.session_message {
+	font-weight: bold;
+	text-align: center;
+	padding: 0.5em;
+	margin-bottom: 1em;
+	border: 1px dashed #333;
+	background: #eee;
+} 

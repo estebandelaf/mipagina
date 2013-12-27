@@ -3,7 +3,8 @@
 	border:1px solid #CCC;
 	background-color:#EBEBEB;
 	background-image:-moz-linear-gradient( top,#fafafa 0%,#ebebeb 100% );
-	background-image:-webkit-gradient( linear,0 0%,0 100%,from( #fafafa ),to( #ebebeb ) );
+	background-image:-webkit-gradient( linear,0 0%,0 100%,from( #fafafa
+),to( #ebebeb ) );
 	-moz-box-shadow:1px 2px 3px 0 #ccc;
 	-webkit-box-shadow:1px 2px 3px 0 #ccc;
 	box-shadow:1px 2px 3px 0 #ccc;
@@ -29,7 +30,7 @@
 	left:2px;
 	height:172px;
 	width:219px;
-	background-image:url(../../img/trans-black.png);
+	background-image:url('../img/trans-black.png');
 	opacity:0;
 	z-index:2;
 	overflow:hidden;
@@ -73,4 +74,4 @@
 	color:#665252;
 	font-size:13px;
 	margin-bottom:4px;
-}
+} 

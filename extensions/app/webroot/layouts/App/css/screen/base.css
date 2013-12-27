@@ -1,13 +1,14 @@
 /**
-Basado en un tema de Donny Burnside
-*/
+ * Tema base para el diseño del layout App
+ * Basado en un tema de Donny Burnside
+ */
 
 /* Generic */
-
 body {
-	background: url(../img/background/bg-body.png) repeat-x top center #E8F7F9;
+	background: url('../../img/background/bg-body.png') repeat-x top center #E8F7F9;
 	font-size: 0.8em;
 	color:#222222;
+	font-family: "Nimbus Sans L", Helvetica;
 }
 a {
 	text-decoration:none;
@@ -19,13 +20,14 @@ a:hover {
 }
 ul.list  {
 	list-style-image: url('../../img/list.png');
+	margin-bottom: 1em;
 }
-img {
-	border: none;
+ul.list>li {
+	margin-left: 35px;
+	padding-left: 0.5em;
 }
 
 /* Structure */
-
 #wrapper {
 	margin:0 auto;
 	width:950px;
@@ -74,7 +76,6 @@ img {
 }
 
 /* Menu */
-
 #navsite ul {
 	list-style-type:none;
 }
@@ -88,25 +89,22 @@ img {
 	margin-right:2px;
 }
 #navsite li a:hover {
-	background:url(../../img/background/bg-menu-hover.png) no-repeat center center;
+	background:url('../../img/background/bg-menu-hover.png') no-repeat center center;
 }
 
 /* Sidebar */
-
 #sidebar-title {
 	height:25px;
 	width:126px;
-	background:url(../../img/background/bg-sidebar.gif) no-repeat;
+	background:url('../../img/background/bg-sidebar.gif') no-repeat;
 	margin:0 auto;
 	padding-left:26px;
 	color: white;
 }
-
 #sidebar-title .txt {
 	margin-left: 10px;
 	font-weight: bold;	
 }
-
 #sidebar ul {
 	list-style-type:none;
 	margin-top:10px;
@@ -123,92 +121,20 @@ img {
 	background:#edebed;
 	color:#6CC4D8;
 }
+#sidebar-bottom {
+	height:20px;
+	background:url('../../img/background/bg-sidebar-bottom.gif') no-repeat top center;
+}
 #navapp-icons {
 	margin: 0 10px;
 	margin-top: 10px;
 	text-align: center;
 }
 
-#sidebar-bottom {
-	height:20px;
-	background:url(../../img/background/bg-sidebar-bottom.gif) no-repeat top center;
-}
-
 /* Heading's */
-
 h1, h2, h3, h4 {
 	font-weight: normal;
 	letter-spacing: -1px;
 	margin-bottom: 10px;
 	color: #B4C835;
-}
-
-/* Mensajes mediante flash */
-.session_message {
-	font-weight: bold;
-	text-align: center;
-	padding: 0.5em;
-	margin-bottom: 1em;
-	border: 1px dashed #333;
-	background: #eee;
-}
-
-/** Formularios */
-form .label {
-	width: 200px;
-	float: left;
-	text-align: right;
-}
-form .field {
-	margin-left: 212px;
-	margin-bottom: 1em;
-}
-input[type="text"], input[type="password"], textarea {
-	border: 1px solid black;
-	width: 400px;
-	padding: 0.5em;
-}
-input[type="submit"], input[type="button"] {
-	border: 1px solid black;
-	padding: 0.5em;
-}
-input[type="file"], input[type="image"] {
-	border: 0;
-}
-
-/** errors */
-.exception_message, .exception_trace {
-	border: 1px dashed gray;
-	padding: 1em;
-	margin-bottom: 1em;
-}
-
-.exception_message {
-	background: #F6CECE;
-	font-weight: bold;
-}
-
-.exception_trace {
-	background: #BCF5A9;
-}
-
-/** mantenedor */
-table.mantenedor input[type="text"], table.mantenedor select {
-	border: 1px dashed gray;
-	padding: 0.3em;
-	width: 100px;
-	text-align: center;
-	color: #555;
-}
-table.mantenedor input[type="image"] {
-	border: 0;
-}
-table.mantenedor th, table.mantenedor td {
-	text-align: center;
-}
-table.mantenedor th:last-child, table.mantenedor td:last-child {
-	width: 50px;
-}
-table.mantenedor th a {
-	display: inline;
 }

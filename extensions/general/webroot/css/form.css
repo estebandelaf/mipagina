@@ -1,0 +1,30 @@
+form {
+	margin-bottom: 2em;
+}
+input, select, textarea {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid black;
+}
+form .label {
+	width: 200px;
+	float: left;
+	text-align: right;
+}
+form .field {
+	margin-left: 212px;
+	margin-bottom: 1em;
+}
+input[type="text"], input[type="password"], textarea {
+	border: 1px solid black;
+	width: 400px;
+	padding: 0.5em;
+}
+input[type="submit"], input[type="button"] {
+	border: 1px solid black;
+	padding: 0.5em;
+}
+input[type="file"], input[type="image"] {
+	border: 0;
+} 
