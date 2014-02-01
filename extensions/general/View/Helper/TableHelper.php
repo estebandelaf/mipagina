@@ -33,7 +33,7 @@ class TableHelper {
 	private $_class = ''; ///< Atributo class para la tabla
 	private $_export; ///< Crear o no datos para exportar
 	private $_exportRemove = array(); ///< Datos que se removeran al exportar
-	private $_display = true; ///< Indica si se debe o no mostrar la tabla
+	private $_display; ///< Indica si se debe o no mostrar la tabla
 
 	/**
 	 * Constructor de la clase para crear una tabla
@@ -44,11 +44,13 @@ class TableHelper {
 	 * @version 2013-12-02
 	 */
 	public function __construct ($table = null, $id = 'table',
-							$export = false) {
+					$export = false, $display = true) {
 		// asignar identificador de la tabla
 		$this->_id = $id;
 		// asignar flag para exportar o no exportar la tabla
 		$this->_export = $export;
+		// asignar flag para mostrar o oculatar la tabla
+		$this->_display = $display; 
 		// si se paso una tabla se genera directamente y se imprime
 		// esto evita una línea de programación em muchos casos
 		if(is_array($table)) {
@@ -125,6 +127,7 @@ class TableHelper {
 		$buffer .= $this->export ($table);
 		$buffer .= $this->showAndHide ();
 		$buffer .= '</div>'."\n";
+		$buffer .= '<div style="clear:both"></div>'."\n";
 		// Iniciar tabla
 		$buffer .= '<table class="'.$this->_class.'" id="'.$this->_id.'">'."\n";
 		// Definir títulos de columnas
