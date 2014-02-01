@@ -56,6 +56,8 @@ class ChartHelper {
 		$chart->setDataSet($data);
 		// porcentaje que ocuparán los datos dentro de la imagen
 		$chart->getPlot()->setGraphCaptionRatio($ratio);
+		// limpar lo que se haya podido enviar antes
+		ob_clean ();
 		// enviar cabeceras
 		header('Content-type: image/png');
 		header('Pragma: no-cache');
