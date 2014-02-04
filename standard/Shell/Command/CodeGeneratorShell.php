@@ -40,6 +40,8 @@ class CodeGeneratorShell extends AppShell {
 	public static $destination; ///< Destino de los archivos que se generan
 	public static $module; ///< Módulo donde se encontrarán los archivos
 	public static $module_url; ///< Url para acceder al módulo
+	private static $tables; ///< Tablas de la base de datos que se estarán procesando
+	private static $nTables; ///< Cantidad de tablas que se estarán procesando
 	
 	/**
 	 * Método principal del comando
@@ -61,6 +63,17 @@ class CodeGeneratorShell extends AppShell {
 		if(!file_exists(self::$destination.DS.'Model')) mkdir(self::$destination.DS.'Model');
 		//if(!file_exists(self::$destination.DS.'View')) mkdir(self::$destination.DS.'View');
 		if(!file_exists(self::$destination.DS.'Controller')) mkdir(self::$destination.DS.'Controller');
+		// obtener tablas de la base de datos y su info
+		self::$tables = self::$db->getTables();
+		self::$nTables = count (self::$tables);
+		$nTables = 0;
+		$this->out('<info>Recuperando información de las tablas '.round(($nTables/self::$nTables)*100).'%</info>', 0);
+		foreach(self::$tables as &$table) {
+			$table['info'] = self::$db->getInfoFromTable($table['name']);
+			$nTables++;
+			$this->out("\r".'<info>Recuperando información de las tablas '.round(($nTables/self::$nTables)*100).'%</info>', 0);
+		}
+		$this->out('');
 		// generar archivos
 		$this->generateModelBase($database);
 		$this->generateModel();
@@ -204,11 +217,9 @@ class CodeGeneratorShell extends AppShell {
 	 */
 	private function generateModelBase ($database) {
 		$this->out('<info>Generando base para modelos</info>');
-		$tables = self::$db->getTables();
-		foreach($tables as &$table) {
+		foreach(self::$tables as &$table) {
 			// buscar info de la tabla
-			$info = self::$db->getInfoFromTable($table['name']);
-			$class = Inflector::camelize($info['name']);
+			$class = Inflector::camelize($table['info']['name']);
 			$columns = array();
 			$getObjectFKs = array();
 			$columns_sql_insert = array();
@@ -216,7 +227,7 @@ class CodeGeneratorShell extends AppShell {
 			$columns_sql_update = array();
 			$columns_clear = array();
 			$columnsInfo = array();
-			foreach($info['columns'] as &$column) {
+			foreach($table['info']['columns'] as &$column) {
 				// generar atributo
 				$columns[] = $this->src('public ${column}; ///< {comment}{type}({length}){null}{default}{auto}{pk}{fk}', array(
 					'column'	=> $column['name'],
@@ -226,7 +237,7 @@ class CodeGeneratorShell extends AppShell {
 					'null'		=> $column['null']=='YES'||$column['null']==1?' NULL':' NOT NULL',
 					'default'	=> " DEFAULT '".$column['default']."' ",
 					'auto'		=> $column['auto']=='YES'||$column['auto']==1?'AUTO ':'',
-					'pk'		=> in_array($column['name'], $info['pk'])?'PK ':'',
+					'pk'		=> in_array($column['name'], $table['info']['pk'])?'PK ':'',
 					'fk'		=> is_array($column['fk'])?'FK:'.$column['fk']['table'].'.'.$column['fk']['column']:'',
 				));
 				// generar información de la columna
@@ -239,7 +250,7 @@ class CodeGeneratorShell extends AppShell {
 					'null'		=> $column['null']=='YES'||$column['null']==1?'true':'false',
 					'default'	=> $column['default'],
 					'auto'		=> $column['auto']=='YES'||$column['auto']==1?'true':'false',
-					'pk'		=> in_array($column['name'], $info['pk'])?'true':'false',
+					'pk'		=> in_array($column['name'], $table['info']['pk'])?'true':'false',
 					'fk'		=> is_array($column['fk']) ? 'array(\'table\' => \''.$column['fk']['table'].'\', \'column\' => \''.$column['fk']['column'].'\')':'null',
 				));
 				// procesar si es FK
@@ -265,7 +276,7 @@ class CodeGeneratorShell extends AppShell {
 					$values_sql_insert[] = $value;
 				}
 				// procesar para actualizar
-				if(!in_array($column['name'], $info['pk']) && !in_array($column['name'], array('creado', 'creada'))) {
+				if(!in_array($column['name'], $table['info']['pk']) && !in_array($column['name'], array('creado', 'creada'))) {
 					if(in_array($column['name'], array('modificado', 'modificada'))) {
 						$value = 'NOW()';
 					}
@@ -286,7 +297,7 @@ class CodeGeneratorShell extends AppShell {
 			$pk_set_from_parameter = array();
 			$pk_attributes_not_empty = array();
 			$pk_sql_where = array();
-			foreach($info['pk'] as &$pk) {
+			foreach($table['info']['pk'] as &$pk) {
 				$pk_parameter[] = '$'.$pk.' = null';
 				$pk_set_from_parameter[] = '$this->'.$pk.' = $'.$pk.';';
 				$pk_attributes_not_empty[] = '!empty($this->'.$pk.')';
@@ -298,12 +309,12 @@ class CodeGeneratorShell extends AppShell {
 			$pk_sql_where = implode(' AND ', $pk_sql_where);
 			// generar datos
 			$file = $this->src('ModelBase.phps', array(
-				'table' => $info['name'],
-				'comment' => $info['comment'],
+				'table' => $table['info']['name'],
+				'comment' => $table['info']['comment'],
 				'author' => AUTHOR,
 				'version' => VERSION,
 				'class' => $class,
-				'classs' => Inflector::camelize(Inflector::pluralize($info['name'])),
+				'classs' => Inflector::camelize(Inflector::pluralize($table['info']['name'])),
 				'columns' => $columns,
 				'columnsInfo' => $columnsInfo,
 				'database' => $database,
@@ -329,12 +340,9 @@ class CodeGeneratorShell extends AppShell {
 	 */
 	private function generateModel () {
 		$this->out('<info>Generando modelos</info>');
-		$tables = self::$db->getTables();
-		foreach($tables as &$table) {
-			// procesar columnas
-			$info = self::$db->getInfoFromTable($table['name']);
+		foreach(self::$tables as &$table) {
 			$fkModule = array();
-			foreach($info['columns'] as &$column) {
+			foreach($table['info']['columns'] as &$column) {
 				// procesar si es FK
 				if(is_array($column['fk'])) {
 					$fk_class = Inflector::camelize($column['fk']['table']);
@@ -371,19 +379,17 @@ class CodeGeneratorShell extends AppShell {
 	 */
 	private function generateControllerBase () {
 		$this->out('<info>Generando base para controladores</info>');
-		$tables = self::$db->getTables();
-		foreach($tables as &$table) {
+		foreach(self::$tables as &$table) {
 			// buscar info de la tabla
-			$info = self::$db->getInfoFromTable($table['name']);
 			$class = Inflector::camelize($table['name']);
 			// procesar pks
 			$pk_parameter = array();
-			foreach($info['pk'] as &$pk) {
+			foreach($table['info']['pk'] as &$pk) {
 				$pk_parameter[] = '$'.$pk;
 			}
 			$pk_parameter = implode(', ', $pk_parameter);
 			// buscar columnas que sean archivos
-			$files = $this->getColsForFiles($info['columns']);
+			$files = $this->getColsForFiles($table['info']['columns']);
 			// procesar archivos
 			if(isset($files[0])) {
 				$methods_ud = $this->src('upload_download.phps', array(
@@ -424,8 +430,7 @@ class CodeGeneratorShell extends AppShell {
 	 */
 	private function generateController () {
 		$this->out('<info>Generando controladores</info>');
-		$tables = self::$db->getTables();
-		foreach($tables as &$table) {
+		foreach(self::$tables as &$table) {
 			// generar datos
 			$class = Inflector::camelize($table['name']);
 			$classs = Inflector::camelize(Inflector::pluralize($table['name']));
@@ -456,18 +461,16 @@ class CodeGeneratorShell extends AppShell {
 		$this->out('<info>Generando vistas (en directorio tmp/View)</info>');
 		if(!file_exists(self::$destination.DS.'tmp')) mkdir(self::$destination.DS.'tmp');
 		if(!file_exists(self::$destination.DS.'tmp'.DS.'View')) mkdir(self::$destination.DS.'tmp'.DS.'View');
-		$tables = self::$db->getTables();
-		foreach($tables as &$table) {
+		foreach(self::$tables as &$table) {
 			// buscar info de la tabla
-			$info = self::$db->getInfoFromTable($table['name']);
-			$class = Inflector::camelize($info['name']);
-			$classs = Inflector::camelize(Inflector::pluralize($info['name']));
+			$class = Inflector::camelize($table['info']['name']);
+			$classs = Inflector::camelize(Inflector::pluralize($table['info']['name']));
 			// buscar columnas que sean archivos
-			$files = $this->getColsForFiles($info['columns']);
+			$files = $this->getColsForFiles($table['info']['columns']);
 			$filesOk = array();
 			// procesamiento real de columnas
 			$columns = array();
-			foreach($info['columns'] as &$column) {
+			foreach($table['info']['columns'] as &$column) {
 				// si la columna es creado, modificado, creada o modificada se omite en la vista (ya que se generará automáticamente su valor)
 				if(in_array($column['name'], array('creado', 'modificado', 'creada', 'modificada'))) continue;
 				// si la columna está relacionada con un archivo (buscar cada una de las posibles columnas)
@@ -499,7 +502,7 @@ class CodeGeneratorShell extends AppShell {
 			// procesar pks
 			$pkUrl = array();
 			$pkTupla = array();
-			foreach($info['pk'] as &$pk) {
+			foreach($table['info']['pk'] as &$pk) {
 				$pkUrl[] = 'urlencode($obj->'.$pk.')';
 				$pkTupla[] = '$obj->'.$pk;
 			}
