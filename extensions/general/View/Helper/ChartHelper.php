@@ -77,6 +77,11 @@ class ChartHelper {
 		$this->generate ($title,$series,'VerticalBar',$options,$exit);
 	}
 
+	public function horizontal_bar ($title, $series,
+					$options = array(), $exit = true) {
+		$this->generate ($title,$series,'HorizontalBar',$options,$exit);
+	}
+
 	public function pie ($title, $data, $options = array(), $exit = true) {
 		// asignar opciones por defecto del gráfico
 		$options = array_merge($this->defaultOptions, $options);
