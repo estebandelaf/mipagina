@@ -73,10 +73,11 @@ abstract class Model extends Object implements ModelInterface {
 	 * Método para setear los atributos de la clase
 	 * @param array Arreglo con los datos que se deben asignar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-11-27
+	 * @version 2014-02-05
 	 */
 	public function set ($array) {
-		foreach (self::$columnsInfo as $a => $data) {
+		$class = get_class($this);
+		foreach ($class::$columnsInfo as $a => $data) {
 			if (isset($array[$a]))
 				$this->$a = $array[$a];
 		}
