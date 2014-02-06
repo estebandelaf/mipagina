@@ -33,7 +33,7 @@ class TableHelper {
 	private $_class = ''; ///< Atributo class para la tabla
 	private $_export; ///< Crear o no datos para exportar
 	private $_exportRemove = array(); ///< Datos que se removeran al exportar
-	private $_display; ///< Indica si se debe o no mostrar la tabla
+	private $_display = true; ///< Indica si se debe o no mostrar la tabla
 
 	/**
 	 * Constructor de la clase para crear una tabla
@@ -50,7 +50,7 @@ class TableHelper {
 		// asignar flag para exportar o no exportar la tabla
 		$this->_export = $export;
 		// asignar flag para mostrar o oculatar la tabla
-		$this->_display = $display; 
+		$this->_dsisplay = $display; 
 		// si se paso una tabla se genera directamente y se imprime
 		// esto evita una línea de programación em muchos casos
 		if(is_array($table)) {
