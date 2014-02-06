@@ -520,7 +520,6 @@ class CodeGeneratorShell extends AppShell {
 					'pkUrl' => $pkUrl,
 					'pkTupla' => $pkTupla,
 					'module' => self::$module,
-					'module_url' => self::$module_url,
 				));
 				// guardar archivos en el directorio de clases (si no existe)
 				$filename = self::$destination.DS.'tmp'.DS.'View'.DS.$classs.DS.$src.'.php';

@@ -4,9 +4,6 @@
 
 <?php
 
-// url del módulo en caso que la vista pertenezca a uno
-$module_url = '/{module_url}';
-
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
 	{columns}

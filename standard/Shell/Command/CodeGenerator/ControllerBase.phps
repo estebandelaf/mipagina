@@ -82,6 +82,7 @@ abstract class {classs}BaseController extends AppController {
 		}
 		// setear variables
 		$this->set(array(
+			'module_url' => $this->module_url,
 			'controller' => $this->request->params['controller'],
 			'page' => $page,
 			'orderby' => $orderby,
