@@ -63,7 +63,7 @@
 $message = Session::message();
 if($message) echo '<div class="session_message">',$message,'</div>';
 ?>
-<a href="javascript:print()" title="Imprimir página" class="fright">
+<a href="javascript:print()" title="Imprimir página" class="fright" id="printIcon">
 	<img src="<?php echo $_base; ?>/img/icons/16x16/actions/print.png"
 		alt="Imprimir página" />
 </a>
@@ -71,10 +71,10 @@ if($message) echo '<div class="session_message">',$message,'</div>';
 			</div>
 			<div id="footer">
 				<div>
-					<div class="fleft">
+					<div class="fleft" id="footer_left">
 						<?php echo Configure::read('page.footer.left'); ?>
 					</div>
-					<div class="fright">
+					<div class="fright" id="footer_right">
 						<?php echo Configure::read('page.footer.right'); ?>
 					</div>
 				</div>
