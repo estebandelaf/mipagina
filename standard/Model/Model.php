@@ -103,7 +103,47 @@ abstract class Model extends Object implements ModelInterface {
 		$this->db->commit();
 		return true;
 	}
-	
+
+	/**
+	 * Método que permite editar una fila de la base de datos de manera
+	 * simple desde desde fuera del modelo.
+	 * @param columns Arreglo con las columnas a editar (como claves) y los nuevos valores
+	 * @param pks Arreglo con las columnas PK (como claves) y los valores para decidir que actualizar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-07
+	 */
+	public function edit ($columns, $pks = null) {
+		// preparar set de la consulta
+		$querySet = array ();
+		foreach ($columns as $col => &$val) {
+			if ($val===null) $val = 'NULL';
+			else if ($val===true) $val = 'true';
+			else if ($val===false) $val = 'false';
+			else $val = '\''.$this->db->sanitize($val).'\'';
+			$querySet[] = $col.' = '.$val;
+		}
+		// preparar PK de la consulta
+		$queryPk = array();
+		if ($pks===null) {
+			$class = get_class($this);
+			foreach ($class::$columnsInfo as $col => &$info) {
+				if ($info['pk']) {
+					$queryPk[] = $col.' = \''.$this->db->sanitize($this->$col).'\'';
+				}
+			}
+		} else {
+			foreach ($pks as $pk => &$val) {
+				$queryPk[] = $pk.' = \''.$this->db->sanitize($val).'\'';
+			}
+		}
+		// realizar consulta
+		$this->db->query ('
+			UPDATE '.$this->_table.'
+			SET '.implode(', ', $querySet).'
+			WHERE '.implode(' AND ', $queryPk)
+		);
+	}
+
 	/**
 	 * Se ejecuta automáticamente antes del save
 	 * @return boolean Verdadero en caso de éxito
