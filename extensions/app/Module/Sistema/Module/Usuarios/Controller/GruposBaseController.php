@@ -26,10 +26,10 @@ App::uses('AppController', 'Controller');
 
 /**
  * Clase abstracta para el controlador asociado a la tabla grupo de la base de datos
- * Comentario de la tabla: Tabla para grupos del sistema
+ * Comentario de la tabla: Grupos de la aplicación
  * Esta clase permite controlar las acciones básicas entre el modelo y vista para la tabla grupo, o sea implementa métodos CRUD
  * @author MiPaGiNa Code Generator
- * @version 2013-07-05 01:36:25
+ * @version 2014-02-06 15:30:30
  */
 abstract class GruposBaseController extends AppController {
 
@@ -39,7 +39,7 @@ abstract class GruposBaseController extends AppController {
 	 * Controlador para listar los registros de tipo Grupo
 	 * @todo Agregar condiciones para paginar los datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function listar ($page = 1, $orderby = null, $order = 'A') {
 		// crear objeto
@@ -82,6 +82,7 @@ abstract class GruposBaseController extends AppController {
 		}
 		// setear variables
 		$this->set(array(
+			'module_url' => $this->module_url,
 			'controller' => $this->request->params['controller'],
 			'page' => $page,
 			'orderby' => $orderby,
@@ -100,7 +101,7 @@ abstract class GruposBaseController extends AppController {
 	 * Controlador para crear un registro de tipo Grupo
 	 * @todo Permitir subir los archivo al crear el registro
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function crear () {
 		// si se envió el formulario se procesa
@@ -123,7 +124,7 @@ abstract class GruposBaseController extends AppController {
 	/**
 	 * Controlador para editar un registro de tipo Grupo
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function editar ($id) {
 		$Grupo = new Grupo($id);
@@ -158,7 +159,7 @@ abstract class GruposBaseController extends AppController {
 	/**
 	 * Controlador para eliminar un registro de tipo Grupo
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function eliminar ($id) {
 		$Grupo = new Grupo($id);

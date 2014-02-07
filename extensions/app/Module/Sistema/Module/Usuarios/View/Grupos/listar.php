@@ -1,15 +1,12 @@
 <script type="text/javascript" src="<?php echo $_base; ?>/js/mantenedor.js"></script>
 <h1>Listado de Grupos</h1>
-<p>Tabla para grupos del sistema.</p>
+<p>Grupos de la aplicación.</p>
 
 <?php
 
-// url del módulo en caso que la vista pertenezca a uno
-$module_url = '/sistema/usuarios/';
-
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
-	'id' => 'Id',
+//	'id' => 'Id',
 	'grupo' => 'Grupo',
 	'activo' => 'Activo'
 );

@@ -29,7 +29,7 @@ App::uses('AppController', 'Controller');
  * Comentario de la tabla: Relación entre usuarios y los grupos a los que pertenecen
  * Esta clase permite controlar las acciones básicas entre el modelo y vista para la tabla usuario_grupo, o sea implementa métodos CRUD
  * @author MiPaGiNa Code Generator
- * @version 2013-07-05 01:36:25
+ * @version 2014-02-06 15:30:30
  */
 abstract class UsuarioGruposBaseController extends AppController {
 
@@ -39,7 +39,7 @@ abstract class UsuarioGruposBaseController extends AppController {
 	 * Controlador para listar los registros de tipo UsuarioGrupo
 	 * @todo Agregar condiciones para paginar los datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function listar ($page = 1, $orderby = null, $order = 'A') {
 		// crear objeto
@@ -82,6 +82,7 @@ abstract class UsuarioGruposBaseController extends AppController {
 		}
 		// setear variables
 		$this->set(array(
+			'module_url' => $this->module_url,
 			'controller' => $this->request->params['controller'],
 			'page' => $page,
 			'orderby' => $orderby,
@@ -100,7 +101,7 @@ abstract class UsuarioGruposBaseController extends AppController {
 	 * Controlador para crear un registro de tipo UsuarioGrupo
 	 * @todo Permitir subir los archivo al crear el registro
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function crear () {
 		// si se envió el formulario se procesa
@@ -123,7 +124,7 @@ abstract class UsuarioGruposBaseController extends AppController {
 	/**
 	 * Controlador para editar un registro de tipo UsuarioGrupo
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function editar ($usuario, $grupo) {
 		$UsuarioGrupo = new UsuarioGrupo($usuario, $grupo);
@@ -158,7 +159,7 @@ abstract class UsuarioGruposBaseController extends AppController {
 	/**
 	 * Controlador para eliminar un registro de tipo UsuarioGrupo
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-06 15:30:30
 	 */
 	public function eliminar ($usuario, $grupo) {
 		$UsuarioGrupo = new UsuarioGrupo($usuario, $grupo);

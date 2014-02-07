@@ -5,10 +5,15 @@
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
 	'id' => 'Id',
-	'persona' => 'Persona',
+	'nombre' => 'Nombre',
 	'usuario' => 'Usuario',
+	'email' => 'Email',
 	'contrasenia' => 'Contrasenia',
-	'activo' => 'Activo'
+	'hash' => 'Hash',
+	'activo' => 'Activo',
+	'ultimo_ingreso_fecha_hora' => 'Ultimo Ingreso Fecha Hora',
+	'ultimo_ingreso_desde' => 'Ultimo Ingreso Desde',
+	'ultimo_ingreso_hash' => 'Ultimo Ingreso Hash'
 );
 
 // crear formulario

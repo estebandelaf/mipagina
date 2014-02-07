@@ -32,20 +32,20 @@ App::uses('AppModel', 'Model');
  * Relación entre usuarios y los grupos a los que pertenecen
  * Esta clase permite trabajar sobre un registro de la tabla usuario_grupo
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-07 17:00:18
  */
 abstract class UsuarioGrupoBase extends AppModel {
 
 	// Atributos de la clase (columnas en la base de datos)
-	public $usuario; ///< ID del usuario: integer(32) NOT NULL DEFAULT '' PK FK:usuario.id
-	public $grupo; ///< ID del grupo: integer(32) NOT NULL DEFAULT '' PK FK:grupo.id
-	public $primario; ///< Indica si es el grupo principal del usuario: boolean() NOT NULL DEFAULT 'false' 
+	public $usuario; ///< Usuario de la aplicación: integer(32) NOT NULL DEFAULT '' PK FK:usuario.id
+	public $grupo; ///< Grupo al que pertenece el usuario: integer(32) NOT NULL DEFAULT '' PK FK:grupo.id
+	public $primario; ///< Indica si el grupo es el grupo primario del usuario: boolean() NOT NULL DEFAULT 'false' 
 
 	// Información de las columnas de la tabla en la base de datos
 	public static $columnsInfo = array(
 		'usuario' => array(
 			'name' => 'Usuario',
-			'comment' => 'ID del usuario',
+			'comment' => 'Usuario de la aplicación',
 			'type' => 'integer',
 			'length' => 32,
 			'null' => false,
@@ -56,7 +56,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 		),
 		'grupo' => array(
 			'name' => 'Grupo',
-			'comment' => 'ID del grupo',
+			'comment' => 'Grupo al que pertenece el usuario',
 			'type' => 'integer',
 			'length' => 32,
 			'null' => false,
@@ -67,7 +67,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 		),
 		'primario' => array(
 			'name' => 'Primario',
-			'comment' => 'Indica si es el grupo principal del usuario',
+			'comment' => 'Indica si el grupo es el grupo primario del usuario',
 			'type' => 'boolean',
 			'length' => null,
 			'null' => false,
@@ -82,7 +82,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function __construct ($usuario = null, $grupo = null) {
 		// asignar base de datos y tabla
@@ -111,7 +111,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	 * Setea a null los atributos de la clase (los que sean columnas de
 	 * la tabla)
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	protected function clear () {
 		$this->usuario = null;
@@ -149,28 +149,9 @@ abstract class UsuarioGrupoBase extends AppModel {
 	}
 	
 	/**
-	 * Setea los atributos del objeto UsuarioGrupoModel mediante un arreglo,
-	 * la key del arreglo es el nombre del atributo, si la key no existe
-	 * el campo quedará seteado a null
-	 * @param array Array Arreglo con la relacion columna=>valor
-	 * @param clear Boolean Verdadero para limpiar atributos antes de hacer el set
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function set ($array) {
-		// asignar atributos con los valores del arreglo
-		if(isset($array['usuario']))
-			$this->usuario = $array['usuario'];
-		if(isset($array['grupo']))
-			$this->grupo = $array['grupo'];
-		if(isset($array['primario']))
-			$this->primario = $array['primario'];
-	}
-	
-	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function exists () {
 		// solo se ejecuta si la PK existe seteada
@@ -187,7 +168,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	/**
 	 * Método para borrar el objeto de la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function delete () {
 		$this->db->transaction();
@@ -204,7 +185,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	/**
 	 * Método para insertar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	protected function insert () {
 		$this->db->transaction();
@@ -228,7 +209,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	/**
 	 * Método para actualizar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	protected function update () {
 		$this->db->transaction();
@@ -248,7 +229,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	 * Recupera un objeto de tipo Usuario asociado al objeto UsuarioGrupo
 	 * @return Usuario Objeto de tipo Usuario con datos seteados o null en caso de que no existe la asociación
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function getUsuario () {
 		App::uses('Usuario', $this->fkModule['Usuario'].'Model');
@@ -263,7 +244,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	 * Recupera un objeto de tipo Grupo asociado al objeto UsuarioGrupo
 	 * @return Grupo Objeto de tipo Grupo con datos seteados o null en caso de que no existe la asociación
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function getGrupo () {
 		App::uses('Grupo', $this->fkModule['Grupo'].'Model');
@@ -278,7 +259,7 @@ abstract class UsuarioGrupoBase extends AppModel {
 	/**
 	 * Método que guarda un archivo en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function saveFile ($name, $file) {
 		$this->db->transaction();
@@ -310,14 +291,14 @@ abstract class UsuarioGrupoBase extends AppModel {
  * Relación entre usuarios y los grupos a los que pertenecen
  * Esta clase permite trabajar sobre un conjunto de registros de la tabla usuario_grupo
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-07 17:00:18
  */
 abstract class UsuarioGruposBase extends AppModels {
 	
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-07 17:00:18
 	 */
 	public function __construct () {
 		// asignar base de datos y tabla

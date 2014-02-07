@@ -1,19 +1,21 @@
 <script type="text/javascript" src="<?php echo $_base; ?>/js/mantenedor.js"></script>
 <h1>Listado de Usuarios</h1>
-<p>Tabla para usuarios del sistema.</p>
+<p>Usuarios de la aplicación.</p>
 
 <?php
 
-// url del módulo en caso que la vista pertenezca a uno
-$module_url = '/sistema/usuarios/';
-
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
-	'id' => 'Id',
-	'persona' => 'Persona',
+//	'id' => 'Id',
+	'nombre' => 'Nombre',
 	'usuario' => 'Usuario',
+	'email' => 'Email',
 //	'contrasenia' => 'Contrasenia',
-	'activo' => 'Activo'
+//	'hash' => 'Hash',
+//	'activo' => 'Activo',
+	'ultimo_ingreso_fecha_hora' => 'Ultimo Ingreso Fecha Hora',
+	'ultimo_ingreso_desde' => 'Ultimo Ingreso Desde',
+//	'ultimo_ingreso_hash' => 'Ultimo Ingreso Hash'
 );
 
 // preparar títulos de columnas (con link para ordenar por dicho campo)

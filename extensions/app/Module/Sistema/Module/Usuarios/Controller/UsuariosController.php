@@ -57,10 +57,15 @@ final class UsuariosController extends UsuariosBaseController {
 		if(isset($_POST['submit'])) {
 			$Usuario = new Usuario();
 			$Usuario->set($_POST);
-			if(!empty($Usuario->contrasenia)) {
-				$Usuario->contrasenia =
-				$this->Auth->hash($Usuario->contrasenia);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/usuarios/perfil');
 			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			$Usuario->contrasenia = $this->Auth->hash($Usuario->contrasenia);
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
 			Session::message('Registro Usuario creado');
@@ -84,6 +89,7 @@ final class UsuariosController extends UsuariosBaseController {
 		}
 		// si no se ha enviado el formulario se mostrará
 		if(!isset($_POST['submit'])) {
+			Usuario::$columnsInfo['contrasenia']['null'] = true;
 			$this->set(array(
 				'Usuario' => $Usuario,
 				'columnsInfo' => Usuario::$columnsInfo,
@@ -92,6 +98,14 @@ final class UsuariosController extends UsuariosBaseController {
 		// si se envió el formulario se procesa
 		else {
 			$Usuario->set($_POST);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
 			if(!empty($_POST['contrasenia'])) {
@@ -111,13 +125,18 @@ final class UsuariosController extends UsuariosBaseController {
 		// obtener usuario
 		$Usuario = new Usuario(Session::read('auth.id'));
 		// procesar datos personales
-		if (isset($_POST['datosPersonales'])) {
+		if (isset($_POST['datosUsuario'])) {
 			// actualizar datos generales
-			$Persona = $Usuario->getPersona();
-			$Persona->set($_POST);
-			$Persona->save();
-			// guardar imagen
-			$this->saveImagen($Persona);
+			$Usuario->set($_POST);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			$Usuario->save();
 			// mensaje de ok y redireccionar
 			Session::message('Perfil actualizado');
 			$this->redirect('/usuarios/perfil');
@@ -130,7 +149,7 @@ final class UsuariosController extends UsuariosBaseController {
 					$this->Auth->settings['model']['user']['hash']
 				);
 			} else {
-				Session::message('Error al actualizar la contraseña');
+				Session::message('Contraseñas no coinciden');
 				$this->redirect('/usuarios/perfil');
 			}
 			// mensaje de ok y redireccionar
@@ -141,72 +160,8 @@ final class UsuariosController extends UsuariosBaseController {
 		else {
 			$this->set(array(
 				'Usuario' => $Usuario,
-				'Persona' => $Usuario->getPersona(),
 			));
 		}
-	}
-
-	private function saveImagen (&$Persona) {
-		if(isset($_FILES['imagen']) && !$_FILES['imagen']['error']) {
-			// diferentes opciones para las imagenes
-			$mimetype = 'image/png image/jpeg image/gif';
-			$w = 256; $h = 256; $w_t = 48; $h_t = 48;
-			// clases que se utilizarán
-			App::uses('File', 'Utility');
-			App::uses('Image', 'Utility');
-			// cargar foto
-			$foto = File::upload(
-				$_FILES['imagen']
-				, explode(' ', $mimetype)
-				, null
-				, $w
-				, $h
-			);
-			// guardar solo si se leyó el archivo
-			if(is_array($foto)) {
-				$avatar = Image::face_thumbnail(
-					$_FILES['imagen']['tmp_name'],
-					$w_t,
-					$h_t
-				);
-				$Persona->saveImagen($foto, $avatar);
-			}
-		}
-	}
-
-	/**
-	 * Controlador para descargar la imagen de un usuario
-	 * @author Esteban De La Fuente Rubio
-	 * @version 2013-07-01
-	 */
-	public function imagen ($usuario, $tamanio = null) {
-		// crear usuario
-		$Usuario = new Usuario($usuario);
-		$Persona = $Usuario->getPersona();
-		// si existe la imagen se usa
-		if($Persona->imagen_size) {
-			// si se solicitó la imagen pequeña
-			if($tamanio=='small') {
-				$img['size'] = $Persona->imagen_t_size;
-				$img['data'] = $Persona->imagen_t_data;
-			}
-			// si se solicitó la imagen normal
-			else {
-				$img['size'] = $Persona->imagen_size;
-				$img['data'] = $Persona->imagen_data;
-			}
-			// datos comunes (independiente del tamaño)
-			$img['type'] = $Persona->imagen_type;
-			$img['name'] = $Persona->imagen_name;
-			$img['data'] = pg_unescape_bytea($img['data']);
-		}
-		// si no existe se busca una por defecto
-		else {
-			$img = App::location('webroot/img/usuarios/default_'.$tamanio.'.png');
-			if(!$img) $img = App::location('webroot/img/usuarios/default_normal.png');
-		}
-		// entregar imagen
-		$this->response->sendFile($img);
 	}
 
 }

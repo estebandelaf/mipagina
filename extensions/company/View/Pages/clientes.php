@@ -3,7 +3,7 @@
 if (file_exists(DIR_WEBSITE.'/Model/Data/clientes.php')) {
 	include DIR_WEBSITE.'/Model/Data/clientes.php';
 	boxAnimated ($clientes, $_base.'/img/pages/clientes',
-							'Servicios prestados:');
+							'Solución entregada:');
 } else {
 	echo '<p>No existen datos de clientes disponibles.</p>';
 }

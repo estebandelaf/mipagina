@@ -2,11 +2,6 @@
 
 // Menú para el módulo
 Configure::write('nav.module', array(
-	'/personas/listar' => array(
-		'name' => 'Personas',
-		'desc' => 'Personas',
-		'imag' => '/sistema/usuarios/img/icons/48x48/persona.png',
-	),
 	'/usuarios/listar' => array(
 		'name' => 'Usuarios',
 		'desc' => 'Usuarios del sistema',
