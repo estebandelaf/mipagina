@@ -271,7 +271,7 @@ class CodeGeneratorShell extends AppShell {
 				// valor para la columna, ya sea al insertar o al actualizar
 				$value = "\".(!empty(\$this->".$column['name'].") || \$this->".$column['name']."=='0' ? \"'\".\$this->db->sanitize(\$this->".$column['name'].").\"'\" : 'NULL').\"";
 				// procesar para insertar
-				if(!($column['auto']=='YES'||$column['auto']==1)) {
+				if(!($column['auto']==='YES'||$column['auto']===1)) {
 					if(in_array($column['name'], array('creado', 'creada', 'modificado', 'modificada'))) {
 						$value = 'NOW()';
 					}
