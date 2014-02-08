@@ -249,7 +249,9 @@ class AuthComponent extends Component {
 			// si existe, crear sesión
 			else {
 				// hash de la sesión
-				$hash = md5 ($_SERVER['REMOTE_ADDR'].date('Y-m-d H:i:s').$this->hash($_POST[$passField]));
+				$timestamp = date('Y-m-d H:i:s');
+				$ip = self::ip (true);
+				$hash = md5 ($ip.$timestamp.$this->hash($_POST[$passField]));
 				// registrar ingreso en la base de datos
 				// se asume que si está seteada una de las columnas lastlogin_* lo estarán todas
 				if (isset($this->settings['model']['user']['columns']['lastlogin_timestamp'][0])) {
@@ -263,8 +265,8 @@ class AuthComponent extends Component {
 						$lastlogin = '';
 					}
 					$$userModel->edit (array(
-						$this->settings['model']['user']['columns']['lastlogin_timestamp'] => date('Y-m-d H:i:s'),
-						$this->settings['model']['user']['columns']['lastlogin_from'] => $_SERVER['REMOTE_ADDR'],
+						$this->settings['model']['user']['columns']['lastlogin_timestamp'] => $timestamp,
+						$this->settings['model']['user']['columns']['lastlogin_from'] => $ip,
 						$this->settings['model']['user']['columns']['lastlogin_hash'] => $hash
 					));
 				} else {
@@ -296,9 +298,37 @@ class AuthComponent extends Component {
 		self::$session = null;
 		$controller->redirect($this->settings['redirect']['logout']);
 	}
-	
+
+	/**
+	 * Método que calcula el hash de la contraseña utilizando el método
+	 * especificado
+	 */
 	public function hash ($string) {
 		return hash($this->settings['model']['user']['hash'], $string);
+	}
+
+	/**
+	 * Establecer ip del visitante
+	 * @return Ip del visitante
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-08
+	 */
+	public static function ip ($get_from_proxy = false) {
+		if ($get_from_proxy && getenv('HTTP_X_FORWARDED_FOR')) {
+			$ips = explode(', ', getenv('HTTP_X_FORWARDED_FOR'));
+			return $ips[count($ips)-1];
+		}
+		return $_SERVER['REMOTE_ADDR'];
+	}
+
+	/**
+	 * Establecer host del visitante
+	 * @return Host del visitante
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-08
+	 */
+	public static function host ($get_from_proxy = false) {
+		return gethostbyaddr(self::ip($get_from_proxy));
 	}
 
 }
