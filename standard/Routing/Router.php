@@ -67,7 +67,7 @@ class Router {
 		}
 		// Buscar alguna que sea parcial (:controller, :action o *)
 		foreach(self::$routes as $key=>$aux) {
-			$params = array_merge(array('module'=>null, 'controller'=>null, 'action'=>'index', 'pass'=>null), $aux);
+			$params = array_merge(array('module'=>null, 'controller'=>null, 'action'=>null, 'pass'=>null), $aux);
 			// Tiene :controller
 			$controller = strpos($key, ':controller');
 			if($controller) {

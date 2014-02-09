@@ -4,6 +4,19 @@ App::uses('AppController', 'Controller');
 
 class ModuleController extends AppController {
 
+	public function beforeFilter () {
+		$this->Auth->allow ('index');
+		parent::beforeFilter ();
+	}
+
+	/**
+	 * Renderizará (sin autenticación) el archivo en View/index
+	 */
+	public function index () {
+		$this->autoRender = false;
+		$this->render('index');
+	}
+
 	/**
 	 * Mostrar la página principal para el módulo (con sus opciones de menú)
 	 * @todo Verificar que se muestre un enlace solo si existen sus módulos
