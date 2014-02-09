@@ -179,6 +179,43 @@ function boxAnimated ($logos, $dir, $infoTitle = '') {
 </div>
 	';
 	}
-	// marcar la función como ejecutada
-	$logo_info_first_call = false;
+}
+
+/**
+ * http://phpes.wordpress.com/2007/06/12/generador-de-una-cadena-aleatoria/
+ */
+function str_random ($length=8, $uc=true, $n=true, $sc=false) {
+	$source = 'abcdefghijklmnopqrstuvwxyz';
+	if($uc) $source .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	if($n) $source .= '0123456789';
+	if($sc) $source .= '|@#~$%()=^*+[]{}-_';
+	if($length>0){
+		$rstr = "";
+		$source = str_split($source,1);
+		for($i=1; $i<=$length; $i++){
+			mt_srand((double)microtime() * 1000000);
+			$num = mt_rand(1,count($source));
+			$rstr .= $source[$num-1];
+		}
+
+	}
+	return $rstr;
+}
+
+/**
+ * http://stackoverflow.com/users/847142/frans-van-asselt
+ */
+function array2xml ($array, $xml = false){
+    if($xml === false){
+        $xml = new SimpleXMLElement('<root/>');
+    }
+    foreach($array as $key => $value){
+        if(is_array($value)){
+        		if(is_numeric($key)) $key = 'item'; // by DeLaF
+            array2xml($value, $xml->addChild($key));
+        } else {
+            $xml->addChild($key, $value);
+        }
+    }
+    return $xml->asXML();
 }
