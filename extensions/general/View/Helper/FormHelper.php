@@ -233,9 +233,11 @@ class FormHelper {
 	 */
 	private function _checkboxes ($config) {
 		$buffer = '';
-		foreach($config['options'] as $option) {
-			$key = array_shift($option);
-			$value = array_shift($option);
+		foreach($config['options'] as $key => &$value) {
+			if (is_array($value)) {
+				$key = array_shift($value);
+				$value = array_shift($value);
+			}
 			$buffer .= '<input type="checkbox" name="'.$config['name'].'[]" value="'.$key.'" '.$config['class'].' '.$config['attr'].'/> '.$value.'<br />';
 		}
 		return $buffer;
@@ -262,9 +264,11 @@ class FormHelper {
 			), $config);
 		$buffer = '';
 		$buffer .= '<select name="'.$config['name'].'" id="'.$config['name'].'Field"'.$config['class'].' '.$config['attr'].'>';
-		foreach($config['options'] as $option) {
-			$key = array_shift($option);
-			$value = array_shift($option);
+		foreach($config['options'] as $key => &$value) {
+			if (is_array($value)) {
+				$key = array_shift($value);
+				$value = array_shift($value);
+			}
 			$buffer .= '<option value="'.$key.'"'.($config['selected']==$key?' selected="selected"':'').'>'.$value.'</option>';
 		}
 		$buffer .= '</select>';
@@ -283,9 +287,11 @@ class FormHelper {
 	
 	private function _radios ($config) {
 		$buffer = '';
-		foreach($config['options'] as &$option) {
-			$key = array_shift($option);
-			$value = array_shift($option);
+		foreach($config['options'] as $key => &$value) {
+			if (is_array($value)) {
+				$key = array_shift($value);
+				$value = array_shift($value);
+			}
 			$checked = isset($config['checked']) && $config['checked']==$key ? 'checked="checked"' : '';
 			$buffer .= ' <input type="radio" name="'.$config['name'].'" value="'.$key.'" '.$checked.'> '.$value.' ';
 		}
