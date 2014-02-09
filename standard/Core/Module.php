@@ -24,12 +24,13 @@
 /**
  * Clase para manejar modulos: cargarlos, rutas y bootstrap 
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-08-20
+ * @version 2014-02-09
  */
 class Module {
 
 	private static $_modules = array(); ///< Listado de modulos cargados
 	private static $_filesLoadeables = array( ///< Archivos que se buscarán para cargar de forma automática al cargar el módulo
+		'basics',
 		'bootstrap',
 		'Config/core',
 		'Config/routes',
@@ -170,7 +171,7 @@ class Module {
 	 * @param url Solicitud realizada (sin la base de la aplicación)
 	 * @return Nombre del módulo si es que existe uno en la url
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-26
+	 * @version 2014-02-09
 	 */
 	public static function find ($url) {
 		// Separar por "/"
@@ -202,7 +203,6 @@ class Module {
 			}
 			// cargar módulo
 			$module = implode('.', $module);
-			Module::load($module);
 			// retornar nombre del modulo
 			return $module;
 		} else {

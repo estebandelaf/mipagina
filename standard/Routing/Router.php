@@ -25,7 +25,7 @@
  * Clase para manejar rutas de la aplicación
  * Las rutas conectan URLs con controladores y acciones
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-15
+ * @version 2014-02-09
  */
 class Router {
 	
@@ -37,7 +37,7 @@ class Router {
 	 * Procesa la url indicando que es lo que se espera obtener según las rutas que existen conectadas
 	 * @todo Verificar que funcione para modulos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
+	 * @version 2014-02-09
 	 */
 	public static function parse ($url) {
 		// La url requiere partir con "/", si no lo tiene se coloca
@@ -112,7 +112,7 @@ class Router {
 				}
 			}
 		}
-		// Arreglo por defecto para los datos de plugin, controlador, accion y parámetros pasados
+		// Arreglo por defecto para los datos de módulo, controlador, accion y parámetros pasados
 		$params = array('module'=>null, 'controller'=>null, 'action'=>'index', 'pass'=>null);
 		// Procesar la URL recibida, en el formato /modulo(s)/controlador/accion/parámetro1/parámetro2/etc
 		// Buscar componente de la url que corresponde al modulo (de existir)
