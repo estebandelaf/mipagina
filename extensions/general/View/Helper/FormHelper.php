@@ -223,6 +223,10 @@ class FormHelper {
 	}
 
 	private function _checkbox ($config) {
+		// si el valor por defecto se pasó en value se copia donde corresponde
+		if (isset($_POST[$config['name']])) {
+			$config['checked'] = true;
+		}
 		$checked = isset($config['checked']) && $config['checked'] ? 'checked="checked"' : '';
 		return '<input type="checkbox" name="'.$config['name'].'" value="'.$config['value'].'" id="'.$config['name'].'Field" '.$checked.''.$config['class'].' '.$config['attr'].'/>';
 	}
