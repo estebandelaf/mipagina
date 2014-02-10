@@ -175,7 +175,7 @@ class FormHelper {
 				'help' => '',
 			), $config
 		);
-		// si no se indico un valor y existe uno por POST se usa
+		// si no se indicó un valor y existe uno por POST se usa
 		if (!isset($config['value'][0]) && isset($_POST[$config['name']])) {
 			$config['value'] = $_POST[$config['name']];
 		}
@@ -262,6 +262,10 @@ class FormHelper {
 		$config = array_merge(array(
 			'selected'=>''
 			), $config);
+		// si el valor por defecto se pasó en value se copia donde corresponde
+		if (isset($config['value'][0])) {
+			$config['selected'] = $config['value'];
+		}
 		$buffer = '';
 		$buffer .= '<select name="'.$config['name'].'" id="'.$config['name'].'Field"'.$config['class'].' '.$config['attr'].'>';
 		foreach($config['options'] as $key => &$value) {
@@ -286,6 +290,10 @@ class FormHelper {
 	}
 	
 	private function _radios ($config) {
+		// si el valor por defecto se pasó en value se copia donde corresponde
+		if (isset($config['value'][0])) {
+			$config['checked'] = $config['value'];
+		}
 		$buffer = '';
 		foreach($config['options'] as $key => &$value) {
 			if (is_array($value)) {
