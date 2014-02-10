@@ -205,17 +205,15 @@ function str_random ($length=8, $uc=true, $n=true, $sc=false) {
 /**
  * http://stackoverflow.com/users/847142/frans-van-asselt
  */
-function array2xml ($array, $xml = false){
-    if($xml === false){
-        $xml = new SimpleXMLElement('<root/>');
-    }
-    foreach($array as $key => $value){
-        if(is_array($value)){
-        		if(is_numeric($key)) $key = 'item'; // by DeLaF
-            array2xml($value, $xml->addChild($key));
-        } else {
-            $xml->addChild($key, $value);
-        }
-    }
-    return $xml->asXML();
+function array2xml ($array, $root = 'root'){
+	$xml = new SimpleXMLElement('<'.$root.'/>');
+	foreach($array as $key => $value){
+		if(is_array($value)){
+			if(is_numeric($key)) $key = 'item'; // by DeLaF
+			array2xml($value, $xml->addChild($key));
+		} else {
+			$xml->addChild($key, $value);
+		}
+	}
+	return $xml->asXML();
 }
