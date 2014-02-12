@@ -127,7 +127,6 @@ class TableHelper {
 		$buffer .= $this->export ($table);
 		$buffer .= $this->showAndHide ();
 		$buffer .= '</div>'."\n";
-		$buffer .= '<div style="clear:both"></div>'."\n";
 		// Iniciar tabla
 		$buffer .= '<table class="'.$this->_class.'" id="'.$this->_id.'">'."\n";
 		// Definir títulos de columnas
