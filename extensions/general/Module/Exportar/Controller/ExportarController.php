@@ -38,7 +38,7 @@ class ExportarController extends AppController {
 		));
 	}
 
-	public function barcode ($string, $type = 'code128') {
+	public function barcode ($string, $type = 'C128') {
 		$this->set(array(
 			'string' => base64_decode($string),
 			'type' => $type,
@@ -46,6 +46,10 @@ class ExportarController extends AppController {
 	}
 
 	public function qrcode ($string) {
+		$this->set('string', base64_decode($string));
+	}
+
+	public function pdf417 ($string) {
 		$this->set('string', base64_decode($string));
 	}
 
