@@ -43,7 +43,7 @@ class TableHelper {
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-12-02
 	 */
-	public function __construct ($table = null, $id = 'table',
+	public function __construct ($table = null, $id = null,
 					$export = false, $display = true) {
 		// asignar identificador de la tabla
 		$this->_id = $id;
@@ -123,10 +123,12 @@ class TableHelper {
 		// de imprimir directamente
 		$buffer = '<div>'."\n";
 		// Crear iconos para exportar y ocultar/mostrar tabla
-		$buffer .= '<div style="float:right">'."\n";
-		$buffer .= $this->export ($table);
-		$buffer .= $this->showAndHide ();
-		$buffer .= '</div>'."\n";
+		if ( $this->_id !==null ) {
+			$buffer .= '<div style="float:right">'."\n";
+			$buffer .= $this->export ($table);
+			$buffer .= $this->showAndHide ();
+			$buffer .= '</div>'."\n";
+		}
 		// Iniciar tabla
 		$buffer .= '<table class="'.$this->_class.'" id="'.$this->_id.'">'."\n";
 		// Definir títulos de columnas
