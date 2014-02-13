@@ -573,8 +573,12 @@ abstract class Models extends Object implements ModelsInterface {
 	 * @version 2012-10-07
 	 */
 	public function getList () {
+		$class = Inflector::singularize (get_class($this));
+		$cols = array_keys($class::$columnsInfo);
+		$id = $cols[0];
+		$glosa = in_array($this->_table, $cols) ? $this->_table : $cols[1];
 		return $this->db->getTable('
-			SELECT id, '.$this->_table.'
+			SELECT '.$id.' AS id, '.$glosa.' AS glosa
 			FROM '.$this->_table.'
 			ORDER BY '.$this->_table
 		);
