@@ -33,7 +33,15 @@ App::uses('GrupoBase', 'Sistema.Usuarios.Model');
  */
 final class Grupo extends GrupoBase {
 
-	protected $fkModule = array(); ///< Modelos utilizados
+	/**
+	 * Constructor de la clase final
+	 * @author MiPaGiNa Code Generator
+	 * @version 2014-02-13 19:09:38
+	 */
+	public function __construct ($id = null) {
+		self::$fkModule = array();
+		parent::__construct ($id);
+	}
 
 }
 

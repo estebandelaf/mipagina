@@ -32,7 +32,7 @@ App::uses('AppModel', 'Model');
  * Usuarios de la aplicación
  * Esta clase permite trabajar sobre un registro de la tabla usuario
  * @author MiPaGiNa Code Generator
- * @version 2014-02-07 17:00:18
+ * @version 2014-02-13 19:09:38
  */
 abstract class UsuarioBase extends AppModel {
 
@@ -162,11 +162,13 @@ abstract class UsuarioBase extends AppModel {
 		),
 
 	);
+
+	public static $fkModule; ///< Modelos utilizados (se asigna en Usuario)
 	
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function __construct ($id = null) {
 		// asignar base de datos y tabla
@@ -194,7 +196,7 @@ abstract class UsuarioBase extends AppModel {
 	 * Setea a null los atributos de la clase (los que sean columnas de
 	 * la tabla)
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	protected function clear () {
 		$this->id = null;
@@ -241,7 +243,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function exists () {
 		// solo se ejecuta si la PK existe seteada
@@ -258,7 +260,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para borrar el objeto de la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function delete () {
 		$this->db->transaction();
@@ -275,7 +277,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para insertar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	protected function insert () {
 		$this->db->transaction();
@@ -311,7 +313,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para actualizar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	protected function update () {
 		$this->db->transaction();
@@ -340,7 +342,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método que guarda un archivo en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function saveFile ($name, $file) {
 		$this->db->transaction();
@@ -372,14 +374,14 @@ abstract class UsuarioBase extends AppModel {
  * Usuarios de la aplicación
  * Esta clase permite trabajar sobre un conjunto de registros de la tabla usuario
  * @author MiPaGiNa Code Generator
- * @version 2014-02-07 17:00:18
+ * @version 2014-02-13 19:09:38
  */
 abstract class UsuariosBase extends AppModels {
 	
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-07 17:00:18
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function __construct () {
 		// asignar base de datos y tabla

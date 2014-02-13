@@ -29,7 +29,7 @@ App::uses('AppController', 'Controller');
  * Comentario de la tabla: Permisos de grupos para acceder a recursos
  * Esta clase permite controlar las acciones básicas entre el modelo y vista para la tabla auth, o sea implementa métodos CRUD
  * @author MiPaGiNa Code Generator
- * @version 2014-02-06 15:30:30
+ * @version 2014-02-13 19:09:38
  */
 abstract class AuthsBaseController extends AppController {
 
@@ -39,7 +39,7 @@ abstract class AuthsBaseController extends AppController {
 	 * Controlador para listar los registros de tipo Auth
 	 * @todo Agregar condiciones para paginar los datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function listar ($page = 1, $orderby = null, $order = 'A') {
 		// crear objeto
@@ -94,6 +94,7 @@ abstract class AuthsBaseController extends AppController {
 			'registers_total' => $registers_total,
 			'pages' => isset($pages) ? $pages : 0,
 			'linkEnd' => ($orderby ? '/'.$orderby.'/'.$order : '').$searchUrl,
+			'fkModule' => Auth::$fkModule,
 		));
 	}
 	
@@ -101,7 +102,7 @@ abstract class AuthsBaseController extends AppController {
 	 * Controlador para crear un registro de tipo Auth
 	 * @todo Permitir subir los archivo al crear el registro
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function crear () {
 		// si se envió el formulario se procesa
@@ -118,13 +119,14 @@ abstract class AuthsBaseController extends AppController {
 		// setear variables
 		$this->set(array(
 			'columnsInfo' => Auth::$columnsInfo,
+			'fkModule' => Auth::$fkModule,
 		));
 	}
 	
 	/**
 	 * Controlador para editar un registro de tipo Auth
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function editar ($id) {
 		$Auth = new Auth($id);
@@ -140,6 +142,7 @@ abstract class AuthsBaseController extends AppController {
 			$this->set(array(
 				'Auth' => $Auth,
 				'columnsInfo' => Auth::$columnsInfo,
+				'fkModule' => Auth::$fkModule,
 			));
 		}
 		// si se envió el formulario se procesa
@@ -159,7 +162,7 @@ abstract class AuthsBaseController extends AppController {
 	/**
 	 * Controlador para eliminar un registro de tipo Auth
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function eliminar ($id) {
 		$Auth = new Auth($id);

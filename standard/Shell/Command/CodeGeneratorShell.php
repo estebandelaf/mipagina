@@ -352,8 +352,17 @@ class CodeGeneratorShell extends AppShell {
 					$fkModule[] = "'$fk_class' => '".self::$module."'";
 				}
 			}
+			// procesar pks
+			$pk_parameter = array();
+			$pk_variable = array();
+			foreach($info['pk'] as &$pk) {
+				$pk_parameter[] = '$'.$pk.' = null';
+				$pk_variable[] = '$'.$pk;
+			}
+			$pk_parameter = implode(', ', $pk_parameter);
+			$pk_variable = implode(', ', $pk_variable);
 			if(count($fkModule)) {
-				$fkModule = "\n\t\t".implode(",\n\t\t", $fkModule)."\n\t";
+				$fkModule = "\n\t\t\t".implode(",\n\t\t\t", $fkModule)."\n\t\t";
 			} else $fkModule = '';
 			// generar datos
 			$class = Inflector::camelize($table);
@@ -366,6 +375,8 @@ class CodeGeneratorShell extends AppShell {
 				'classs' => Inflector::camelize(Inflector::pluralize($table)),
 				'module' => self::$module,
 				'fkModule' => $fkModule,
+				'pk_parameter' => $pk_parameter,
+				'pk_variable' => $pk_variable,
 			));
 			// guardar archivo en el directorio de clases (si no existe)
 			$filename = self::$destination.DS.'Model'.DS.$class.'.php';

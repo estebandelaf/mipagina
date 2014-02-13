@@ -33,10 +33,18 @@ App::uses('UsuarioGrupoBase', 'Sistema.Usuarios.Model');
  */
 final class UsuarioGrupo extends UsuarioGrupoBase {
 
-	protected $fkModule = array(
-		'Usuario' => 'Sistema.Usuarios.',
-		'Grupo' => 'Sistema.Usuarios.'
-	); ///< Modelos utilizados
+	/**
+	 * Constructor de la clase final
+	 * @author MiPaGiNa Code Generator
+	 * @version 2014-02-13 19:09:38
+	 */
+	public function __construct ($usuario = null, $grupo = null) {
+		self::$fkModule = array(
+			'Usuario' => 'Sistema.Usuarios.',
+			'Grupo' => 'Sistema.Usuarios.'
+		);
+		parent::__construct ($usuario, $grupo);
+	}
 
 }
 

@@ -29,7 +29,7 @@ App::uses('AppController', 'Controller');
  * Comentario de la tabla: Usuarios de la aplicación
  * Esta clase permite controlar las acciones básicas entre el modelo y vista para la tabla usuario, o sea implementa métodos CRUD
  * @author MiPaGiNa Code Generator
- * @version 2014-02-06 15:30:30
+ * @version 2014-02-13 19:09:38
  */
 abstract class UsuariosBaseController extends AppController {
 
@@ -39,7 +39,7 @@ abstract class UsuariosBaseController extends AppController {
 	 * Controlador para listar los registros de tipo Usuario
 	 * @todo Agregar condiciones para paginar los datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function listar ($page = 1, $orderby = null, $order = 'A') {
 		// crear objeto
@@ -94,6 +94,7 @@ abstract class UsuariosBaseController extends AppController {
 			'registers_total' => $registers_total,
 			'pages' => isset($pages) ? $pages : 0,
 			'linkEnd' => ($orderby ? '/'.$orderby.'/'.$order : '').$searchUrl,
+			'fkModule' => Usuario::$fkModule,
 		));
 	}
 	
@@ -101,7 +102,7 @@ abstract class UsuariosBaseController extends AppController {
 	 * Controlador para crear un registro de tipo Usuario
 	 * @todo Permitir subir los archivo al crear el registro
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function crear () {
 		// si se envió el formulario se procesa
@@ -118,13 +119,14 @@ abstract class UsuariosBaseController extends AppController {
 		// setear variables
 		$this->set(array(
 			'columnsInfo' => Usuario::$columnsInfo,
+			'fkModule' => Usuario::$fkModule,
 		));
 	}
 	
 	/**
 	 * Controlador para editar un registro de tipo Usuario
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function editar ($id) {
 		$Usuario = new Usuario($id);
@@ -140,6 +142,7 @@ abstract class UsuariosBaseController extends AppController {
 			$this->set(array(
 				'Usuario' => $Usuario,
 				'columnsInfo' => Usuario::$columnsInfo,
+				'fkModule' => Usuario::$fkModule,
 			));
 		}
 		// si se envió el formulario se procesa
@@ -159,7 +162,7 @@ abstract class UsuariosBaseController extends AppController {
 	/**
 	 * Controlador para eliminar un registro de tipo Usuario
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-06 15:30:30
+	 * @version 2014-02-13 19:09:38
 	 */
 	public function eliminar ($id) {
 		$Usuario = new Usuario($id);
