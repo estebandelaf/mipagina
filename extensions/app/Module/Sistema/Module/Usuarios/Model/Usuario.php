@@ -82,7 +82,7 @@ final class Usuario extends UsuarioBase {
 	}
 
 	/**
-	 * Método que guarda los datos generales de un usuario
+	 * Método que guarda la contraseña de un usuario
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-06-30
 	 */
