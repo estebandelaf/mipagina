@@ -33,15 +33,7 @@ App::uses('{class}Base', '{module}Model');
  */
 final class {class} extends {class}Base {
 
-	/**
-	 * Constructor de la clase final
-	 * @author {author}
-	 * @version {version}
-	 */
-	public function __construct ({pk_parameter}) {
-		self::$fkModule = array({fkModule});
-		parent::__construct ({pk_variable});
-	}
+	public static $fkModule = array({fkModule}); ///< Módulos que utiliza esta clase
 
 }
 

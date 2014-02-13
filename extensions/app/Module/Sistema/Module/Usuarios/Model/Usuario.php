@@ -33,6 +33,8 @@ App::uses('UsuarioBase', 'Sistema.Usuarios.Model');
  */
 final class Usuario extends UsuarioBase {
 
+	public static $fkModule = array(); ///< Módulos que utiliza esta clase
+
 	/**
 	 * Constructor de la clase usuario
 	 * Permite crear el objeto usuario ya sea recibiendo el id del usuario
@@ -41,7 +43,6 @@ final class Usuario extends UsuarioBase {
 	 * @version 2014-02-13
 	 */
 	public function __construct ($id = null) {
-		self::$fkModule = array();
 		if (!is_numeric($id)) {
 			$this->db = Database::get($this->_database);
 			$id = $this->db->getValue('

@@ -33,17 +33,9 @@ App::uses('AuthBase', 'Sistema.Usuarios.Model');
  */
 final class Auth extends AuthBase {
 
-	/**
-	 * Constructor de la clase final
-	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:09:38
-	 */
-	public function __construct ($id = null) {
-		self::$fkModule = array(
-			'Grupo' => 'Sistema.Usuarios.'
-		);
-		parent::__construct ($id);
-	}
+	public static $fkModule = array(
+		'Grupo' => 'Sistema.Usuarios.'
+	); ///< Módulos que utiliza esta clase
 	
 	/**
 	 * Método que revisa los permisos de un usuario sobre un recurso
