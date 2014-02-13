@@ -1,5 +1,5 @@
 <script type="text/javascript" src="<?php echo $_base; ?>/js/mantenedor.js"></script>
-<h1>Listado de UsuarioGrupos</h1>
+<h1>Listado de usuarios y sus grupos</h1>
 <p>Relación entre usuarios y los grupos a los que pertenecen.</p>
 
 <?php

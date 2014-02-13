@@ -13,8 +13,8 @@ $columns = array(
 //	'contrasenia' => 'Contrasenia',
 //	'hash' => 'Hash',
 //	'activo' => 'Activo',
-	'ultimo_ingreso_fecha_hora' => 'Ultimo Ingreso Fecha Hora',
-	'ultimo_ingreso_desde' => 'Ultimo Ingreso Desde',
+	'ultimo_ingreso_fecha_hora' => 'Último Ingreso',
+	'ultimo_ingreso_desde' => 'Última IP',
 //	'ultimo_ingreso_hash' => 'Ultimo Ingreso Hash'
 );
 
