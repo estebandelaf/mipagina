@@ -5,7 +5,7 @@
 	 * @version {version}
 	 */
 	public function get{fk_name} () {
-		App::uses('{fk_class}', $this->fkModule['{fk_class}'].'Model');
+		App::uses('{fk_class}', self::$fkModule['{fk_class}'].'Model');
 		${fk_class} = new {fk_class}({pk});
 		if(${fk_class}->exists()) {
 			return ${fk_class};

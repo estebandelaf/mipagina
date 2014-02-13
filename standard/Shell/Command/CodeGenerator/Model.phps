@@ -33,7 +33,7 @@ App::uses('{class}Base', '{module}Model');
  */
 final class {class} extends {class}Base {
 
-	protected $fkModule = array({fkModule}); ///< Modelos utilizados
+	public static $fkModule = array({fkModule}); ///< Modelos utilizados
 
 }
 

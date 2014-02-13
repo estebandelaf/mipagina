@@ -94,6 +94,7 @@ abstract class {classs}BaseController extends AppController {
 			'registers_total' => $registers_total,
 			'pages' => isset($pages) ? $pages : 0,
 			'linkEnd' => ($orderby ? '/'.$orderby.'/'.$order : '').$searchUrl,
+			'fkModule' => {class}::$fkModule,
 		));
 	}
 	
@@ -118,6 +119,7 @@ abstract class {classs}BaseController extends AppController {
 		// setear variables
 		$this->set(array(
 			'columnsInfo' => {class}::$columnsInfo,
+			'fkModule' => {class}::$fkModule,
 		));
 	}
 	
@@ -140,6 +142,7 @@ abstract class {classs}BaseController extends AppController {
 			$this->set(array(
 				'{class}' => ${class},
 				'columnsInfo' => {class}::$columnsInfo,
+				'fkModule' => {class}::$fkModule,
 			));
 		}
 		// si se envió el formulario se procesa

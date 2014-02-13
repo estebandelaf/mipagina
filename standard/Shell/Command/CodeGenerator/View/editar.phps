@@ -36,7 +36,7 @@ foreach($columns as $column => &$name) {
 		else if($columnsInfo[$column]['fk']) {
 			$class = Inflector::camelize($columnsInfo[$column]['fk']['table']);
 			$classs = Inflector::camelize(Inflector::pluralize($columnsInfo[$column]['fk']['table']));
-			App::uses($class, '{module}Model');
+			App::uses($class, $fkModule[$class].'Model');
 			$objs = new $classs();
 			$options = $objs->getList();
 			array_unshift($options, array('', 'Seleccione una opción'));

@@ -43,6 +43,8 @@ abstract class {class}Base extends AppModel {
 	public static $columnsInfo = array(
 {columnsInfo}
 	);
+
+	public static $fkModule; ///< Modelos utilizados (se asigna en {class})
 	
 	/**
 	 * Constructor de la clase abstracta
