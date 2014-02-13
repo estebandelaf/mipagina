@@ -91,6 +91,30 @@ Form.checkDate = function (field) {
 	return status;
 }
 
+Form.checkRut = function (field) {
+	// se asume todo ok
+	var status = true;
+	var dv = field.value.charAt(field.value.length-1);
+	var rut = field.value.replace(/\./g, '').replace('-', '');
+	rut = rut.substr (0, rut.length-1);
+	// verificar en caso que no sea el formato (solo si existe la función rutDV)
+	if (typeof rutDV == 'function') {
+		if (dv!=rutDV(rut)) {
+			var label = $(field).parent().parent().children('.label').text().replace('*', '');
+			alert('¡' + label + ' es incorrecto!');
+			field.value = '';
+			field.focus();
+			status = false;
+		}
+	}
+	// asignar valor al campo rut
+	if (status) {
+		field.value = num(rut)+'-'+dv;
+	}
+	// retornar
+	return status;
+}
+
 Form.check = function (id) {
 	// asumir que todo está ok
 	var status = true;
@@ -119,6 +143,11 @@ Form.check = function (id) {
 		// verificar si es una fecha
 		if($.inArray('date', check)>=0) {
 			status = Form.checkDate(field);
+			if(!status) return false;
+		}
+		// verificar rut (que corresponsa el DV)
+		if($.inArray('rut', check)>=0) {
+			status = Form.checkRut(field);
 			if(!status) return false;
 		}
 	});
