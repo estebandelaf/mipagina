@@ -44,7 +44,7 @@ class ModuleController extends AppController {
 					$info = array(
 						'name' => $info,
 						'desc' => '',
-						'imag' => '/img/icons/48x48/icon.png',
+						'imag' => '/img/icons/48x48/icono.png',
 						'need' => '',
 					);
 				}
@@ -53,7 +53,7 @@ class ModuleController extends AppController {
 					$info = array_merge(array(
 						'name' => $link,
 						'desc' => '',
-						'imag' => '/img/icons/48x48/icon.png',
+						'imag' => '/img/icons/48x48/icono.png',
 						'need' => '',
 					), $info);
 				}
