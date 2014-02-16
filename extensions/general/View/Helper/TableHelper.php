@@ -25,7 +25,7 @@
  * Helper para la creación de tablas en HTML
  * @todo Arreglar tablas para paginar, exportar, etc
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-12-02
+ * @version 2014-02-16
  */
 class TableHelper {
 
@@ -41,7 +41,7 @@ class TableHelper {
 	 * @param id Identificador de la tabla
 	 * @param export Si se desea poder exportar los datos de la tabla
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-12-02
+	 * @version 2014-02-16
 	 */
 	public function __construct ($table = null, $id = null,
 					$export = false, $display = true) {
@@ -50,7 +50,7 @@ class TableHelper {
 		// asignar flag para exportar o no exportar la tabla
 		$this->_export = $export;
 		// asignar flag para mostrar o oculatar la tabla
-		$this->_dsisplay = $display; 
+		$this->_display = $display;
 		// si se paso una tabla se genera directamente y se imprime
 		// esto evita una línea de programación em muchos casos
 		if(is_array($table)) {
@@ -163,7 +163,7 @@ class TableHelper {
 	 * Crea los datos de la sesión de la tabla para poder exportarla
 	 * @param table Tabla que se está exportando
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-12-02
+	 * @version 2014-02-16
 	 */
 	private function export (&$table) {
 		// si no se debe exportar retornar vacío
@@ -185,7 +185,7 @@ class TableHelper {
 			$nCol = 0;
 			$nCols = count($row);
 			$aux = array();
-			foreach($row as $col) {
+			foreach($row as &$col) {
 				$nCol++;
 				if(isset($this->_exportRemove['rows'])) {
 					if(
@@ -195,11 +195,7 @@ class TableHelper {
 						continue;
 					}
 				}
-				if(isset($col[0]) && $col[0]!='<') {
-					$parts = explode('<br>', $col);
-					$aux[] = $parts[0]; // :-)
-				} else
-					$aux[] = '';
+				$aux[] = $col;
 			}
 			$data[] = $aux;
 		}

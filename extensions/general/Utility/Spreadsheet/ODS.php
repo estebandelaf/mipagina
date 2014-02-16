@@ -24,7 +24,7 @@
 /**
  * Manejo de planillas de cálculo de OpenDocumment
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-04-04
+ * @version 2014-02-12
  */
 final class ODS {
 
@@ -45,7 +45,7 @@ final class ODS {
 	 * @param data Arreglo utilizado para generar la planilla
 	 * @param id Identificador de la planilla
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-07-05
+	 * @version 2014-02-12
 	 */
 	public static function generate ($data, $id) {
 		App::import('Vendor/odsPhpGenerator/ods');
@@ -54,7 +54,7 @@ final class ODS {
 		foreach($data as &$fila) {
 			$row = new \odsphpgenerator\odsTableRow();
 			foreach($fila as &$celda)
-				$row->addCell(new \odsphpgenerator\odsTableCellString(str_replace('<br />', "\n", $celda)));
+				$row->addCell(new \odsphpgenerator\odsTableCellString(str_replace('<br />', "\n", strip_tags($celda, '<br>'))));
 			$table->addRow($row);
 		}
 		$ods->addTable($table);

@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar archivos json
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-07-05
+ * @version 2014-02-12
  */
 final class JSON {
 
@@ -42,7 +42,7 @@ final class JSON {
 		header('Pragma: no-cache');
 		header('Expires: 0');
 		// cuerpo del archivo
-		echo json_encode($data);
+		echo str_replace('<br />', ', ', strip_tags(json_encode($data), '<br>'));
 		// liberar memoria y terminar script
 		unset($titles, $data, $id);
 		exit(0);

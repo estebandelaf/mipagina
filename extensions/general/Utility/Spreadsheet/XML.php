@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar archivos xml
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-07-05
+ * @version 2014-02-16
  */
 final class XML {
 
@@ -60,7 +60,7 @@ final class XML {
 			$i = 0;
 			foreach($row as &$col) {
 				echo "\t\t\t",'<td name="',$titles[$i],'">',
-				str_replace('<br />', ', ', $col),'</td>',"\n";
+				str_replace('<br />', ', ', strip_tags($col, '<br>')),'</td>',"\n";
 				$i++;
 			}
 			echo "\t\t",'</tr>',"\n";

@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar archivos csv
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-04-04
+ * @version 2014-02-16
  */
 final class CSV {
 
@@ -59,7 +59,7 @@ final class CSV {
 	 * @param id Identificador de la planilla
 	 * @param separador separador a utilizar para diferenciar entre una columna u otra
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-07-05
+	 * @version 2014-02-16
 	 */
 	public static function generate ($data, $id, $separador = ',',
 						$delimitadortexto = '"') {
@@ -70,7 +70,7 @@ final class CSV {
 		header('Expires: 0');
 		foreach($data as &$row) {
 			foreach($row as &$col) {
-				$col = $delimitadortexto.$col.$delimitadortexto;
+				$col = $delimitadortexto.strip_tags($col, '<br>').$delimitadortexto;
 			}
 			echo str_replace('<br />', ', ', implode($separador, $row)),"\n";
 			unset($row);

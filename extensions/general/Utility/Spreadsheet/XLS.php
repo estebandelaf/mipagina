@@ -29,7 +29,7 @@ App::import('Vendor/PHPExcel/PHPExcel');
  *
  * Esta clase permite leer y generar archivos en excel
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-05-09
+ * @version 2014-02-16
  */
 final class XLS {
 
@@ -69,7 +69,7 @@ final class XLS {
 	 * @param id Identificador de la planilla
 	 * @param horizontal Indica si la hoja estara horizontalmente (true) o verticalmente (false)
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-07-05
+	 * @version 2014-02-16
 	 */
 	public static function generate ($tabla, $id, $type = 'Excel5') {
 		// Crear objeto PHPExcel
@@ -85,7 +85,7 @@ final class XLS {
 			foreach($fila as &$celda) {
 				$objPHPExcel->getActiveSheet()->setCellValue(
 					PHPExcel_Cell::stringFromColumnIndex($x++).$y,
-					str_replace('<br />', "\n", $celda)
+					str_replace('<br />', "\n", strip_tags($celda, '<br>'))
 				);
 			}
 			$x=0;
