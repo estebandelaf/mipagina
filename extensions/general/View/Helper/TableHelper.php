@@ -112,7 +112,7 @@ class TableHelper {
 	 * Método que genera la tabla en HTML a partir de un arreglo
 	 * @param table Tabla que se generará
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-12-02
+	 * @version 2014-02-16
 	 */
 	public function generate ($table) {
 		// si el arreglo esta vacio o no es arreglo retornar nada
@@ -124,7 +124,7 @@ class TableHelper {
 		$buffer = '<div>'."\n";
 		// Crear iconos para exportar y ocultar/mostrar tabla
 		if ( $this->_id !==null ) {
-			$buffer .= '<div style="float:right">'."\n";
+			$buffer .= '<div class="tableIcons" style="float:right">'."\n";
 			$buffer .= $this->export ($table);
 			$buffer .= $this->showAndHide ();
 			$buffer .= '</div>'."\n";

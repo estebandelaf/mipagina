@@ -129,7 +129,7 @@ class FormHelper {
 				$actions = 'onmouseover="$(\'#'.$config['name'].'FieldHelp\').dialog()" onmouseout="$(\'#'.$config['name'].'FieldHelp\').dialog(\'close\')"';
 				;
 				$config['help'] =
-					' <a href="#" onclick="return false" '.$actions.'>'.
+					' <a href="#" class="helpIcon" onclick="return false" '.$actions.'>'.
 					'<img src="'.Request::getBase().'/img/icons/16x16/actions/help.png" alt="" /></a>'.
 					'<div id="'.$config['name'].'FieldHelp" title="'.$config['label'].'" style="display:none" '.$actions.'>'.$config['help'].'</div>'
 				;
