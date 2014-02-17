@@ -27,7 +27,7 @@ App::import('Vendor/tcpdf/tcpdf');
 /**
  * Clase para generar PDFs
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-16
+ * @version 2014-02-17
  */
 class PDFHelper extends TCPDF {
 
@@ -206,6 +206,42 @@ class PDFHelper extends TCPDF {
 				$fill = !$fill;
 		}
 		$this->Cell(array_sum($w), 0, '', 'T');
+	}
+
+	/**
+	 * Agregar texto al PDF, es una variación del método Text que permite
+	 * definir un ancho al texto. Además recibe menos parámetros para ser
+	 * más simple (parámetros comunes solamente).
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-12
+	 */
+	public function Texto ($x, $y, $txt, $align='', $w=0, $link='', $border=0, $fill=false) {
+		$textrendermode = $this->textrendermode;
+		$textstrokewidth = $this->textstrokewidth;
+		$this->setTextRenderingMode(0, true, false);
+		$this->SetXY($x, $y);
+		$this->Cell($w, 0, $txt, $border, 0, $align, $fill, $link);
+		// restore previous rendering mode
+		$this->textrendermode = $textrendermode;
+		$this->textstrokewidth = $textstrokewidth;
+	}
+
+	/**
+	 * Método idéntico a Texto, pero en vez de utilizar Cell utiliza
+	 * MultiCell. La principal diferencia es que este método no permite
+	 * agregar un enlace y Texto si.
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-12
+	 */
+	public function MultiTexto ($x, $y, $txt, $align='', $w=0, $border=0, $fill=false) {
+		$textrendermode = $this->textrendermode;
+		$textstrokewidth = $this->textstrokewidth;
+		$this->setTextRenderingMode(0, true, false);
+		$this->SetXY($x, $y);
+		$this->MultiCell($w, 0, $txt, $border, $align, $fill);
+		// restore previous rendering mode
+		$this->textrendermode = $textrendermode;
+		$this->textstrokewidth = $textstrokewidth;
 	}
 
 }

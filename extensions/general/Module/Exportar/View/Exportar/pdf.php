@@ -17,14 +17,10 @@ $pdf->setStandardHeaderFooter (
 	'Tabla: '.$id
 );
 
-// agregar página
+// agregar datos
 $pdf->AddPage();
-
-// agregar tabla con los datos
 $pdf->addTable (array_shift($data), $data, array(), true);
 
-// enviar pdf al navegador
-$pdf->Output($id);
-
-// detener script
+// generar pdf y terminar
+$pdf->Output($id.'.pdf', 'I');
 exit(0);
