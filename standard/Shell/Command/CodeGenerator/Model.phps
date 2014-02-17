@@ -33,6 +33,10 @@ App::uses('{class}Base', '{module}Model');
  */
 final class {class} extends {class}Base {
 
+	// Datos para la conexión a la base de datos
+	protected $_database = '{database}'; ///< Base de datos del modelo
+	protected $_table = '{table}'; ///< Tabla del modelo
+
 	public static $fkModule = array({fkModule}); ///< Módulos que utiliza esta clase
 
 }
@@ -45,4 +49,9 @@ final class {class} extends {class}Base {
  * @version {version}
  */
 final class {classs} extends {classs}Base {
+
+	// Datos para la conexión a la base de datos
+	protected $_database = '{database}'; ///< Base de datos del modelo
+	protected $_table = '{table}'; ///< Tabla del modelo
+
 }

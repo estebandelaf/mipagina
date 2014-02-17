@@ -32,7 +32,7 @@ App::uses('AppModel', 'Model');
  * Permisos de grupos para acceder a recursos
  * Esta clase permite trabajar sobre un registro de la tabla auth
  * @author MiPaGiNa Code Generator
- * @version 2014-02-13 19:41:02
+ * @version 2014-02-16 17:36:25
  */
 abstract class AuthBase extends AppModel {
 
@@ -84,12 +84,9 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	public function __construct ($id = null) {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'auth';
 		// ejecutar constructor de la clase padre
 		parent::__construct();
 		// setear todo a nulo
@@ -112,7 +109,7 @@ abstract class AuthBase extends AppModel {
 	 * Setea a null los atributos de la clase (los que sean columnas de
 	 * la tabla)
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	protected function clear () {
 		$this->id = null;
@@ -152,7 +149,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	public function exists () {
 		// solo se ejecuta si la PK existe seteada
@@ -169,7 +166,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para borrar el objeto de la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	public function delete () {
 		$this->db->transaction();
@@ -186,7 +183,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para insertar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	protected function insert () {
 		$this->db->transaction();
@@ -208,7 +205,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para actualizar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	protected function update () {
 		$this->db->transaction();
@@ -229,7 +226,7 @@ abstract class AuthBase extends AppModel {
 	 * Recupera un objeto de tipo Grupo asociado al objeto Auth
 	 * @return Grupo Objeto de tipo Grupo con datos seteados o null en caso de que no existe la asociación
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	public function getGrupo () {
 		App::uses('Grupo', Auth::$fkModule['Grupo'].'Model');
@@ -244,7 +241,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método que guarda un archivo en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
+	 * @version 2014-02-16 17:36:25
 	 */
 	public function saveFile ($name, $file) {
 		$this->db->transaction();
@@ -276,21 +273,7 @@ abstract class AuthBase extends AppModel {
  * Permisos de grupos para acceder a recursos
  * Esta clase permite trabajar sobre un conjunto de registros de la tabla auth
  * @author MiPaGiNa Code Generator
- * @version 2014-02-13 19:41:02
+ * @version 2014-02-16 17:36:25
  */
 abstract class AuthsBase extends AppModels {
-	
-	/**
-	 * Constructor de la clase abstracta
-	 * @author MiPaGiNa Code Generator
-	 * @version 2014-02-13 19:41:02
-	 */
-	public function __construct () {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'auth';
-		// ejecutar constructor de la clase padre
-		parent::__construct();
-	}
-
 }

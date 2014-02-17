@@ -52,9 +52,6 @@ abstract class {class}Base extends AppModel {
 	 * @version {version}
 	 */
 	public function __construct ({pk_parameter}) {
-		// asignar base de datos y tabla
-		$this->_database = '{database}';
-		$this->_table = '{table}';
 		// ejecutar constructor de la clase padre
 		parent::__construct();
 		// setear todo a nulo
@@ -225,18 +222,4 @@ abstract class {class}Base extends AppModel {
  * @version {version}
  */
 abstract class {classs}Base extends AppModels {
-	
-	/**
-	 * Constructor de la clase abstracta
-	 * @author {author}
-	 * @version {version}
-	 */
-	public function __construct () {
-		// asignar base de datos y tabla
-		$this->_database = '{database}';
-		$this->_table = '{table}';
-		// ejecutar constructor de la clase padre
-		parent::__construct();
-	}
-
 }

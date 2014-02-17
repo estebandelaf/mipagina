@@ -78,8 +78,8 @@ class CodeGeneratorShell extends AppShell {
 		unset($nTables);
 		$this->out('');
 		// generar archivos
-		$this->generateModelBase($database);
-		$this->generateModel();
+		$this->generateModelBase();
+		$this->generateModel($database);
 		$this->generateControllerBase();
 		$this->generateController();
 		$this->generateView();
@@ -214,11 +214,10 @@ class CodeGeneratorShell extends AppShell {
 	
 	/**
 	 * Método que genera el código para la clase base de modelos
-	 * @param database Nombre de la conexión a la base de datos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2014-02-06
 	 */
-	private function generateModelBase ($database) {
+	private function generateModelBase () {
 		$this->out('<info>Generando base para modelos</info>');
 		foreach(self::$tables as $table => &$info) {
 			// buscar info de la tabla
@@ -320,7 +319,6 @@ class CodeGeneratorShell extends AppShell {
 				'classs' => Inflector::camelize(Inflector::pluralize($table)),
 				'columns' => $columns,
 				'columnsInfo' => $columnsInfo,
-				'database' => $database,
 				'getObjectFKs' => $getObjectFKs,
 				'pk_parameter' => $pk_parameter,
 				'pk_set_from_parameter' => $pk_set_from_parameter,
@@ -338,10 +336,11 @@ class CodeGeneratorShell extends AppShell {
 
 	/**
 	 * Método que genera el código para la clase final de modelos
+	 * @param database Nombre de la conexión a la base de datos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2014-02-06
 	 */
-	private function generateModel () {
+	private function generateModel ($database) {
 		$this->out('<info>Generando modelos</info>');
 		foreach(self::$tables as $table => &$info) {
 			$fkModule = array();
@@ -358,6 +357,7 @@ class CodeGeneratorShell extends AppShell {
 			// generar datos
 			$class = Inflector::camelize($table);
 			$file = $this->src('Model.phps', array(
+				'database' => $database,
 				'table' => $table,
 				'comment' => $info['comment'],
 				'author' => AUTHOR,
