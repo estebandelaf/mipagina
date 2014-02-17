@@ -32,9 +32,13 @@ class ExportarController extends AppController {
 	}
 
 	private function _exportTable ($id) {
+		$data = Session::read('export.'.$id);
+		if (!$data) {
+			throw new MiErrorException('No hay datos que exportar');
+		}
 		$this->set(array(
 			'id' => $id,
-			'data' => Session::read('export.'.$id),
+			'data' => $data,
 		));
 	}
 
