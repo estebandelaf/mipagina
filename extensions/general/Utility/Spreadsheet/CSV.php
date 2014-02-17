@@ -70,9 +70,9 @@ final class CSV {
 		header('Expires: 0');
 		foreach($data as &$row) {
 			foreach($row as &$col) {
-				$col = $delimitadortexto.strip_tags($col, '<br>').$delimitadortexto;
+				$col = $delimitadortexto.rtrim(str_replace('<br />', ', ', strip_tags($col, '<br>')), " \t\n\r\0\x0B,").$delimitadortexto;
 			}
-			echo str_replace('<br />', ', ', implode($separador, $row)),"\n";
+			echo implode($separador, $row),"\n";
 			unset($row);
 		}
 		unset($data);

@@ -85,7 +85,7 @@ final class XLS {
 			foreach($fila as &$celda) {
 				$objPHPExcel->getActiveSheet()->setCellValue(
 					PHPExcel_Cell::stringFromColumnIndex($x++).$y,
-					str_replace('<br />', "\n", strip_tags($celda, '<br>'))
+					rtrim(str_replace('<br />', "\n", strip_tags($celda, '<br>')))
 				);
 			}
 			$x=0;

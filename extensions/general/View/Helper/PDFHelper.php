@@ -27,7 +27,7 @@ App::import('Vendor/tcpdf/tcpdf');
 /**
  * Clase para generar PDFs
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-12
+ * @version 2014-02-16
  */
 class PDFHelper extends TCPDF {
 
@@ -133,14 +133,14 @@ class PDFHelper extends TCPDF {
 	 * Agregar una tabla generada a través de código HTML al PDF
 	 * @todo Utilizar las opciones para definir estilo de la tabla HTML
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-12
+	 * @version 2014-02-16
 	 */
 	private function addHTMLTable ($headers, $data, $options = array()) {
 		$buffer = '<table>';
 		// Definir títulos de columnas
 		$buffer .= '<tr>';
 		foreach($headers as &$col) {
-			$buffer .= '<th style="background-color:#000;color:#fff;text-align:center;font-size:10px"><strong>'.$col.'</strong></th>';
+			$buffer .= '<th style="background-color:#000;color:#fff;text-align:center;font-size:10px"><strong>'.strip_tags($col).'</strong></th>';
 		}
 		$buffer .= '</tr>';
 		// Definir datos de la tabla

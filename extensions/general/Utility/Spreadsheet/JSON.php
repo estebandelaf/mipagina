@@ -42,7 +42,12 @@ final class JSON {
 		header('Pragma: no-cache');
 		header('Expires: 0');
 		// cuerpo del archivo
-		echo str_replace('<br />', ', ', strip_tags(json_encode($data), '<br>'));
+		foreach ($data as &$row) {
+			foreach ($row as &$col) {
+				$col = rtrim(str_replace('<br />', ', ', strip_tags($col, '<br>')), " \t\n\r\0\x0B,");
+			}
+		}
+		echo json_encode($data);
 		// liberar memoria y terminar script
 		unset($titles, $data, $id);
 		exit(0);

@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar archivos xml
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2014-02-16
+ * @version 2014-02-17
  */
 final class XML {
 
@@ -38,37 +38,28 @@ final class XML {
 		ob_clean();
 		// cabeceras del archivo
 		header('Content-type: application/xml');
-		header('Content-Disposition: inline; filename='.$id.'.csv');
+		header('Content-Disposition: inline; filename='.$id.'.xml');
 		header('Pragma: no-cache');
 		header('Expires: 0');
 		// cuerpo del archivo
+		$root = string2url(Inflector::underscore($id));
+		$item = Inflector::singularize($root);
 		echo '<?xml version="1.0" encoding="utf-8" ?>',"\n";
-		echo '<table name="',string2url($id),'">',"\n";
+		echo '<',$root,'>',"\n";
 		$titles = array_shift($data);
-		echo "\t",'<thead>',"\n";
-		echo "\t\t",'<th>',"\n";
 		foreach ($titles as &$col) {
-			echo "\t\t\t",'<td name="',string2url($col),'">',
-			str_replace('<br />', ', ', $col),'</td>',"\n";
-			$col = string2url($col);
+			$col = string2url(strip_tags($col));
 		}
-		echo "\t\t",'</th>',"\n";
-		echo "\t",'</thead>',"\n";
-		echo "\t",'<tbody>',"\n";
 		foreach($data as &$row) {
-			echo "\t\t",'<tr>',"\n";
-			$i = 0;
-			foreach($row as &$col) {
-				echo "\t\t\t",'<td name="',$titles[$i],'">',
-				str_replace('<br />', ', ', strip_tags($col, '<br>')),'</td>',"\n";
-				$i++;
+			echo "\t",'<',$item,'>',"\n";
+			foreach($row as $key => &$col) {
+				$key = $titles[$key];
+				echo "\t\t",'<',$key,'>',rtrim(str_replace('<br />', ', ', strip_tags($col, '<br>')), " \t\n\r\0\x0B,"),'</',$key,'>',"\n";
 			}
-			echo "\t\t",'</tr>',"\n";
+			echo "\t",'</',$item,'>',"\n";
 		}
-		echo "\t",'</tbody>',"\n";
-		echo '</table>',"\n";
-		// liberar memoria y terminar script
-		unset($titles, $data, $id);
+		echo '</',$root,'>',"\n";
+		// terminar script
 		exit(0);
 	}
 

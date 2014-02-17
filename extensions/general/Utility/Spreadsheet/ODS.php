@@ -54,7 +54,7 @@ final class ODS {
 		foreach($data as &$fila) {
 			$row = new \odsphpgenerator\odsTableRow();
 			foreach($fila as &$celda)
-				$row->addCell(new \odsphpgenerator\odsTableCellString(str_replace('<br />', "\n", strip_tags($celda, '<br>'))));
+				$row->addCell(new \odsphpgenerator\odsTableCellString(rtrim(str_replace('<br />', "\n", strip_tags($celda, '<br>')))));
 			$table->addRow($row);
 		}
 		$ods->addTable($table);
