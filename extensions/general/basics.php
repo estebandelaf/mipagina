@@ -217,3 +217,24 @@ function array2xml ($array, $root = 'root'){
 	}
 	return $xml->asXML();
 }
+
+/**
+ * Función para mostrar una fecha con hora con un formato "agradable"
+ */
+function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
+	$dias = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
+	$meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+	$unixtime = strtotime($timestamp);
+	$fecha = date('\D\I\A j \d\e \M\E\S \d\e\l Y', $unixtime);
+	if ($hora) $fecha .= ', a las '.date ('H:i', $unixtime);
+	$dia = $dias[date('w', $unixtime)];
+	$mes = $meses[date('n', $unixtime)-1];
+	if ($letrasFormato == 'l') {
+		$dia = strtolower ($dia);
+		$mes = strtolower ($mes);
+	} else if ($letrasFormato == 'u') {
+		$dia = strtoupper ($dia);
+		$mes = strtoupper ($mes);
+	}
+	return str_replace(array('DIA', 'MES'), array($dia, $mes), $fecha);
+}
