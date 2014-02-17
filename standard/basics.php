@@ -107,18 +107,19 @@ function num ($n, $d=0) {
  *   Cadena normal: Esto es un texto
  *   Cadena convertida: esto-es-un-texto
  * @param string String a convertir
+ * @param encoding Codificación del string
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-19
+ * @version 2014-02-17
  */
-function string2url ($string) {
+function string2url ($string, $encoding = 'UTF-8') {
 	// tranformamos todo a minúsculas
-	$string = strtolower($string);
+	$string = mb_strtolower($string, $encoding);
 	// rememplazamos carácteres especiales latinos
 	$find = array('á', 'é', 'í', 'ó', 'ú', 'ñ');
 	$repl = array('a', 'e', 'i', 'o', 'u', 'n');
 	$string = str_replace($find, $repl, $string);
 	// añadimos los guiones
-	$find = array(' ', '&', '\r\n', '\n', '+');
+	$find = array(' ', '&', '\r\n', '\n', '+', '_');
 	$string = str_replace($find, '-', $string);
 	// eliminamos y reemplazamos otros caracteres especiales
 	$find = array('/[^a-z0-9\-<>]/', '/[\-]+/', '/<[^>]*>/');
