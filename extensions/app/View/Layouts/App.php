@@ -8,7 +8,7 @@
 		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" rel="stylesheet" />
 		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/print.css" media="print" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/jquery.js"></script>
-		<script type="text/javascript" src="<?php echo $_base; ?>/js/js.js"></script>
+		<script type="text/javascript" src="<?php echo $_base; ?>/js/app.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/form.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/jquery-ui/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo $_base; ?>/js/jquery-ui/css/smoothness/jquery-ui.css" media="screen"/>
