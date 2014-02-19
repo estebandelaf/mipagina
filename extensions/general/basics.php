@@ -214,11 +214,17 @@ function array2xml ($array, $root = 'root'){
 
 /**
  * Función para mostrar una fecha con hora con un formato "agradable"
+ * @param timestamp Fecha en formto (de función date): Y-m-d H:i:s
+ * @param hora Si se desea (true) o no (false) mostrar la hora
+ * @param letrasFormato Si van en mayúscula ('u'), mínuscula ('l') o normal ('')
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-17
+ * @version 2014-02-19
  */
 function timestamp2string ($timestamp, $hora = true, $letrasFormato = '') {
-	$timestamp = substr($timestamp, 0, strpos($timestamp, '.'));
+	$puntoPos = strpos($timestamp, '.');
+	if ($puntoPos) {
+		$timestamp = substr($timestamp, 0, $puntoPos);
+	}
 	$dias = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
 	$meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 	$unixtime = strtotime($timestamp);
