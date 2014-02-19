@@ -24,7 +24,7 @@
 /**
  * Helper para la creación de formularios en HTML
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-11-25
+ * @version 2014-02-19
  */
 class FormHelper {
 
@@ -118,11 +118,11 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el elemento
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-08
+	 * @version 2014-02-17
 	 */
 	private function _formatear ($field, $config) {
 		// si se debe aplicar estilo de mantenedor
-		if(!in_array($config['type'], array('hidden', 'js')) && $this->_formato=='mantenedor') {
+		if(!in_array($config['type'], array('hidden')) && $this->_formato=='mantenedor') {
 			$buffer = '';
 			// generar ayuda
 			if($config['help']!='') {				
@@ -136,9 +136,13 @@ class FormHelper {
 			}
 			// generar campo
 			$buffer .= '<div class="input">'."\n";
-			if(!empty($config['label']))
-				$buffer .= '	<div class="label"><label for="'.$config['name'].'Field">'.$config['label'].'</label></div>'."\n";
-			else
+			if(!empty($config['label'])) {
+				if (isset($name))
+					$label = '<label for="'.$config['name'].'Field">'.$config['label'].'</label>';
+				else
+					$label = $config['label'];
+				$buffer .= '	<div class="label">'.$label.'</div>'."\n";
+			} else
 				$buffer .= '	<div class="label">&nbsp;</div>'."\n";
 			$buffer .= '	<div class="field">'.$field.$config['help'].'</div>'."\n";
 			$buffer .= '</div>'."\n";
@@ -157,7 +161,7 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el elemento
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-11-25
+	 * @version 2014-02-17
 	 */
 	public function input ($config) {
 		// transformar a arreglo en caso que no lo sea
@@ -176,7 +180,8 @@ class FormHelper {
 			), $config
 		);
 		// si no se indicó un valor y existe uno por POST se usa
-		if (!isset($config['value'][0]) && isset($_POST[$config['name']])) {
+
+		if (!isset($config['value'][0]) && isset($config['name']) && isset($_POST[$config['name']])) {
 			$config['value'] = $_POST[$config['name']];
 		}
 		// si label no existe se usa el nombre de la variable
@@ -282,16 +287,6 @@ class FormHelper {
 		$buffer .= '</select>';
 		return $buffer;
 	}
-
-	private function _js ($config) {
-		$buffer = '';
-		$buffer .= '<div>'."\n";
-		$buffer .= '	<div class="label">'.$config['label'].' <a href="javascript:'.$config['js'].'()" title="Agregar"><img src="'.Request::getBase().'/img/icons/16x16/actions/add.png" alt="add" /></a></div>'."\n";
-		$buffer .= '	<div class="field"><div id="'.$config['id'].'">'.$config['value'].'</div></div>'."\n";
-		$buffer .= '	<div class="clear"></div>'."\n";
-		$buffer .= '</div>'."\n";
-		return $buffer;
-	}
 	
 	private function _radios ($config) {
 		// si el valor por defecto se pasó en value se copia donde corresponde
@@ -307,6 +302,54 @@ class FormHelper {
 			$checked = isset($config['checked']) && $config['checked']==$key ? 'checked="checked"' : '';
 			$buffer .= ' <input type="radio" name="'.$config['name'].'" value="'.$key.'" '.$checked.'> '.$value.' ';
 		}
+		return $buffer;
+	}
+
+	private function _js ($config) {
+		// configuración por defecto
+		$config = array_merge(array('titles'=>array(), 'width'=>'100%'), $config);
+		// respaldar formato
+		$formato = $this->_formato;
+		$this->_formato = null;
+		// determinar inputs
+		$inputs = '<tr>';
+		foreach ($config['inputs'] as $input) {
+			$input['name'] = $input['name'].'[]';
+			$inputs .= '<td>'.rtrim($this->input($input)).'</td>';
+		}
+		$inputs .= '<td><a href="" onclick="$(this).parent().parent().remove(); return false" title="Eliminar"><img src="'.Request::getBase().'/img/icons/16x16/actions/delete.png" alt="add" /></a></td>';
+		$inputs .= '</tr>';
+		// si no se indicaron valores, entonces se crea una fila con los campos vacíos
+		if (!isset($config['values'])) {
+			$values = $inputs;
+		}
+		// en caso que se cree el formulario con valores por defecto ya asignados
+		else {
+			$values = '';
+			foreach ($config['values'] as $value) {
+				$values .= '<tr>';
+				foreach ($config['inputs'] as $input) {
+					$input['value'] = $value[$input['name']];
+					$input['name'] = $input['name'].'[]';
+					$values .= '<td>'.rtrim($this->input($input)).'</td>';
+				}
+				$values .= '<td><a href="" onclick="$(this).parent().parent().remove(); return false" title="Eliminar"><img src="'.Request::getBase().'/img/icons/16x16/actions/delete.png" alt="add" /></a></td>';
+				$values .= '</tr>';
+			}
+		}
+		// restaurar formato
+		$this->_formato = $formato;
+		// generar tabla
+		$buffer = '<script type="text/javascript"> window["inputsJS_'.$config['id'].'"] = \''.$inputs.'\'; </script>'."\n";
+		$buffer .= '<table id="'.$config['id'].'" class="tableJS" style="width:'.$config['width'].'">';
+		$buffer .= '<tr>';
+		foreach ($config['titles'] as &$title) {
+			$buffer .= '<th>'.$title.'</th>';
+		}
+		$buffer .= '<th><a href="javascript:Form.addJS(\''.$config['id'].'\')" title="Agregar [+]" accesskey="+"><img src="'.Request::getBase().'/img/icons/16x16/actions/add.png" alt="add" /></a></th>';
+		$buffer .= '</tr>';
+		$buffer .= $values;
+		$buffer .= '</table>';
 		return $buffer;
 	}
 

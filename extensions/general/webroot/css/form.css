@@ -27,4 +27,21 @@ input[type="submit"], input[type="button"] {
 }
 input[type="file"], input[type="image"] {
 	border: 0;
-} 
+}
+
+/* ajustes para tablasJS dentro de formularios */
+table.tableJS input[type="text"], table.tableJS textarea, table.tableJS select {
+	border: 1px solid gray;
+	padding: 0.3em;
+	width: 100px;
+	color: #555;
+}
+table.tableJS input[type="image"] {
+	border: 0;
+}
+table.tableJS th, table.tableJS td {
+	text-align: center;
+}
+table.tableJS th:last-child, table.tableJS td:last-child {
+	width: 50px;
+}

@@ -165,3 +165,7 @@ Form.checkSend = function (msg) {
 		return false;
 	}
 }
+
+Form.addJS = function (tableID) {
+	$('#'+tableID).append(window["inputsJS_"+tableID]);
+}
