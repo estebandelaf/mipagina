@@ -32,7 +32,7 @@ App::uses('Database', 'Model/Datasource/Database');
 /**
  * Comando para generar código de forma automática
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-06
+ * @version 2014-02-19
  */
 class CodeGeneratorShell extends AppShell {
 	
@@ -46,7 +46,7 @@ class CodeGeneratorShell extends AppShell {
 	/**
 	 * Método principal del comando
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-06
+	 * @version 2014-02-19
 	 */
 	public function main () {
 		// obtener nombre de la base de datos
@@ -55,28 +55,44 @@ class CodeGeneratorShell extends AppShell {
 			$this->out('<error>No se encontró configuración válida para la base de datos</error>');
 			exit(1);
 		}
-		// obtener destino para los archivos
-		self::$destination = $this->selectDestination();
-		// obtener conexión a la base de datos 
+		// obtener conexión a la base de datos
 		self::$db = &Database::get($database);
-		// crear directorios para archivos que se crearán
-		if(!file_exists(self::$destination.DS.'Model')) mkdir(self::$destination.DS.'Model');
-		//if(!file_exists(self::$destination.DS.'View')) mkdir(self::$destination.DS.'View');
-		if(!file_exists(self::$destination.DS.'Controller')) mkdir(self::$destination.DS.'Controller');
-		// obtener tablas de la base de datos y su info
-		$tables = self::$db->getTables();
+		// obtener tablas de la base de datos
+		$aux = self::$db->getTables();
+		$tables = array();
+		foreach ($aux as &$t) {
+			$tables[] = $t['name'];
+		}
+		// mostrar tablas disponibles para que usuario elija cual quiere procesar
+		$this->out('Tablas disponibles: '.implode(', ', $tables));
+		$procesarTablas = $this->in('Ingresar las tablas que desea procesar [*]: ');
+		if (!empty($procesarTablas) && $procesarTablas != '*') {
+			if (strpos($procesarTablas, ',')) {
+				$procesarTablas = str_replace (' ', '', $procesarTablas);
+				$tables = explode (',', $procesarTablas);
+			} else {
+				$tables = explode (' ', $procesarTablas);
+			}
+		}
+		// obtener información de las tablas
 		self::$nTables = count ($tables);
 		$nTables = 0;
 		$this->out('<info>Recuperando información de las tablas '.round(($nTables/self::$nTables)*100).'%</info>', 0);
 		self::$tables = array();
 		foreach($tables as &$table) {
-			self::$tables[$table['name']] = self::$db->getInfoFromTable($table['name']);
+			self::$tables[$table] = self::$db->getInfoFromTable($table);
 			$nTables++;
 			$this->out("\r".'<info>Recuperando información de las tablas '.round(($nTables/self::$nTables)*100).'%</info>', 0);
 		}
 		unset($tables);
 		unset($nTables);
 		$this->out('');
+		// obtener destino para los archivos
+		self::$destination = $this->selectDestination();
+		// crear directorios para archivos que se crearán
+		if(!file_exists(self::$destination.DS.'Model')) mkdir(self::$destination.DS.'Model');
+		//if(!file_exists(self::$destination.DS.'View')) mkdir(self::$destination.DS.'View');
+		if(!file_exists(self::$destination.DS.'Controller')) mkdir(self::$destination.DS.'Controller');
 		// generar archivos
 		$this->generateModelBase();
 		$this->generateModel($database);
