@@ -117,12 +117,6 @@ function filesFromDir ($dir) {
 	return $files;
 }
 
-function timestamp2string ($timestamp) {
-	$timestamp = substr($timestamp, 0, strpos($timestamp, '.'));
-	$date = DateTime::createFromFormat('Y-m-d H:i:s', $timestamp);
-	return $date->format('d \d\e M \d\e Y \a \l\a\s H:i');
-}
-
 /**
  * @author http://stackoverflow.com/questions/1960461/convert-plain-text-urls-into-html-hyperlinks-in-php
  */
@@ -223,7 +217,8 @@ function array2xml ($array, $root = 'root'){
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2014-02-17
  */
-function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
+function timestamp2string ($timestamp, $hora = true, $letrasFormato = '') {
+	$timestamp = substr($timestamp, 0, strpos($timestamp, '.'));
 	$dias = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
 	$meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 	$unixtime = strtotime($timestamp);
@@ -268,6 +263,7 @@ function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
  * )
  * @param array Arreglo de donde extraer
  * @param keys Llaves que se extraeran
+ * @return Tabla con los campos extraídos
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2014-02-18
  */
@@ -283,4 +279,83 @@ function groupOfArraysToTable ($array, $keys) {
 		$data[] = $d;
 	}
 	return $data;
+}
+
+/**
+ * Método que toma un arreglo con un formato de tabla el cual contiene
+ * un encabezado y detalle, ejemplo:
+ *   $arreglo = array (
+ *     array (
+ *       'run' => '1-9'
+ *       'nombre' => 'Juan Pérez'
+ *       'direccion' => 'Dir 1'
+ *       'telefono' => 'Tel 1'
+ *     ),
+ *     array (
+ *       'run' => '1-9'
+ *       'nombre' => 'Juan Pérez'
+ *       'direccion' => 'Dir 2'
+ *       'telefono' => 'Tel 2'
+ *     ),
+ *   );
+ * Y con la llamada tableToArrayWithHeaderAndBody($arreglo, 2) lo entrega como:
+ *   $arreglo = array (
+ *     'run' => '1-9'
+ *     'nombre' => 'Juan Pérez'
+ *     'detalle' => array (
+ *       array (
+ *         'direccion' => 'Dir 1'
+ *         'telefono' => 'Tel 1'
+ *       ),
+ *       array (
+ *         'direccion' => 'Dir 2'
+ *         'telefono' => 'Tel 2'
+ *       ),
+ *     )
+ *   );
+ * @param data Arreglo en formato tabla con los datos
+ * @param camposEncabezado Cuandos campos (columnas) de la "tabla" son parte del encabezado
+ * @param detalle Nombre del índice (key) que se utilizará para agrupar los detalles
+ * @return Arreglo con el formato de un encabezado y detalle
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-19
+ */
+function tableToArrayWithHeaderAndBody ($data, $camposEncabezado, $detalle = 'detalle') {
+	if (!isset($data[0]))
+		return array();
+	$id = array_keys ($data[0])[0];
+	$item = null;
+	$items = array();
+	foreach ($data as &$d) {
+		if ($item === null) {
+			$item = array();
+			$i = 0;
+			foreach ($d as $key => &$value) {
+				$item[$key] = array_shift($d);
+				if (++$i==$camposEncabezado)
+					break;
+			}
+			$item[$detalle] = array ();
+			$item[$detalle][] = $d;
+		} else if ($item[$id] == $d[$id]) {
+			$item[$detalle][] = array_slice (
+				$d,
+				$camposEncabezado
+			);
+		} else {
+			$items[] = $item;
+			$item = array();
+			$i = 0;
+			foreach ($d as $key => &$value) {
+				$item[$key] = array_shift($d);
+				if (++$i==$camposEncabezado)
+					break;
+			}
+			$item[$detalle] = array ();
+			$item[$detalle][] = $d;
+		}
+		unset ($d);
+	}
+	$items[] = $item;
+	return $items;
 }
