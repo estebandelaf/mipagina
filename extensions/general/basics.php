@@ -266,19 +266,19 @@ function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
  *     'key3' => 9,
  *   ),
  * )
- * @param key Claves que se desean extraer, se pasan tantos argumentos a la función como claves se desea extraer
+ * @param array Arreglo de donde extraer
+ * @param keys Llaves que se extraeran
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2014-02-18
  */
-function groupOfArraysToTable ($key) {
-	$keys = func_get_args();
+function groupOfArraysToTable ($array, $keys) {
 	$n_keys = count($keys);
-	$n_elementos = count($_POST[$keys[0]]);
+	$n_elementos = count($array[$keys[0]]);
 	$data = array();
 	for ($i=0; $i<$n_elementos; ++$i) {
 		$d = array();
 		for ($j=0; $j<$n_keys; ++$j) {
-			$d[$keys[$j]] = $_POST[$keys[$j]][$i];
+			$d[$keys[$j]] = $array[$keys[$j]][$i];
 		}
 		$data[] = $d;
 	}
