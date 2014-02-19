@@ -137,7 +137,7 @@ if($message) echo '<div class="session_message">',$message,'</div>';
 ?>
 <?php echo $_content; ?>
 			<!--<a class="topOfPage" href="#top" title="Go to the top of this page">Ir hasta arriba</a></div>-->
-			<div class="timestamp">Última modificación de esta página fue el <?php echo $_timestamp; ?></div>
+			<div class="timestamp">Última modificación de esta página fue el <?php echo timestamp2string($_timestamp); ?></div>
 <?php if (!empty($google_ads['client']) && !empty($google_ads['ads']['468x60'])) { ?>
 			<div class="adsense">
 				<script type="text/javascript">
