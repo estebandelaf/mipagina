@@ -271,16 +271,31 @@ function timestamp2string ($timestamp, $hora = true, $letrasFormato = '') {
  * @param keys Llaves que se extraeran
  * @return Tabla con los campos extraídos
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-18
+ * @version 2014-02-19
  */
-function groupOfArraysToTable ($array, $keys) {
+function groupOfArraysToTable ($array, $keys = null) {
+	// determinar llaves y su cantidad
+	if ($keys==null) {
+		$keys = array_keys ($array);
+	}
 	$n_keys = count($keys);
+	// determinar el arreglo con más elementos y cuantos son
 	$n_elementos = count($array[$keys[0]]);
+	for ($j=1; $j<$n_keys; ++$j) {
+		$aux = count($array[$keys[$j]]);
+		if ($aux > $n_elementos)
+			$n_elementos = $aux;
+	}
+	// extrar datos
 	$data = array();
 	for ($i=0; $i<$n_elementos; ++$i) {
 		$d = array();
 		for ($j=0; $j<$n_keys; ++$j) {
-			$d[$keys[$j]] = $array[$keys[$j]][$i];
+			if (isset($array[$keys[$j]][$i])) {
+				$d[$keys[$j]] = $array[$keys[$j]][$i];
+			} else {
+				$d[$keys[$j]] = null;
+			}
 		}
 		$data[] = $d;
 	}
