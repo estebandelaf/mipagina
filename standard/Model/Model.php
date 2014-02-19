@@ -570,7 +570,7 @@ abstract class Models extends Object implements ModelsInterface {
 	 * donde id es la PK. Si estos no son, el método deberá ser
 	 * reescrito en la clase final.
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-07
+	 * @version 2014-02-19
 	 */
 	public function getList () {
 		$class = Inflector::singularize (get_class($this));
@@ -580,7 +580,7 @@ abstract class Models extends Object implements ModelsInterface {
 		return $this->db->getTable('
 			SELECT '.$id.' AS id, '.$glosa.' AS glosa
 			FROM '.$this->_table.'
-			ORDER BY '.$this->_table
+			ORDER BY '.$glosa
 		);
 	}
 
