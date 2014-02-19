@@ -220,6 +220,8 @@ function array2xml ($array, $root = 'root'){
 
 /**
  * Función para mostrar una fecha con hora con un formato "agradable"
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-17
  */
 function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
 	$dias = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
@@ -237,4 +239,48 @@ function date_nice ($timestamp, $hora = true, $letrasFormato = '') {
 		$mes = strtoupper ($mes);
 	}
 	return str_replace(array('DIA', 'MES'), array($dia, $mes), $fecha);
+}
+
+/**
+ * Función que extra de un arreglo en formato:
+ * array(
+ *   'key1' => array(1,2,3),
+ *   'key2' => array(4,5,6),
+ *   'key3' => array(7,8,9),
+ * )
+ * Y lo entrega como una "tabla":
+ * array (
+ *   array (
+ *     'key1' => 1,
+ *     'key2' => 4,
+ *     'key3' => 7,
+ *   ),
+ *   array (
+ *     'key1' => 2,
+ *     'key2' => 5,
+ *     'key3' => 8,
+ *   ),
+ *   array (
+ *     'key1' => 3,
+ *     'key2' => 6,
+ *     'key3' => 9,
+ *   ),
+ * )
+ * @param key Claves que se desean extraer, se pasan tantos argumentos a la función como claves se desea extraer
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-18
+ */
+function groupOfArraysToTable ($key) {
+	$keys = func_get_args();
+	$n_keys = count($keys);
+	$n_elementos = count($_POST[$keys[0]]);
+	$data = array();
+	for ($i=0; $i<$n_elementos; ++$i) {
+		$d = array();
+		for ($j=0; $j<$n_keys; ++$j) {
+			$d[$keys[$j]] = $_POST[$keys[$j]][$i];
+		}
+		$data[] = $d;
+	}
+	return $data;
 }
