@@ -24,7 +24,7 @@
 /**
  * Manejo de planillas de cálculo de OpenDocumment
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2014-02-12
+ * @version 2014-02-20
  */
 final class ODS {
 
@@ -45,20 +45,27 @@ final class ODS {
 	 * @param data Arreglo utilizado para generar la planilla
 	 * @param id Identificador de la planilla
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2014-02-12
+	 * @version 2014-02-20
 	 */
 	public static function generate ($data, $id) {
 		App::import('Vendor/odsPhpGenerator/ods');
 		$ods = new \odsphpgenerator\ods();
-		$table = new \odsphpgenerator\odsTable($id);
-		foreach($data as &$fila) {
-			$row = new \odsphpgenerator\odsTableRow();
-			foreach($fila as &$celda)
-				$row->addCell(new \odsphpgenerator\odsTableCellString(rtrim(str_replace('<br />', "\n", strip_tags($celda, '<br>')))));
-			$table->addRow($row);
+		// si las llaves de $data no son strings, entonces es solo una hoja
+		if (!is_string(array_keys($data)[0])) {
+			$data = array($id=>$data);
 		}
-		$ods->addTable($table);
-		unset($data, $table, $fila, $celda, $row);
+		// generar hojas
+		foreach ($data as $name => &$sheet) {
+			$table = new \odsphpgenerator\odsTable($name);
+			foreach($sheet as &$fila) {
+				$row = new \odsphpgenerator\odsTableRow();
+				foreach($fila as &$celda)
+					$row->addCell(new \odsphpgenerator\odsTableCellString(rtrim(str_replace('<br />', "\n", strip_tags($celda, '<br>')))));
+				$table->addRow($row);
+			}
+			$ods->addTable($table);
+			unset ($name, $sheet, $row, $table);
+		}
 		$ods->downloadOdsFile($id.'.ods');
 		exit(0);
 	}
