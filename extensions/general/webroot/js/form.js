@@ -169,3 +169,9 @@ Form.checkSend = function (msg) {
 Form.addJS = function (tableID) {
 	$('#'+tableID).append(window["inputsJS_"+tableID]);
 }
+
+Form.checkboxesSet = function (name, checked) {
+	$('input[name="'+name+'[]"]').each (function () {
+		this.checked = checked;
+	});
+}

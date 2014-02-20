@@ -24,7 +24,7 @@
 /**
  * Helper para la creación de formularios en HTML
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-19
+ * @version 2014-02-20
  */
 class FormHelper {
 
@@ -84,7 +84,7 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el botón submit
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-03-25
+	 * @version 2014-02-20
 	 */
 	public function end ($config = array()) {
 		// solo se procesa la configuración si no es falsa
@@ -103,7 +103,8 @@ class FormHelper {
 			);
 			// generar buffer
 			$buffer = '';
-			if($config['type']) $buffer .= $this->input($config);
+			if(isset($config['type']))
+				$buffer .= $this->input($config);
 			$buffer .= '</form>'."\n";
 			// retornar buffer
 			return $buffer;
@@ -118,7 +119,7 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el elemento
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-17
+	 * @version 2014-02-20
 	 */
 	private function _formatear ($field, $config) {
 		// si se debe aplicar estilo de mantenedor
@@ -146,6 +147,10 @@ class FormHelper {
 				$buffer .= '	<div class="label">&nbsp;</div>'."\n";
 			$buffer .= '	<div class="field">'.$field.$config['help'].'</div>'."\n";
 			$buffer .= '</div>'."\n";
+		}
+		// si se debe alinear
+		else if (isset($config['align'])) {
+			$buffer = '<div style="text-align:'.$config['align'].'">'.$field.'</div>'."\n";
 		}
 		// si no se debe aplicar ningún formato solo agregar EOL
 		else {
@@ -180,7 +185,6 @@ class FormHelper {
 			), $config
 		);
 		// si no se indicó un valor y existe uno por POST se usa
-
 		if (!isset($config['value'][0]) && isset($config['name']) && isset($_POST[$config['name']])) {
 			$config['value'] = $_POST[$config['name']];
 		}
@@ -341,7 +345,7 @@ class FormHelper {
 		$this->_formato = $formato;
 		// generar tabla
 		$buffer = '<script type="text/javascript"> window["inputsJS_'.$config['id'].'"] = \''.$inputs.'\'; </script>'."\n";
-		$buffer .= '<table id="'.$config['id'].'" class="tableJS" style="width:'.$config['width'].'">';
+		$buffer .= '<table id="'.$config['id'].'" class="formTable" style="width:'.$config['width'].'">';
 		$buffer .= '<tr>';
 		foreach ($config['titles'] as &$title) {
 			$buffer .= '<th>'.$title.'</th>';
@@ -349,6 +353,39 @@ class FormHelper {
 		$buffer .= '<th><a href="javascript:Form.addJS(\''.$config['id'].'\')" title="Agregar [+]" accesskey="+"><img src="'.Request::getBase().'/img/icons/16x16/actions/add.png" alt="add" /></a></th>';
 		$buffer .= '</tr>';
 		$buffer .= $values;
+		$buffer .= '</table>';
+		return $buffer;
+	}
+
+	private function _tablecheck ($config) {
+		// configuración por defecto
+		$config = array_merge(array('id'=>$config['name'], 'titles'=>array(), 'width'=>'100%'), $config);
+		if (!isset($config['key']))
+			$config['key'] = array_keys($config['table'][0])[0];
+		if (!is_array($config['key']))
+			$config['key'] = array($config['key']);
+		$buffer = '<table id="'.$config['id'].'" class="formTable" style="width:'.$config['width'].'">';
+		$buffer .= '<tr>';
+		foreach ($config['titles'] as &$title) {
+			$buffer .= '<th>'.$title.'</th>';
+		}
+		$buffer .= '<th><input type="checkbox" checked="checked" onclick="Form.checkboxesSet(\''.$config['name'].'\', this.checked)"/></th>';
+		$buffer .= '</tr>';
+		foreach($config['table'] as &$row) {
+			// determinar la llave
+			$key = array();
+			foreach ($config['key'] as $k) {
+				$key[] = $row[$k];
+			}
+			$key = implode (';', $key);
+			// agregar fila
+			$buffer .= '<tr>';
+			foreach ($row as &$col) {
+				$buffer .= '<td>'.$col.'</td>';
+			}
+			$buffer .= '<td><input type="checkbox" name="'.$config['name'].'[]" value="'.$key.'" checked="checked" /></td>';
+			$buffer .= '</tr>';
+		}
 		$buffer .= '</table>';
 		return $buffer;
 	}
