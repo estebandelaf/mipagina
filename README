@@ -28,3 +28,10 @@ MiPaGiNa esta compuesto por defecto de tres directorios:
 Este framework esta basado en CakePHP, tomando la estructura de directorios, los
 conceptos de las clases, incluso en algunos casos reutilizando el mismo código
 y/o clases completas de CakePHP.
+
+TODO
+====
+
+* Implementar namespace
+* Unificar metodo de carga
+* Manejar extensiones como vendors via composer

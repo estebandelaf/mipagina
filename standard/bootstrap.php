@@ -46,6 +46,20 @@ define('DS', DIRECTORY_SEPARATOR);
 // iniciar buffer
 ob_start();
 
+// Carga autoload class de composer
+require DIR_STANDARD.DS.'..'.DS.'vendor'.DS.'autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+// create a log channel
+$log = new Logger('name');
+$log->pushHandler(new StreamHandler(DIR_WEBSITE.DS.'Log/debug.log', Logger::WARNING));
+
+// add records to the log
+$log->addWarning('Foo');
+$log->addError('Bar');
+
 // Incluir archivos genéricos 
 include DIR_STANDARD.DS.'basics.php';
 include DIR_STANDARD.DS.'Core'.DS.'App.php';
