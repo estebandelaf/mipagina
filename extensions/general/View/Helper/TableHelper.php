@@ -112,9 +112,9 @@ class TableHelper {
 	 * Método que genera la tabla en HTML a partir de un arreglo
 	 * @param table Tabla que se generará
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-16
+	 * @version 2014-02-20
 	 */
-	public function generate ($table) {
+	public function generate ($table, $thead = 1) {
 		// si el arreglo esta vacio o no es arreglo retornar nada
 		if(!is_array($table) || !count($table)) {
 			return null;
@@ -131,7 +131,8 @@ class TableHelper {
 		}
 		// Iniciar tabla
 		$buffer .= '<table class="'.$this->_class.'" id="'.$this->_id.'">'."\n";
-		// Definir títulos de columnas
+		// Definir cabecera de la tabla
+		// títulos de columnas
 		$buffer .= "\t".'<thead>'."\n";
 		$titles = array_shift($table);
 		$buffer .= "\t\t".'<tr>'."\n";
@@ -139,6 +140,15 @@ class TableHelper {
 			$buffer .= "\t\t\t".'<th>'.$col.'</th>'."\n";
 		}
 		$buffer .= "\t\t".'</tr>'."\n";
+		// extraer otras filas que son parte de la cabecera
+		for ($i=1; $i<$thead; ++$i) {
+			$titles = array_shift($table);
+			$buffer .= "\t\t".'<tr>'."\n";
+			foreach($titles as &$col) {
+				$buffer .= "\t\t\t".'<td>'.$col.'</td>'."\n";
+			}
+			$buffer .= "\t\t".'</tr>'."\n";
+		}
 		$buffer .= "\t".'</thead>'."\n";
 		// Definir datos de la tabla
 		$buffer .= "\t".'<tbody>'."\n";

@@ -22,7 +22,7 @@ class MaintainerHelper extends TableHelper {
 		$buffer .= '<div style="float:left"><a href="'.$this->options['link'].'/crear" title="Crear nuevo registro"><img src="'.$_base.'/img/icons/16x16/actions/new.png" alt="" /></a></div>';
 		if ($page)
 			$buffer .= $this->paginator ($pages, $page);
-		$buffer .= parent::generate ($data);
+		$buffer .= parent::generate ($data, 2);
 		$buffer .= $this->form->end(array('type'=>null));
 		$buffer .= '<div style="text-align:right;margin-bottom:1em;font-size:0.8em">';
 		if($page)

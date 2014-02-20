@@ -17,3 +17,6 @@ table.mantenedor th:last-child, table.mantenedor td:last-child {
 table.mantenedor th a {
 	display: inline;
 } 
+table.mantenedor tbody tr:hover {
+	background: #ddd;
+}
