@@ -22,7 +22,7 @@
  */
 
 /**
- * Clase para trabajar con una base de datos MySQL (o MariaDB)
+ * Clase para trabajar con una base de datos MySQL
  * @todo Se deben completar los métodos para la clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2013-11-21
