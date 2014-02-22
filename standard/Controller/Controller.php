@@ -60,6 +60,8 @@ class Controller {
 			'_request' => $this->request->request,
 			'_url' => $this->request->url,
 		));
+		// obtener layout por defecto (el configurado en Config/core.php)
+		$this->layout = Configure::read('page.layout');
 	}
 	
 	/**

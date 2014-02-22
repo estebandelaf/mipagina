@@ -46,7 +46,7 @@ class View {
 		$this->request = $controller->request;
 		$this->response = $controller->response;
 		$this->viewVars = $controller->viewVars;
-		$this->layout = Configure::read('page.layout');
+		$this->layout = $controller->layout;
 	}
 	
 	/**
@@ -78,6 +78,8 @@ class View {
 		$class = ucfirst($ext).'Page';
 		App::uses($class, 'View/Helper/Pages');
 		$page_content = $class::render($location, $this->viewVars);
+		if ($this->layout === null)
+			return $page_content;
 		// buscar archivo del tema que está seleccionado, si no existe
 		// se utilizará el tema por defecto
 		$layout = $this->getLayoutLocation($this->layout);
@@ -92,7 +94,7 @@ class View {
 		} else $page = '/inicio';
 		// renderizar layout de la página (con su contenido)
 		App::uses('PhpPage', 'View/Helper/Pages');
-		$this->response->body(PhpPage::render($layout, array_merge(array(
+		return PhpPage::render($layout, array_merge(array(
 			'_header_title' => Configure::read('page.header.title').': '.$page,
 			'_header_extra' => '<!-- MODIFICAR EN View.php -->',
 			'_body_title' => Configure::read('page.body.title'),
@@ -103,8 +105,7 @@ class View {
 			'_timestamp' => date(Configure::read('time.format'), filemtime($location)),
 			'_layout' => $this->layout,
 			'_content' => $page_content,
-		), $this->viewVars)));
-		
+		), $this->viewVars));
 	}
 
 	/**
