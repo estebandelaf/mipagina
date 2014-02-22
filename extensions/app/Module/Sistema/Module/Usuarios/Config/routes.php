@@ -18,8 +18,14 @@ Router::connect('/usuarios/perfil', array(
 	'action' => 'perfil',
 ));
 
-Router::connect('/usuarios/imagen/*', array(
+Router::connect('/usuarios/contrasenia/recuperar', array(
 	'module' => 'Sistema.Usuarios',
 	'controller' => 'usuarios',
-	'action' => 'imagen',
+	'action' => 'contrasenia_recuperar',
+));
+
+Router::connect('/usuarios/contrasenia/recuperar/*', array(
+	'module' => 'Sistema.Usuarios',
+	'controller' => 'usuarios',
+	'action' => 'contrasenia_recuperar',
 ));

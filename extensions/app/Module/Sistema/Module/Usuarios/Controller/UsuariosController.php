@@ -39,7 +39,7 @@ final class UsuariosController extends UsuariosBaseController {
 	protected $module_url = '/sistema/usuarios/';
 
 	public function beforeFilter () {
-		$this->Auth->allow('ingresar', 'salir', 'imagen');
+		$this->Auth->allow('ingresar', 'salir', 'contrasenia_recuperar');
 		$this->Auth->allowWithLogin('perfil');
 		parent::beforeFilter();
 	}
@@ -50,6 +50,78 @@ final class UsuariosController extends UsuariosBaseController {
 
 	public function salir () {
 		$this->Auth->logout($this);
+	}
+
+	public function contrasenia_recuperar ($usuario = null) {
+		$this->autoRender = false;
+		// pedir correo
+		if ($usuario == null) {
+			if (!isset($_POST['submit'])) {
+				$this->render ('Usuarios/contrasenia_recuperar_step1');
+			} else {
+				$Usuario = new Usuario ($_POST['id']);
+				if (!$Usuario->exists()) {
+					Session::message ('Usuario o email inválido');
+					$this->render ('Usuarios/contrasenia_recuperar_step1');
+				} else {
+					$this->contrasenia_recuperar_email (
+						$Usuario->email,
+						$Usuario->nombre,
+						$Usuario->usuario,
+						$this->Auth->hash($Usuario->contrasenia)
+					);
+					Session::message ('Se ha enviado un email con las instrucciones para recuperar su contraseña');
+					$this->redirect('/usuarios/ingresar');
+				}
+			}
+		}
+		// cambiar contraseña
+		else {
+			$Usuario = new Usuario ($usuario);
+			if (!$Usuario->exists()) {
+				Session::message ('Usuario inválido');
+				$this->redirect ('/usuarios/contrasenia/recuperar');
+			}
+			if (!isset($_POST['submit'])) {
+				$this->set('usuario', $usuario);
+				$this->render ('Usuarios/contrasenia_recuperar_step2');
+			} else {
+				if ($this->Auth->hash($Usuario->contrasenia)!=$_POST['codigo']) {
+					Session::message ('Código ingresado no es válido para el usuario');
+					$this->set('usuario', $usuario);
+					$this->render ('Usuarios/contrasenia_recuperar_step2');
+				}
+				else if (empty ($_POST['contrasenia1']) || empty ($_POST['contrasenia2']) || $_POST['contrasenia1']!=$_POST['contrasenia2']) {
+					Session::message ('Contraseña nueva inválida (en blanco o no coinciden)');
+					$this->set('usuario', $usuario);
+					$this->render ('Usuarios/contrasenia_recuperar_step2');
+				}
+				else {
+					$Usuario->saveContrasenia(
+						$_POST['contrasenia1'],
+						$this->Auth->settings['model']['user']['hash']
+					);
+					Session::message ('La contraseña para el usuario '.$usuario.' ha sido cambiada con éxito');
+					$this->redirect('/usuarios/ingresar');
+				}
+			}
+		}
+	}
+
+	private function contrasenia_recuperar_email ($correo, $nombre, $usuario, $hash) {
+		$this->layout = null;
+		$this->set (array(
+			'nombre'=>$nombre,
+			'usuario'=>$usuario,
+			'hash'=>$hash,
+			'ip'=>AuthComponent::ip(),
+		));
+		$msg = $this->render('Usuarios/contrasenia_recuperar_email')->body();
+		App::uses('Email', 'Network/Email');
+		$email = new Email();
+		$email->to($correo);
+		$email->subject('Recuperación de contraseña');
+		$email->send($msg);
 	}
 
 	public function crear () {
