@@ -131,19 +131,47 @@ final class UsuariosController extends UsuariosBaseController {
 			$Usuario->set($_POST);
 			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
 				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
-				$this->redirect('/usuarios/perfil');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
 			}
 			if ($Usuario->checkIfHashAlreadyExists ()) {
 				Session::message('Hash seleccionado ya está en uso');
-				$this->redirect('/usuarios/perfil');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
 			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
+			}
+			if (empty($Usuario->contrasenia)) {
+				$Usuario->contrasenia = string_random (8);
+			}
+			if (empty($Usuario->hash)) {
+				do {
+					$Usuario->hash = string_random (32);
+				} while ($Usuario->checkIfHashAlreadyExists ());
+			}
+			$layout = $this->layout;
+			$this->layout = null;
+			$this->set(array(
+				'nombre'=>$Usuario->nombre,
+				'usuario'=>$Usuario->usuario,
+				'contrasenia'=>$Usuario->contrasenia,
+			));
+			$msg = $this->render('Usuarios/crear_email')->body();
+			$this->layout = $layout;
 			$Usuario->contrasenia = $this->Auth->hash($Usuario->contrasenia);
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
-			Session::message('Registro Usuario creado');
+			App::uses('Email', 'Network/Email');
+			$email = new Email();
+			$email->to($Usuario->email);
+			$email->subject('Cuenta de usuario creada');
+			$email->send($msg);
+			Session::message('Registro Usuario creado (se envió email a '.$Usuario->email.' con los datos de acceso');
 			$this->redirect($this->module_url.'usuarios/listar');
 		}
 		// setear variables
+		Usuario::$columnsInfo['contrasenia']['null'] = true;
+		Usuario::$columnsInfo['hash']['null'] = true;
 		$this->set(array(
 			'columnsInfo' => Usuario::$columnsInfo,
 		));
@@ -172,11 +200,15 @@ final class UsuariosController extends UsuariosBaseController {
 			$Usuario->set($_POST);
 			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
 				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
-				$this->redirect('/usuarios/perfil');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
 			}
 			if ($Usuario->checkIfHashAlreadyExists ()) {
 				Session::message('Hash seleccionado ya está en uso');
-				$this->redirect('/usuarios/perfil');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
+			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
 			}
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
@@ -207,6 +239,15 @@ final class UsuariosController extends UsuariosBaseController {
 			if ($Usuario->checkIfHashAlreadyExists ()) {
 				Session::message('Hash seleccionado ya está en uso');
 				$this->redirect('/usuarios/perfil');
+			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if (empty($Usuario->hash)) {
+				do {
+					$Usuario->hash = string_random (32);
+				} while ($Usuario->checkIfHashAlreadyExists ());
 			}
 			$Usuario->save();
 			// mensaje de ok y redireccionar

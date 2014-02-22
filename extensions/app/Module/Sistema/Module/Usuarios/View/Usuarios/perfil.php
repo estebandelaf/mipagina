@@ -32,8 +32,7 @@ echo $form->input(array(
 	'name' => 'hash',
 	'label' => 'Hash',
 	'value' => $Usuario->hash,
-	'help' => 'Hash único para identificar el usuario',
-	'check' => 'notempty',
+	'help' => 'Hash único para identificar el usuario (32 caracteres).<br />Si desea uno nuevo, borrar este y automáticamente se generará uno nuevo al guardar los cambios',
 ));
 echo $form->end(array(
 	'name' => 'datosUsuario',

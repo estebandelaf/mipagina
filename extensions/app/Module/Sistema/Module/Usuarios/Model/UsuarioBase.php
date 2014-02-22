@@ -107,7 +107,7 @@ abstract class UsuarioBase extends AppModel {
 		),
 		'hash' => array(
 			'name' => 'Hash',
-			'comment' => 'Hash único del usuario',
+			'comment' => 'Hash único del usuario (32 caracteres)',
 			'type' => 'character',
 			'length' => 32,
 			'null' => false,

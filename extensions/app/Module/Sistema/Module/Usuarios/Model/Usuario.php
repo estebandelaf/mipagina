@@ -124,6 +124,27 @@ final class Usuario extends UsuarioBase {
 	}
 
 	/**
+	 * Método que revisa si el email ya existe en la base de datos
+	 */
+	public function checkIfEmailAlreadyExists () {
+		if (empty($this->id)) {
+			return (boolean)$this->db->getValue('
+				SELECT COUNT(*)
+				FROM usuario
+				WHERE email = \''.$this->db->sanitize($this->email).'\'
+			');
+		} else {
+			return (boolean)$this->db->getValue('
+				SELECT COUNT(*)
+				FROM usuario
+				WHERE
+					id != '.$this->db->sanitize($this->id).'
+					AND email = \''.$this->db->sanitize($this->email).'\'
+			');
+		}
+	}
+
+	/**
 	 * Método que revisa si el hash del usuario ya existe en la base de datos
 	 */
 	public function checkIfHashAlreadyExists () {

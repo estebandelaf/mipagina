@@ -171,7 +171,7 @@ class AuthComponent extends Component {
 		// si es un arreglo self::$session se verifica el hash de la sesión
 		if(is_array(self::$session) && isset(self::$session['id']) && isset(self::$session['usuario']) && isset(self::$session['hash'])) {
 			$userModel = self::$userModel;
-			$$userModel = new $userModel(self::$session['usuario']);
+			$$userModel = new $userModel(self::$session['id']);
 			if ($$userModel->{self::$lastlogin_hash} != self::$session['hash']) {
 				Session::destroy();
 				Session::message(sprintf(self::$newlogin_message, self::$session['usuario']));
