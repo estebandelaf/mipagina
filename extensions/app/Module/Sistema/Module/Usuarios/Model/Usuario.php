@@ -45,11 +45,19 @@ final class Usuario extends UsuarioBase {
 	public function __construct ($id = null) {
 		if (!is_numeric($id)) {
 			$this->db = Database::get($this->_database);
-			$id = $this->db->getValue('
-				SELECT id
-				FROM usuario
-				WHERE usuario = \''.$this->db->sanitize($id).'\'
-			');
+			if (strpos($id, '@')) {
+				$id = $this->db->getValue('
+					SELECT id
+					FROM usuario
+					WHERE email = \''.$this->db->sanitize($id).'\'
+				');
+			} else {
+				$id = $this->db->getValue('
+					SELECT id
+					FROM usuario
+					WHERE usuario = \''.$this->db->sanitize($id).'\'
+				');
+			}
 		}
 		parent::__construct ($id);
 	}

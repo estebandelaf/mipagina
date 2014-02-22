@@ -204,7 +204,7 @@ class AuthComponent extends Component {
 	/**
 	 * Método que realiza el login del usuario
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-07
+	 * @version 2014-02-22
 	 */
 	public function login ($controller) {
 		// si ya está logueado se redirecciona
@@ -280,7 +280,7 @@ class AuthComponent extends Component {
 				);
 				Session::write($this->settings['session']['key'], self::$session);
 				// mensaje para mostrar
-				Session::message(sprintf($this->settings['messages']['ok']['login'], $_POST[$userField]).$lastlogin);
+				Session::message(sprintf($this->settings['messages']['ok']['login'], $$userModel->$userField).$lastlogin);
 				// redireccionar
 				$controller->redirect($this->settings['redirect']['login']);
 			}
