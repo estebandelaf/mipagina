@@ -24,7 +24,7 @@
 /**
  * Clase para el envío de correo electrónico
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2010-10-09
+ * @version 2014-02-22
  */
 class Email {
 
@@ -33,6 +33,7 @@ class Email {
 	protected $_to = array(); ///< Listado de destinatarios
 	protected $_subject = null; ///< Asunto del correo que se enviará
 	protected $_attach = array(); ///< Archivos adjuntos
+	protected $_debug = false; ///< Si se debe mostrar datos de debug o no
 
 	/**
 	 * Constructor de la clase
@@ -48,7 +49,7 @@ class Email {
 	 * Define la configuración con los datos para el envío
 	 * @param name
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2010-10-09
+	 * @version 2014-02-22
 	 */
 	public function config ($name = 'default') {
 		// Revisar que no exista la configuración ya cargada
@@ -59,18 +60,19 @@ class Email {
 			}
 			// Si no es arreglo, es el nombre de la configuración
 			else {
-				// permite usar configuración mediante clase
-				if(file_exists(DIR_WEBSITE.'/Config/email.php')) {
-					include_once DIR_WEBSITE.'/Config/email.php';
-					$config = new EmailConfig();
-					$this->_config = $config->$name;
-				}
-				// si no se configura mediante clase se lee desde la configuración
-				else {
-					$this->_config = Configure::read('email.'.$name);
-				}
+				$this->_config = Configure::read('email.'.$name);
 			}
 		}
+	}
+
+	/**
+	 * Método para asignar si hay o no (por defecto) debug
+	 * @param debug =true hay debug, =false no hay debug
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-22
+	 */
+	public function setDebug ($debug = false) {
+		$this->_debug = $debug;
 	}
 
 	/**
@@ -130,7 +132,7 @@ class Email {
 	 * Enviar correo electrónico
 	 * @param msg
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2010-10-09
+	 * @version 2014-02-22
 	 */
 	public function send ($msg) {
 		// Si el mensaje no es un arreglo se crea, asumiendo que se paso en formato texto
@@ -161,7 +163,7 @@ class Email {
 		// Crear correo
 		$class = 'Email'.ucfirst($this->_config['type']);
 		App::uses($class, 'Network/Email');
-		$email = new $class($this->_config, $header, $data);
+		$email = new $class($this->_config, $header, $data, $this->_debug);
 		// Enviar mensaje a todos los destinatarios
 		return $email->send();
 	}
