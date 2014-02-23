@@ -135,12 +135,14 @@ function string2url ($string, $encoding = 'UTF-8') {
  * @author http://www.lost-in-code.com/programming/php-code/php-random-string-with-numbers-and-letters
  */
 function string_random ($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-    $string = '';
-    for ($p = 0; $p < $length; $p++) {
-        $string .= $characters[mt_rand(0, strlen($characters)-1)];
-    }
-    return $string;
+	$characters = '0123456789';
+	$characters .= 'abcdefghijklmnopqrstuvwxyz';
+	$characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$string = '';
+	for ($p = 0; $p < $length; $p++) {
+		$string .= $characters[mt_rand(0, strlen($characters)-1)];
+	}
+	return $string;
 }
 
 /**
