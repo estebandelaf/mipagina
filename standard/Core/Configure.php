@@ -24,7 +24,7 @@
 /**
  * Clase para configurar la aplicación
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-04-09
+ * @version 2014-02-24
  */
 class Configure {
 
@@ -33,7 +33,7 @@ class Configure {
 	/**
 	 * Realizar configuración al inicio de la aplicación
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-04-22
+	 * @version 2014-02-24
 	 */
 	public static function bootstrap() {
 		// Incluir configuraciones para el sitio web
@@ -58,18 +58,8 @@ class Configure {
 			define('TMP', DIR_WEBSITE.DS.'tmp');
 		else
 			define('TMP', sys_get_temp_dir());
-		// cargar inflector con reglas para español
-		// http://joecabezas.tumblr.com/post/572538183/espanolizando-cakephp-mediante-inflections-version
-		Inflector::rules('singular', array(
-			'rules' => array('/([r|d|j|n|l|m|y|z])es$/i' => '\1', '/as$/i' => 'a', '/([ti])a$/i' => '\1a'),
-			'irregular' => array(),
-			'uninflected' => array()
-		));
-		Inflector::rules('plural', array(
-			'rules' => array('/([r|d|j|n|l|m|y|z])$/i' => '\1es','/a$/i' => '\1as'),
-			'irregular' => array(),
-			'uninflected' => array()
-		));
+		// cargar reglas de Inflector para el idioma de la aplicación
+		App::import ('Config/Inflector/'.self::read('language'));
 		// procesar cada ruta (excepto standard) buscando funciones y bootstrap
 		$paths = array_reverse(App::paths());
 		array_shift($paths);
