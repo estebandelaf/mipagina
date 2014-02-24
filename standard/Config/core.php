@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -36,7 +36,7 @@ Configure::write('time.format', 'Y-m-d H:i:s');
 
 // Variables que deberán ser tratadas como globales al renderizar (si
 // es que existen, sino se omitirán)
-Configure::write('page.globals', array('db'));
+Configure::write('page.globals', array());
 
 // Extensiones para las páginas que se desean renderizar
 Configure::write('page.extensions', array('php', 'markdown'));

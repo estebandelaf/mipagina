@@ -353,18 +353,6 @@ final class Oracle extends DatabaseManager {
 	}
 
 	/**
-	 * Entrega información de una tabla (nombre, comentario, columnas,
-	 * pks y fks)
-	 * @param table Tabla a buscar sus datos
-	 * @return Arreglo con los datos de la tabla
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	public function getInfoFromTable ($tablename) {
-		
-	}
-
-	/**
 	 * Seleccionar una tabla con los nombres de las columnas
 	 * @param sql Consulta SQL que se desea realizar
 	 * @todo Verificar que efectivamente exista campo de tipo blob y sea ese el que no se muestra en la web

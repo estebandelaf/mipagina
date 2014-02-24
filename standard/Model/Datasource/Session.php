@@ -26,15 +26,8 @@ App::uses('Set', 'Utility');
 
 /**
  * Clase para escribir y recuperar datos desde una sesión
- * @todo Dos o más páginas en la misma ruta del servidor comparten la
- * sesión, por ejemplo los sitios: http://localhost/pagina1 y
- * http://localhost/pagina2 usan la misma sesión, esto es MUY malo ya
- * que al autenticar a un usuario en una página, aparecerá autenticado
- * en las otras. En el fondo cualquier variable seteada en una página
- * será seteada en la otra. ¡CORREGIR URGENTE!, por ejemplo escribir
- * la info de la sesión en el directorio tmp como lo hace CakePHP
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-12
+ * @version 2014-02-23
  */
 class Session {
 

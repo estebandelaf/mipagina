@@ -37,9 +37,8 @@ final class XLS {
 	 * Lee una planilla de cálculo
 	 * @param archivo archivo a leer (ejemplo celda tmp_name de un arreglo $_FILES)
 	 * @param hoja Hoja que se quiere devolver, comenzando por la 0
-	 * @todo Parchar clase Spreadsheet_Excel_Reader y quitar el parche de este método
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-05-09
+	 * @version 2014-02-23
 	 */
 	public static function read ($archivo = null, $hoja = 0, $type = 'Excel5') {
 		// Crear objeto para leer archivo

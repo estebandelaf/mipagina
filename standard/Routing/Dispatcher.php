@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -29,7 +29,7 @@ App::uses('Router', 'Routing');
 /**
  * Clase para despachar la página que se esté solicitando
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-09
+ * @version 2014-02-23
  */
 class Dispatcher {
 
@@ -38,7 +38,7 @@ class Dispatcher {
 	 * @param request Objeto Request
 	 * @param response Objeto Response
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-09
+	 * @version 2014-02-23
 	 */
 	public function dispatch(Request $request, Response $response) {
 		// Verificar si el recurso solicitado es un archivo físico dentro del directorio webroot
@@ -56,8 +56,6 @@ class Dispatcher {
 				));
 			}
 		}
-		// Asignar solicitud al enrutador
-		Router::setRequestInfo($request);
 		// Obtener controlador
 		$controller = $this->_getController($request, $response);
 		// Verificar que lo obtenido sea una instancia de la clase Controller
@@ -134,7 +132,7 @@ class Dispatcher {
 	/**
 	 * Método que obtiene el controlador
 	 */
-	protected function _getController(Request $request, Response $response) {
+	private function _getController(Request $request, Response $response) {
 		// Cargar clase del controlador
 		$controller = Inflector::camelize($request->params['controller']);
 		$class = $controller.'Controller';
@@ -155,7 +153,7 @@ class Dispatcher {
 	/**
 	 * Método que se encarga de invocar a la acción del controlador y entregar la respuesta
 	 */
-	protected function _invoke(Controller $controller, Request $request, Response $response) {
+	private function _invoke(Controller $controller, Request $request, Response $response) {
 		// Iniciar el proceso
 		$controller->startupProcess();
 		// Ejecutar acción

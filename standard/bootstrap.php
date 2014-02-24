@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,6 +24,7 @@
 /**
  * @file bootstrap.php
  * Archivo de arranque de la aplicación
+ * @version 2014-02-23
  */
 
 // Asignar nivel de error máximo (para reportes previo a que se asigne
@@ -51,8 +52,7 @@ include DIR_STANDARD.DS.'basics.php';
 include DIR_STANDARD.DS.'Core'.DS.'App.php';
 
 // Asignar rutas/paths donde se buscarán las clases (en este mismo orden)
-$_DIRS = array();
-$_DIRS[] = DIR_WEBSITE;
+$_DIRS = array(DIR_WEBSITE);
 $_EXTENSIONS_DIR = dirname(DIR_STANDARD).DS.'extensions';
 foreach($_EXTENSIONS as &$_extension) {
 	if($_extension[0]!='/') $_extension = $_EXTENSIONS_DIR.DS.$_extension;

@@ -201,21 +201,14 @@ class Controller {
 
 	/**
 	 * Redireccionar página
-	 * @todo Si la url es un arreglo usar Router::normalize()
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-06
+	 * @version 2014-02-23
 	 */
 	public function redirect ($url = null, $status = 0) {
-		// Ejecutar evento
 		$this->beforeRedirect(array($url, $status));
-		// si la url es null se redirecciona a la actual
 		if(!$url) $url = $this->request->request;
-		// Si la url es un arreglo se asume se debe normalizar
-		if(is_array($url)) $url = Router::normalize($url);
-		// Redireccionar
 		header('location: '.$this->request->base.$url);
-		// Detener script
-		exit(0);
+		exit($status);
 	}
 
 }

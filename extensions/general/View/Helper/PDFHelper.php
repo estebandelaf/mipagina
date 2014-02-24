@@ -27,7 +27,7 @@ App::import('Vendor/tcpdf/tcpdf');
 /**
  * Clase para generar PDFs
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-17
+ * @version 2014-02-23
  */
 class PDFHelper extends TCPDF {
 
@@ -57,13 +57,11 @@ class PDFHelper extends TCPDF {
 
 	/**
 	 * Constructor de la clase
-	 * @todo Recibir como parámetro las opciones y sobreescribir las por defecto
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-12
+	 * @version 2014-02-23
 	 */
 	public function __construct ($o = 'P', $u = 'mm', $s = 'Letter') {
 		parent::__construct($o, $u, $s);
-		// margenes
 		$this->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$this->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$this->SetFooterMargin(PDF_MARGIN_FOOTER);

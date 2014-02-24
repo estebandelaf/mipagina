@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase que renderizará las vistas de la aplicación
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-09
+ * @version 2014-02-23
  */
 class View {
 	
@@ -48,14 +48,13 @@ class View {
 		$this->viewVars = $controller->viewVars;
 		$this->layout = $controller->layout;
 	}
-	
+
 	/**
 	 * Método para renderizar una página.
 	 * El como renderizará dependerá de la extensión de la página encontrada
-	 * @todo Poder elegir extension que se quiere
 	 * @param Ubicación relativa de la página
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
+	 * @version 2014-02-23
 	 */
 	public function render ($page, $ext = null) {
 		// buscar página
