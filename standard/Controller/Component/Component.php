@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -36,6 +36,8 @@ class Component {
 	/**
 	 * Constructor de la clase
 	 * @todo Cargar componentes que este componente utilice
+	 * @param Components Colección de componentes
+	 * @param settings Opciones para la carga de componentes
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
@@ -49,7 +51,8 @@ class Component {
 
 	/**
 	 * Método llamado desde Controller::beforeFilter()
-	 * Deberá se sobreescrito en el componente
+	 * Deberá se sobreescrito en el componente si se quiere utilizar
+	 * @param controller Controllador que está siendo usado en el momento
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
@@ -58,7 +61,8 @@ class Component {
 
 	/**
 	 * Método llamado desde Controller::afterFilter()
-	 * Deberá se sobreescrito en el componente
+	 * Deberá se sobreescrito en el componente si se quiere utilizar
+	 * @param controller Controllador que está siendo usado en el momento
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
@@ -67,7 +71,8 @@ class Component {
 
 	/**
 	 * Método llamado desde Controller::beforeRender()
-	 * Deberá se sobreescrito en el componente
+	 * Deberá se sobreescrito en el componente si se quiere utilizar
+	 * @param controller Controllador que está siendo usado en el momento
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
@@ -76,7 +81,10 @@ class Component {
 
 	/**
 	 * Método llamado desde Controller::beforeRedirect()
-	 * Deberá se sobreescrito en el componente
+	 * Deberá se sobreescrito en el componente si se quiere utilizar
+	 * @param controller Controllador que está siendo usado en el momento
+	 * @param url Dirección hacia donde se está redirigiendo
+	 * @param status Estado de términi del script (0 es todo ok)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */

@@ -24,7 +24,7 @@
 /**
  * Clase para el envío de correo electrónico
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-22
+ * @version 2014-02-24
  */
 class Email {
 
@@ -37,31 +37,18 @@ class Email {
 
 	/**
 	 * Constructor de la clase
-	 * @param config
+	 * @param config Configuración del correo electrónico que se usará
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
 	public function __construct($config = 'default') {
-		$this->config($config);	
-	}
-
-	/**
-	 * Define la configuración con los datos para el envío
-	 * @param name
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-22
-	 */
-	public function config ($name = 'default') {
-		// Revisar que no exista la configuración ya cargada
-		if($this->_config==null) {
-			// Si es un arreglo, se asume es la configuración directamente
-			if(is_array($name)) {
-				$this->_config = $name;
-			}
-			// Si no es arreglo, es el nombre de la configuración
-			else {
-				$this->_config = Configure::read('email.'.$name);
-			}
+		// Si es un arreglo, se asume es la configuración directamente
+		if(is_array($config)) {
+			$this->_config = $config;
+		}
+		// Si no es arreglo, es el nombre de la configuración
+		else {
+			$this->_config = Configure::read('email.'.$config);
 		}
 	}
 
@@ -77,8 +64,8 @@ class Email {
 
 	/**
 	 * Define a quién se debe responder el correo
-	 * @param email
-	 * @param name
+	 * @param email Correo electrónico a quien responder
+	 * @param name Nombre a quien responder
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
@@ -89,7 +76,7 @@ class Email {
 
 	/**
 	 * Asigna la lista de destinatarios
-	 * @param email
+	 * @param email Email o arreglo con los emails que se desean agregar como destinatarios
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
@@ -110,7 +97,7 @@ class Email {
 
 	/**
 	 * Asignar asunto del correo electrónico
-	 * @param subject
+	 * @param subject Asunto del correo electrónico
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
@@ -120,7 +107,7 @@ class Email {
 	
 	/**
 	 * Agregar un archivo para enviar en el correo
-	 * @param src
+	 * @param src Arreglo (formato de $_FILES) con el archivo a adjuntar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
@@ -130,7 +117,8 @@ class Email {
 
 	/**
 	 * Enviar correo electrónico
-	 * @param msg
+	 * @param msg Cuerpo del mensaje que se desea enviar (arreglo o string)
+	 * @return Arreglo asociativo con los estados de cada correo enviado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2014-02-22
 	 */

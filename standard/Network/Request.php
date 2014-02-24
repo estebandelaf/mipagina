@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase con la solicitud del cliente
  * @author Esteban De la Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-07-30
+ * @version 2014-02-24
  */
 class Request {
 
@@ -120,15 +120,6 @@ class Request {
 	 */
 	public static function getUrl () {
 		return self::$Url;
-	}
-	
-	/**
-	 * Agregar parámetros a la lista de parámetros de la solicitud
-	 * @author Esteban De la Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-29
-	 */	
-	public function addParams($params = array()) {
-		$this->params = array_merge($this->params, $params);
 	}
 
 }

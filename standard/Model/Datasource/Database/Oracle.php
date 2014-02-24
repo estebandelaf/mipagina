@@ -29,7 +29,8 @@
  * 
  * Para obtener SID de la base de datos desde comando SQL utilizar:
  *   select instance_name from v$instance;
- * 
+ *
+ * @todo Se deben completar los métodos para la clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2012-12-26
  */

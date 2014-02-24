@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase para manejar modulos: cargarlos, rutas y bootstrap 
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-09
+ * @version 2014-02-24
  */
 class Module {
 
@@ -43,15 +43,16 @@ class Module {
 	 * @param module Nombre del módulo (o un arreglo de módulos con sus configuraciones)
 	 * @param config Arreglo con configuración del módulo
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-08-20
+	 * @version 2014-02-24
 	 */
 	public static function uses ($module, $config = array()) {
 		// Si se paso un arreglo se procesa cada uno por separado
 		if (is_array($module)) {
 			// Cada elemento del arreglo será un modulo
 			foreach ($module as $name => $conf) {
-				// Si se paso solo el nombre del módulo y no su configuración se convierte
-				// al formato requerido de 'Modulo'=>array()
+				// Si se paso solo el nombre del módulo y no su
+				// configuración se convierte al formato
+				// requerido de 'Modulo'=>array()
 				if(!is_array($conf)) {
 					$name = $conf;
 					$conf = array();
@@ -59,7 +60,8 @@ class Module {
 				// Indicar que se usará el módulo
 				self::uses($name, $conf);
 			}
-			// Una vez procesados todos los modulos pasados terminar el uses
+			// Una vez procesados todos los modulos pasados terminar
+			// el uses
 			return;
 		}
 		// Asignar opciones por defecto
@@ -69,42 +71,44 @@ class Module {
 				'path' => array(),
 				// si se debe cargar el módulo automáticamente
 				'autoLoad' => false,
+				// el módulo no se encuentra cargado
+				'loaded' => false,
 			), $config
 		);
-		// Indicar que el módulo no se encuentra cargado
-		$config['loaded'] = false;
-		// Guardar configuración del modulo
+		// Guardar configuración del modulo y cargar si es necesario
 		self::$_modules[$module] = $config;
-		// cargar módulo si así se solicito
 		if($config['autoLoad']) {
 			self::load($module);
 		}
 	}
 
 	/**
-	 * Cargar modulo e inicializarlo
+	 * Cargar módulo e inicializarlo
 	 * @param module Nombre del módulo que se desea cargar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-08-20
+	 * @version 2014-02-24
 	 */
 	public static function load ($module) {
 		// si el módulo ya está cargado se retorna
 		if(self::$_modules[$module]['loaded']) {
 			return;
 		}
-		// Si no se indicó el path donde se encuentra el módulo se deberá determinar
-		// se buscarán todos los paths donde el módulo exista
-		if (empty(self::$_modules[$module]['path'])) {
+		// Si no se indicó el path donde se encuentra el módulo se
+		// deberá determinar, se buscarán todos los paths donde el
+		// módulo pueda existir
+		if (!isset(self::$_modules[$module]['path'][0])) {
 			self::$_modules[$module]['path'] = array();
 			foreach (App::paths() as $path) {
-				// Verificar que el directorio exista (el reemplazo es para los submódulos)
+				// Verificar que el directorio exista (el
+				// reemplazo es para los submódulos)
 				$modulePath = $path.'/Module/'.str_replace('.', '/Module/', $module);
 				if(is_dir($modulePath)) {
 					self::$_modules[$module]['path'][] = $modulePath;
 				}
 			}
 		}
-		// Si se indicó se verifica que exista y se agrega como único path para el modulo al arreglo
+		// Si se indicó se verifica que exista y se agrega como único
+		// path para el modulo al arreglo
 		else {
 			// Si el directorio existe se agrega
 			if(is_dir(self::$_modules[$module]['path'])) {
@@ -116,13 +120,13 @@ class Module {
 			}
 		}
 		// Si el módulo no fue encontrado se crea una excepción
-		if (empty(self::$_modules[$module]['path'])) {
+		if (!isset(self::$_modules[$module]['path'][0])) {
 			throw new MissingModuleException(array('module' => $module));
 		}
 		// verificar "archivos cargables", si existen se cargan
 		foreach(self::$_filesLoadeables as &$file) {
 			$path = self::fileLocation($module, $file);
-			if(!empty($path)) {
+			if($path) {
 				include $path;
 			}
 		}
@@ -134,24 +138,26 @@ class Module {
 	 * Entrega la ruta completa para un archivo
 	 * @param module Nombre del modulo
 	 * @param file Ruta hacia el archivo, sin .php
+	 * @return Ruta completa para el archivo solicitado o null si no existe
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-20
+	 * @version 2014-02-24
 	 */
 	public static function fileLocation ($module, $file) {
-		$location = null;
-		$paths = App::paths();
-		foreach ($paths as &$path) {
+		foreach (App::paths() as $path) {
 			$fileLocation = $path.DS.'Module'.DS.str_replace('.', DS.'Module'.DS, $module).DS.$file.'.php';
 			if(file_exists($fileLocation)) {
-				$location = $fileLocation;
-				break;
+				return $fileLocation;
 			}
 		}
-		return $location;
+		return null;
 	}
 
 	/**
-	 * Entrega listado de modulos cargados o si se especifica un modulo si ese esta cargado o no
+	 * Entrega listado de modulos cargados o si se especifica un modulo
+	 * si ese esta cargado o no
+	 * @param module Módulo que se desea verificar si está cargado o null para pedir todos los módulos cargados
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-24
 	 */
 	public static function loaded ($module = null) {
 		// Si existe el nombre del modulo, se indica si esta o no cargado

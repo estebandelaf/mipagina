@@ -172,6 +172,13 @@ function array_merge_recursive_distinct ( array &$array1, array &$array2 ) {
 	return $merged;
 }
 
+/**
+ * Convierte una tabla de Nx2 (N filas 2 columnas) a un arreglo asociativo
+ * @param table Tabla de Nx2 (N filas 2 columnas) que se quiere convertir
+ * @return Arreglo convertido a asociativo
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-24
+ */
 function table2array ($table) {
 	$array = array();
 	foreach($table as &$row) {

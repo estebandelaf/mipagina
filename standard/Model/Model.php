@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -60,6 +60,7 @@ abstract class Model extends Object implements ModelInterface {
 	 * que tenga el mismo nombre que la tabla a la que está asociada
 	 * esta clase. Si no existe el atributo se devolverá el nombre de la
 	 * clase (en dicho caso, se debe sobreescribir en el modelo final)
+	 * @return Nombre de la tabla asociada al modelo o la clase misma
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-02
 	 */
@@ -85,6 +86,7 @@ abstract class Model extends Object implements ModelInterface {
 	
 	/**
 	 * Método para guardar el objeto en la base de datos
+	 * @return =true si todo fue ok, =false si se hizo algún rollback
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-07
 	 */
@@ -348,7 +350,7 @@ abstract class Models extends Object implements ModelsInterface {
 	
 	/**
 	 * Wrapper para el método sanitize de la Base de datos
-	 * @param string
+	 * @param string Valor que se desea limpiar
 	 * @return String sanitizado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-11

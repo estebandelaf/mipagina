@@ -24,10 +24,18 @@
 /**
  * @file core.php
  * Rutas estándares de las páginas o aplicaciones
+ * @version 2014-02-24
  */
 
 // Definir la página de inicio
-Router::connect('/', array('controller' => 'pages', 'action' => 'display', '/'.Configure::read('homepage')));
+Router::connect('/', array(
+	'controller' => 'pages',
+	'action' => 'display',
+	'/'.Configure::read('homepage')
+));
 
 // Conectar páginas estáticas (se cargarán automáticamente desde /)
-Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+Router::connect('/pages/*', array(
+	'controller' => 'pages',
+	'action' => 'display'
+));

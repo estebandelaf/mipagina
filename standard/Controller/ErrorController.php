@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  *
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@ App::uses('AppController', 'Controller');
 /**
  * Clase para cargar una página y entregarla al usuario
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-10
+ * @version 2014-02-24
  */
 class ErrorController extends AppController {
 
@@ -35,15 +35,14 @@ class ErrorController extends AppController {
 
 	/**
 	 * Renderizar error
+	 * @param data Datos qye se deben pasar a la vista del error
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-10
+	 * @version 2014-02-24
 	 */
 	public function display ($data) {
 		// mostrar error exacto solo si se debe
 		if ($this->error_reporting) {
-			// setear variables
 			$this->set($data);
-			// renderizar
 			$this->render('Error/error_reporting');
 		}
 		// mostrar error "genérico"

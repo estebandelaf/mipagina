@@ -43,7 +43,8 @@ final class Database {
 	 * datos la cual será utilizada para cargar la base de datos por
 	 * primera vez.
 	 * @param database La base de datos que se desea cargar,
-	 * @return Object Objeto con la base de datos seleccionada
+	 * @param config Configuración de la base de datos
+	 * @return Objeto con la base de datos seleccionada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-10-22
 	 */

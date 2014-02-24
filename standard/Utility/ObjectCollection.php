@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -39,6 +39,8 @@ abstract class ObjectCollection {
 
 	/**
 	 * Obtiene un objeto desde la colección
+	 * @param name Nombre del objeto que se quiere obtener
+	 * @return El objeto solicitado o null si no lo encontró
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-09
 	 */
@@ -51,6 +53,8 @@ abstract class ObjectCollection {
 
 	/**
 	 * Verifica si un objeto existe dentro de la colección
+	 * @param Nombre del objeto que se quiere verificar si existe
+	 * @return =true si existe, =false si no existe
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-09
 	 */
@@ -60,6 +64,8 @@ abstract class ObjectCollection {
 
 	/**
 	 * Normaliza un arreglo de objetos, para una carga más simple
+	 * @param objects Objetos a normalizar
+	 * @return Objetos normalizados
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-09
 	 */

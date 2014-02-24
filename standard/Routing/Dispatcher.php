@@ -151,13 +151,16 @@ class Dispatcher {
 	}
 	
 	/**
-	 * Método que se encarga de invocar a la acción del controlador y entregar la respuesta
+	 * Método que se encarga de invocar a la acción del controlador y
+	 * entregar la respuesta
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-24
 	 */
 	private function _invoke(Controller $controller, Request $request, Response $response) {
 		// Iniciar el proceso
 		$controller->startupProcess();
 		// Ejecutar acción
-		$result = $controller->invokeAction($request);
+		$result = $controller->invokeAction();
 		// Renderizar proceso
 		if ($controller->autoRender) {
 			$response = $controller->render();

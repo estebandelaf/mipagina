@@ -24,11 +24,12 @@
 /**
  * @file core.php
  * Configuración estándar de las páginas o aplicaciones
+ * @version 2014-02-24
  */
 
 // Errores
 Configure::write('debug', true);
-Configure::write('error.level', E_ALL | E_STRICT);
+Configure::write('error.level', E_ALL);
 
 // Tiempo
 Configure::write('time.zone', 'America/Santiago');
@@ -45,4 +46,7 @@ Configure::write('page.extensions', array('php', 'markdown'));
 Configure::write('homepage', 'inicio');
 
 // Textos de la página
-Configure::write('page.footer', 'powered by <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>');
+Configure::write(
+	'page.footer',
+	'powered by <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>'
+);

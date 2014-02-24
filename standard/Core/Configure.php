@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -41,7 +41,8 @@ class Configure {
 		foreach($paths as $path) {
 			App::import($path.DS.'Config'.DS.'core');
 		}
-		// Incluir rutas
+		// Incluir rutas (se debe hacer por separado, primero la
+		// configuración y luego rutas)
 		foreach($paths as $path) {
 			App::import($path.DS.'Config'.DS.'routes');
 		}

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -25,39 +25,40 @@
  * Clase que permite manejar los errores que aparecen durante
  * la ejecución de la aplicación.
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-11-21
+ * @version 2014-02-24
  */
 class ErrorHandler {
 
 	/**
 	 * Método para manejar los errores ocurridos en la aplicación
+	 * @param code Código de error
+	 * @param description Descripción del error
+	 * @param file Archivo donde se produjo el error
+	 * @param line Línea donde se producto el error
+	 * @param context Contexto del error
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-11-21
+	 * @version 2014-02-24
 	 */
 	public static function handle($code, $description, $file = null, $line = null, $context = null) {
-		// Si no se deben mostrar errores, omitir
 		if (error_reporting() === 0) {
 			return false;
 		}
-		// Traducir código de error
 		list($error, $log) = self::mapErrorCode($code);
-		// Generar arreglo
-		$data = array(
+		ob_clean();
+		self::render(array(
 			'code' => $code,
 			'error' => $error,
-			'level' => $log,			
+			'level' => $log,
 			'description' => $description,
 			'file' => $file,
 			'line' => $line,
 			'context' => $context
-		);
-		// Renderizar
-		ob_clean();
-		self::render($data);
+		));
 	}
 
 	/**
 	 * Método que realiza el renderizado del error
+	 * @param data Arreglo con los datos que se deben renderizar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-27
 	 */
@@ -69,6 +70,7 @@ class ErrorHandler {
 
 	/**
 	 * Método que mapea el de código de error al nivel en string
+	 * @param code Código de error que se busca
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-27
 	 */

@@ -50,9 +50,11 @@ class View {
 	}
 
 	/**
-	 * Método para renderizar una página.
+	 * Método para renderizar una página
 	 * El como renderizará dependerá de la extensión de la página encontrada
-	 * @param Ubicación relativa de la página
+	 * @param page Ubicación relativa de la página
+	 * @param ext Extensión de la página que se está renderizando
+	 * @return Buffer de la página renderizada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2014-02-23
 	 */
@@ -109,7 +111,6 @@ class View {
 
 	/**
 	 * Método que entrega la ubicación del tema que se está utilizando
-	 * @todo Poder elegir extension que se quiere
 	 * @param layout Tema que se quiere buscar su ubicación
 	 * @return Ubicación del tema (o falso si no se encontró)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
@@ -129,6 +130,9 @@ class View {
 	/**
 	 * Método que busca la vista en las posibles rutas y para todas las posibles extensiones
 	 * @param view Nombre de la vista buscada (ejemplo: /inicio)
+	 * @param module Nombre del módulo en caso de pertenecer a uno
+	 * @param ext Extensión de la vista buscada
+	 * @return Ubicación de la vista que se busca
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-09
 	 */

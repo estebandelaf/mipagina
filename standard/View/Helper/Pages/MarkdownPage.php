@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -32,6 +32,7 @@ class MarkdownPage {
 	 * Método que renderiza una página en formato Markdown
 	 * @param file Archivo que se desea renderizar
 	 * @param vars Arreglo con variables que se desean pasar
+	 * @return Buffer de la página renderizada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-19
 	 */
@@ -44,6 +45,7 @@ class MarkdownPage {
 	 * Método que evalua el archivo con formato Markdown
 	 * @param file Archivo que se desea renderizar
 	 * @param vars Arreglo con variables que se desean pasar
+	 * @return Buffer de la página renderizada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-19
 	 */
