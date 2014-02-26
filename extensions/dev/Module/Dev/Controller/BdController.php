@@ -21,15 +21,29 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// clase que extiende este controlador
 App::uses ('AppController', 'Controller');
 
+/**
+ * Controlador para las acciones relacionadas con la base de datos
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-25
+ */
 class BdController extends AppController {
 
+	/**
+	 * Acción que permite listar las tablas de una de las base de datos
+	 * configuradas y mostrar sus tablas y la información de las mismas
+	 * (comentarios, columnas y pks).
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-25	 
+	 */
 	public function tablas () {
 		if (isset($_POST['submit'])) {
 			$db = &Database::get ($_POST['database']);
 			$tables = $db->getTables();
 			$data = array();
+			// procesar cada una de las tablas
 			foreach($tables as &$table) {
 				$info = $db->getInfoFromTable($table['name']);
 				$row = array(
@@ -38,8 +52,9 @@ class BdController extends AppController {
 					'columns' => array(),
 					'pk' => implode ('<br />', $info['pk']),
 				);
+				// procesar cada columna para armar su
+				// información
 				foreach ($info['columns'] as &$column) {
-					$name = 
 					$row['columns'][] = '<strong>['.$column['name'].']</strong> '.
 								($column['comment']!=''?$column['comment'].': ':'').
 								$column['type'].
@@ -54,14 +69,22 @@ class BdController extends AppController {
 				$row['columns'] = implode ('<br />', $row['columns']);
 				$data[] = $row;
 			}
+			// setear las variables para mostrar los datos de la bd
 			$this->set (array(
 				'database' => $_POST['database'],
 				'data' => $data
 			));
 		}
+		// setear listado de bases de datos
 		$this->_setDatabases ();
 	}
 
+	/**
+	 * Acción que permite poblar datos en tablas de una BD
+	 * @todo Poblar tablas con PK autoincrementales (idea, actualizar serie)
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-25
+	 */
 	public function poblar () {
 		if (isset($_FILES['file'])) {
 			$db = &Database::get ($_POST['database']);
@@ -70,6 +93,7 @@ class BdController extends AppController {
 			$message = array();
 			// hacer todo en una transacción
 			$db->transaction();
+			// cada hoja del archivo son los datos de una tabla
 			foreach($sheets as $id => &$name) {
 				$data = Spreadsheet::read($_FILES['file'], $id);
 				$table = $db->sanitize ($name);
@@ -90,7 +114,8 @@ class BdController extends AppController {
 				if (isset($_POST['delete'])) {
 					$db->query ('DELETE FROM '.$table);
 				}
-				// agregar (o actualizar) cada registro
+				// agregar (o actualizar) cada registro con cada
+				// una de las filas de la tabla
 				foreach ($data as &$row) {
 					$where = $whereQuery;
 					foreach ($info['pk'] as $pk) {
@@ -135,11 +160,22 @@ class BdController extends AppController {
 			$db->commit();
 			Session::message (implode('<br />', $message));
 		}
+		// setear listado de bases de datos
 		$this->_setDatabases ();
 	}
 
+	/**
+	 * Acción para descargar los datos de tablas de una base de datos, al
+	 * elegir la base de datos, se muestra una nueva pantalla donde se
+	 * eligen las tablas para las cuales se desea descargar sus datos. Una
+	 * vez se eligen las tablas se descargan los datos en el archivo de
+	 * formato seleccionado (ej: ODS o XLS).
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-25
+	 */
 	public function descargar () {
 		$this->autoRender = false;
+		// en caos que se haya seleccionado una base de datos
 		if (isset($_POST['step1'])) {
 			$db = &Database::get ($_POST['database']);
 			$this->set(array(
@@ -148,7 +184,9 @@ class BdController extends AppController {
 				'tables' => $db->getTables(),
 			));
 			$this->render ('Bd/descargar_step2');
-		} else if (isset($_POST['step2'])) {
+		}
+		// en caso que se hayan seleccionado las tablas descargar datos
+		else if (isset($_POST['step2'])) {
 			$db = &Database::get ($_POST['database']);
 			$data = array();
 			foreach ($_POST['tables'] as &$table) {
@@ -163,12 +201,21 @@ class BdController extends AppController {
 				'data'=>$data,
 			));
 			$this->render ('Bd/descargar_step3');
-		} else {
+		}
+		// en caso que no se haya seleccionado aun la bd
+		else {
+			// setear listado de bases de datos
 			$this->_setDatabases ();
 			$this->render ('Bd/descargar_step1');
 		}
 	}
 
+	/**
+	 * Método que busca las bases de datos configuradas a través de
+	 * Configure y las asigna para la vista como un arreglo asociativo
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-25
+	 */
 	private function _setDatabases () {
 		$databases = array();
 		$aux = Configure::read('database');

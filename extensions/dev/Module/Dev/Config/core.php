@@ -21,6 +21,12 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+/**
+ * @file core.php
+ * Configuración del módulo
+ * @version 2014-02-25
+ */
+
 // Menú para el módulo
 Configure::write('nav.module', array(
 	'/bd/tablas' => array(
