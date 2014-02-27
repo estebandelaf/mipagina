@@ -30,6 +30,10 @@
  */
 final class XML {
 
+	/**
+	 * Clase que lee un archivo XML
+	 * @todo Implementar clase
+	 */
 	public static function read ($archivo) {
 	}
 
