@@ -21,6 +21,12 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+/**
+ * @file @core.php
+ * Configuración de la extensión aulavirtual
+ * @version 2014-02-26
+ */
+
 // Tema de la página (diseño)
 Configure::write('page.layout', 'sinorca');
 

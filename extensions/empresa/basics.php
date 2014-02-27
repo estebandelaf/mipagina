@@ -22,6 +22,12 @@
  */
 
 /**
+ * @file basics.php
+ * Funciones de la extensión empresa
+ * @version 2014-02-26
+ */
+
+/**
  * Transforma un rut a un formato con solo los numeros
  * @param rut Rut que se quiere transformar (puede venir con puntos, comas, si tiene digito verificador DEBE tener guion)
  * @param quitarDV Si es true el digito verificador se quita, sino se mantiene

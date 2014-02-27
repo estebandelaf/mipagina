@@ -21,5 +21,14 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+/**
+ * @file routes.php
+ * Rutas para la extensión aulavirtual
+ * @version 2014-02-26
+ */
+
 // Conectar páginas de cursos
-Router::connect('/cursos/*', array('controller' => 'cursos', 'action' => 'mostrar'));
+Router::connect('/cursos/*', array(
+	'controller' => 'cursos',
+	'action' => 'mostrar'
+));

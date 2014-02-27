@@ -21,10 +21,21 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// clase que extiende el controlador
 App::uses('AppController', 'Controller');
 
+/**
+ * Controlador para las páginas de cursos
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-26
+ */
 class  CursosController extends AppController {
 
+	/**
+	 * Acción que muestra el listado de cursos del aula
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-26
+	 */
 	public function index () {
 		$this->set(
 			'cursos',
@@ -32,6 +43,21 @@ class  CursosController extends AppController {
 		);
 	}
 
+	/**
+	 * Acción que muestra un curso y subpágina (o sea la página del curso
+	 * que se desea ver propiamente tal).
+	 * Esta acción llamará a otros métodos que cargarán las subpáginas:
+	 * - calendario (planilla)
+	 * - notas (planilla)
+	 * - código
+	 * - En caso que no sea una de las 3 anteriores se buscará un directorio
+	 *   que coincida con el string en subpage y se mostrará su contenido
+	 *   con enlaces para descargas los archivos.
+	 * @param curso Directorio del curso disponible en archivos/cursos
+	 * @param subpage Página del curso que se quiere cargar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-26
+	 */
 	public function mostrar ($curso, $subpage = '') {
 		// si el curso no existe mostrar error
 		$cursos = Configure::read('nav.website./cursos.nav');
@@ -83,6 +109,9 @@ class  CursosController extends AppController {
 
 	/**
 	 * Método para buscar y renderizar una planilla
+	 * @param curso Directorio del curso disponible en archivos/cursos
+	 * @param planilla Nombre de la planilla en Model/Data/cursos/X/
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-08-07
 	 */
 	private function planilla ($curso, $planilla) {
@@ -105,6 +134,9 @@ class  CursosController extends AppController {
 
 	/**
 	 * Método para buscar y renderizar el contenido de un directorio
+	 * @param curso Directorio del curso disponible en archivos/cursos
+	 * @param directorio Directorio dentro de archivos/curso/X/
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-08-07
 	 */
 	private function directorio ($curso, $directorio) {
@@ -123,7 +155,10 @@ class  CursosController extends AppController {
 	}
 
 	/**
-	 * Método para buscar y renderizar el contenido del directorio "codigo"
+	 * Método para buscar y renderizar el contenido del directorio
+	 * archivos/cursos/X/codigo
+	 * @param curso Directorio del curso disponible en archivos/cursos
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2013-08-07
 	 */
 	private function codigo ($curso) {

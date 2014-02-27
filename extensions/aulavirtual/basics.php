@@ -21,6 +21,20 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+/**
+ * @file basics.php
+ * Funciones de la extensión aulavirtual
+ * @version 2014-02-26
+ */
+
+/**
+ * Función para crear los enaces para la sección "enlaces útiles" en el layout
+ * de la página
+ * @param linksName Links que se están renderizando
+ * @return Retorna un string con los enlaces
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-26
+ */
 function header_useful_links ($linksName) {
 	$useful_links = Configure::read($linksName);
 	if (is_array($useful_links) && count($useful_links)) {
