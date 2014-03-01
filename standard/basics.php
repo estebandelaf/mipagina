@@ -71,23 +71,20 @@ function debug ($var, $withtype = false) {
  * @param string Texto que se desea traducir
  * @param args Argumentos para reemplazar en el string, puede ser un arreglo o bien n argumentos a la función
  * @return Texto traducido
- * @author CakePHP
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-01
  */
-function __($string = null, $args = null) {
-	// si no se paso nada se retorna
-	if (!$string) return;
-	// traducir
-	$translated = I18n::translate($string);
+function __ ($string, $args = null) {
 	// si no hay argumentos solo se retorna el texto traducido
-	if ($args === null) {
-		return $translated;
+	if (!$args) {
+		return I18n::translate($string);
 	}
 	// si los argumentos no son un arreglo se obtiene arreglo a partir
 	// de los argumentos pasados a la función
 	if (!is_array($args)) {
 		$args = array_slice(func_get_args(), 1);
 	}
-	return vsprintf($translated, $args);
+	return vsprintf(I18n::translate($string), $args);
 }
 
 /**

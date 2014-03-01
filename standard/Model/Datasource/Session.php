@@ -27,12 +27,13 @@ App::uses('Set', 'Utility');
 /**
  * Clase para escribir y recuperar datos desde una sesión
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-23
+ * @version 2014-03-01
  */
 class Session {
 
 	public static $id = null; ///< Identificador de la sesión
 	public static $time = false; ///< Tiempo de inicio de la sesión
+	public static $config; ///< Configuración de la sesión del sitio
 	private static $_prefix = null; ///< Prefijo para la sesión
 	
 	/**
@@ -61,6 +62,22 @@ class Session {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Carga configuración del inicio de la sesión
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-01
+	 */
+	public static function configure () {
+		// idioma
+		if (!Session::read('config.language')) {
+			Session::write('config.language', Configure::read('language'));
+		}
+		// layout
+		if (!Session::read('config.page.layout')) {
+			Session::write('config.page.layout', Configure::read('page.layout'));
+		}
 	}
 
 	/**

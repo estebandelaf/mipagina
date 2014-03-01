@@ -79,9 +79,8 @@ App::uses('ExceptionHandler', 'Error');
 App::uses('ErrorHandler', 'Error');
 include DIR_STANDARD.DS.'Error'.DS.'exceptions.php';
 
-// Iniciar sesión
+// Iniciar sesión y configurar el sitio
 App::uses('Session', 'Model/Datasource');
 Session::start();
-
-// Cargar configuración del inicio
-Configure::bootstrap();
+Configure::bootstrap ();
+Session::configure ();

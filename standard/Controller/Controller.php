@@ -27,7 +27,7 @@ App::uses('View', 'View');
 /**
  * Clase base para los controladores de la aplicación
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-06
+ * @version 2014-03-01
  */
 class Controller {
 
@@ -45,7 +45,7 @@ class Controller {
 	 * @param request Objeto con la solicitud realizada
 	 * @param response Objeto para la respuesta que se enviará al cliente
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-06
+	 * @version 2014-03-01
 	 */
 	public function __construct (Request $request, Response $response) {
 		// copiar objeto para solicitud y respuesta
@@ -65,7 +65,7 @@ class Controller {
 			'_url' => $this->request->url,
 		));
 		// obtener layout por defecto (el configurado en Config/core.php)
-		$this->layout = Configure::read('page.layout');
+		$this->layout = Session::read('config.page.layout');
 	}
 	
 	/**
