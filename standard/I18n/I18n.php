@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -61,13 +61,22 @@ final class I18n {
 	 *   $ msginit --locale=en_US.utf8 --input=master.pot
 	 * Lo anterior creará el archivo en_US.po y luego se usa msgfmt con este archivo
 	 *
+	 * La locale que se esté utilizando debe existir en el sistema, verificar con:
+	 *   $ locale -a
+	 * En caso que no exista editar /etc/locale.gen para agregarla y luego ejecutar:
+	 *   # locale-gen
+	 *
 	 * Cuando se crean o modifican los directorios en DIR_WEBSITE/Locale se
 	 * debe reiniciar el servicio Apache (¿?)
 	 *
+	 * @param string Texto que se desea traducir
+	 * @param domain Dominio que se desea utilizar para la traducción
+	 * @param locale Localee (o idioma) al cual traducir el texto
+	 * @param encoding Tipo de codificación de las traducciones
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2014-03-02
 	 */
-	public static function translate ($string, $locale = null, $domain = 'master', $encoding = 'UTF-8') {
+	public static function translate ($string, $domain = 'master', $locale = null, $encoding = 'UTF-8') {
 		if (!$locale) {
 			$locale = Session::read('config.language');
 		}
