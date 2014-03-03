@@ -21,10 +21,14 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// Incluir biblioteca
+App::import('Vendor/michelf/php-markdown/Michelf/MarkdownInterface');
+App::import('Vendor/michelf/php-markdown/Michelf/Markdown');
+
 /**
  * Clase para cargar una página en formato Markdown
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-19
+ * @version 2014-03-03
  */
 class MarkdownPage {
 
@@ -34,11 +38,10 @@ class MarkdownPage {
 	 * @param vars Arreglo con variables que se desean pasar
 	 * @return Buffer de la página renderizada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-19
+	 * @version 2014-03-03
 	 */
 	public static function render ($file, $vars = array()) {
-		App::import('Vendor/markdown/markdown');
-		return Markdown(self::_evaluate($file, $vars));
+		return Michelf\Markdown::defaultTransform(self::_evaluate($file, $vars));
 	}
 	
 	/**
