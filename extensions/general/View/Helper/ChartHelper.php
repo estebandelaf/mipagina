@@ -22,28 +22,45 @@
  */
 
 // importar biblioteca para gráficos
-App::import('Vendor/libchart/classes/libchart');
+App::import('Vendor/libchart/libchart/vendor/autoload');
 
+/**
+ * Clase para generar gráficos
+ * Hace uso de libchart, presentando métodos más simples y evitando que el
+ * programador deba escribir tando código
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-03
+ */
 class ChartHelper {
 
-	private $defaultOptions = array(
+	private $defaultOptions = array( ///< Opciones por defecto de los gráficos
 		'width' => 750,
 		'height' => 300,
 		'ratio' => 0.65,
 	);
 
+	/**
+	 * Método que genera un gráfico
+	 * @param title Título del gráfico
+	 * @param series Datos del gráfico
+	 * @param type Tipo de gráfico que se desea generar
+	 * @param options Opciones para el gráfico
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	private function generate ($title, $series, $type = 'line',
 						$options = array(), $exit) {
 		// asignar opciones por defecto del gráfico
 		$options = array_merge($this->defaultOptions, $options);
 		// crear gráfico
-		$class = $type.'Chart';
+		$class = '\\Libchart\\View\\Chart\\'.$type.'Chart';
 		$chart = new $class($options['width'], $options['height']);
 		// asignar colores
 		if (isset($options['colors'])) {
 			$colors = array();
 			foreach ($options['colors'] as &$c)
-				$colors[] = new Color($c[0], $c[1], $c[2]);
+				$colors[] = new \Libchart\View\Color\Color($c[0], $c[1], $c[2]);
 			if($type=='Line') {
 				$chart->getPlot()->getPalette()
 					->setLineColor($colors);
@@ -54,12 +71,12 @@ class ChartHelper {
 			}
 		}
 		// conjunto de series
-		$dataSet = new XYSeriesDataSet();
+		$dataSet = new \Libchart\Model\XYSeriesDataSet();
 		// procesar cada serie
 		foreach ($series as $serie => &$data) {
-			$s = new XYDataSet();
+			$s = new \Libchart\Model\XYDataSet();
 			foreach ($data as $key => &$value) {
-				$s->addPoint(new Point(
+				$s->addPoint(new \Libchart\Model\Point(
 					$key,
 					$value
 				));
@@ -70,44 +87,86 @@ class ChartHelper {
 		$this->render($chart,$title,$dataSet,$options['ratio'],$exit);
 	}
 
+	/**
+	 * Función que renderiza el gráfico que se está generando
+	 * @param chart Gráfico a renderizar
+	 * @param title Título del gráfico
+	 * @param data Datos del gráfico
+	 * @param ratio Porcentaje que ocuparán los datos dentro de la imagen
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	private function render (&$chart, $title, $data, $ratio, $exit = true) {
-		// poner título
+		// asignar opciones al gráfico
 		$chart->setTitle($title);
-		// asignar datos para el gráfico
 		$chart->setDataSet($data);
-		// porcentaje que ocuparán los datos dentro de la imagen
 		$chart->getPlot()->setGraphCaptionRatio($ratio);
-		// limpar lo que se haya podido enviar antes
-		ob_clean ();
 		// enviar cabeceras
+		ob_clean ();
 		header('Content-type: image/png');
 		header('Pragma: no-cache');
 		header('Expires: 0');
-		// renderizar
+		// renderizar y terminar script
 		$chart->render();
-		// terminar script
 		if($exit) exit(0);
 	}
 
+	/**
+	 * Método para generar un gráfico de lineas
+	 * @param title Título del gráfico
+	 * @param series Datos del gráfico
+	 * @param options Opciones para el gráfico
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	public function line ($title, $series, $options=array(), $exit= true) {
 		$this->generate ($title, $series, 'Line', $options, $exit);
 	}
 
+	/**
+	 * Método para generar un gráfico de barras verticales
+	 * @param title Título del gráfico
+	 * @param series Datos del gráfico
+	 * @param options Opciones para el gráfico
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	public function vertical_bar ($title, $series,
 					$options = array(), $exit = true) {
 		$this->generate ($title,$series,'VerticalBar',$options,$exit);
 	}
 
+	/**
+	 * Método para generar un gráfico de barras horizontales
+	 * @param title Título del gráfico
+	 * @param series Datos del gráfico
+	 * @param options Opciones para el gráfico
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	public function horizontal_bar ($title, $series,
 					$options = array(), $exit = true) {
 		$this->generate ($title,$series,'HorizontalBar',$options,$exit);
 	}
 
+	/**
+	 * Método para generar un gráfico de torta
+	 * @param title Título del gráfico
+	 * @param data Datos del gráfico
+	 * @param options Opciones para el gráfico
+	 * @param exit =true si se debe terminar el script, =false si no se debe terminar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-03
+	 */
 	public function pie ($title, $data, $options = array(), $exit = true) {
 		// asignar opciones por defecto del gráfico
 		$options = array_merge($this->defaultOptions, $options);
 		// crear gráfico
-		$chart = new PieChart($options['width'], $options['height']);
+		$chart = new \Libchart\View\Chart\PieChart($options['width'], $options['height']);
 		// asignar colores
 		if (isset($options['colors'])) {
 			$colors = array();
@@ -116,9 +175,9 @@ class ChartHelper {
 			$chart->getPlot()->getPalette()->setPieColor($colors);
 		}
 		// asignar datos
-		$dataSet = new XYDataSet();
+		$dataSet = new \Libchart\Model\XYDataSet();
 		foreach ($data as $key => $value) {
-			$dataSet->addPoint(new Point(
+			$dataSet->addPoint(new \Libchart\Model\Point(
 				$key.' ('.$value.')',
 				$value
 			));

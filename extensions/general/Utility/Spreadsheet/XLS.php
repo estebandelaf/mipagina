@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -22,7 +22,7 @@
  */
 
 // Incluir biblioteca PHPExcel
-App::import('Vendor/PHPExcel/PHPExcel');
+App::import('Vendor/phpoffice/phpexcel/Classes/PHPExcel');
 
 /**
  * Manejar archivos en excel

@@ -21,8 +21,11 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// Directorio para imagenes vació (no se asume nada)
+define ('K_PATH_IMAGES', '');
+
 // Importar clase TCPDF
-App::import('Vendor/tcpdf/tcpdf');
+App::import('Vendor/tecnick.com/tcpdf/tcpdf');
 
 /**
  * Clase para generar PDFs

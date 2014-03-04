@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Manejo de planillas de cálculo de OpenDocumment
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2014-02-20
+ * @version 2014-03-03
  */
 final class ODS {
 
@@ -41,14 +41,14 @@ final class ODS {
 	}
 
 	/**
-	 *  Crea una planilla de cálculo a partir de un arreglo
+	 * Crea una planilla de cálculo a partir de un arreglo
 	 * @param data Arreglo utilizado para generar la planilla
 	 * @param id Identificador de la planilla
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2014-02-20
+	 * @version 2014-03-03
 	 */
 	public static function generate ($data, $id) {
-		App::import('Vendor/odsPhpGenerator/ods');
+		App::import('Vendor/lapinator.net/ods-php-generator/ods');
 		$ods = new \odsphpgenerator\ods();
 		// si las llaves de $data no son strings, entonces es solo una hoja
 		if (!is_string(array_keys($data)[0])) {
