@@ -34,7 +34,7 @@
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2012-12-26
  */
-final class Oracle extends DatabaseManager {
+class Oracle extends DatabaseManager {
 
 	/**
 	 * Constructor de la clase

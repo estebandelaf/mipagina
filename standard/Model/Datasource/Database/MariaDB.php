@@ -30,5 +30,5 @@ App::uses('MySQL', 'Model/Datasource/Database');
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2014-02-21
  */
-final class MariaDB extends MySQL {
+class MariaDB extends MySQL {
 }

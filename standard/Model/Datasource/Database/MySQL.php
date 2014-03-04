@@ -27,7 +27,7 @@
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2013-11-21
  */
-final class MySQL extends DatabaseManager {
+class MySQL extends DatabaseManager {
 	
 	/**
 	 * Constructor de la clase

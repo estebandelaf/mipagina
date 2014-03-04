@@ -29,7 +29,7 @@
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
  * @version 2013-10-22
  */
-final class PostgreSQL extends DatabaseManager {
+class PostgreSQL extends DatabaseManager {
 
 	/**
 	 * Constructor de la clase
