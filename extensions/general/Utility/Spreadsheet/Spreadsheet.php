@@ -26,7 +26,7 @@
  *
  * Esta clase permite leer y generar planillas de cálculo
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-12-02
+ * @version 2014-03-05
  */
 final class Spreadsheet {
 
@@ -212,7 +212,7 @@ final class Spreadsheet {
 	/**
 	 * Método que lee una hoja de cálculo y dibuja una tabla en HTML
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-12-02
+	 * @version 2014-03-05
 	 */
 	public static function file2html ($file, $sheet = -1, $options = array()) {
 		// helper
@@ -222,6 +222,7 @@ final class Spreadsheet {
 		// opciones
 		$options = array_merge(array(
 			'id' => 'file2html',
+			'height' => 38,
 		), $options);
 		// obtener las hojas del archivo
 		$sheets = self::sheets(DIR_WEBSITE.DS.$file);
@@ -229,25 +230,25 @@ final class Spreadsheet {
 		// buffer para ir guardando lo que se va generando
 		$buffer = '';
 		// scripts
-		echo '<style>#',$options['id'],' > ul { height: 28px; }</style>';
-		echo '<script>$(function() { $("#',$options['id'],'").tabs(); }); </script>';
+		$buffer .= '<style>#'.$options['id'].' > ul { height: '.$options['height'].'px; }</style>'."\n";
+		$buffer .= '<script>$(function() { $("#'.$options['id'].'").tabs(); }); </script>'."\n";
 		// iniciar pestañas
-		echo '<div id="',$options['id'],'" style="margin-top: 1em">';
+		$buffer .= '<div id="'.$options['id'].'" style="margin-top: 1em">'."\n";
 		// agregar títulos de la pestaña
-		echo '<ul>';
+		$buffer .= '<ul>'."\n";
 		foreach($sheets as $id => &$name) {
-			echo '<li><a href="#',$options['id'],'_',string2url($name),'">',$name,'</a></li>';
+			$buffer .= '<li><a href="#'.$options['id'].'_'.string2url($name).'">'.$name.'</a></li>'."\n";
 		}
-		echo '</ul>';
+		$buffer .= '</ul>'."\n";
 		// agregar hojas
 		foreach($sheets as $id => &$name) {
-			echo '<div id="',$options['id'],'_',string2url($name),'">',"\n";
+			$buffer .= '<div id="'.$options['id'].'_'.string2url($name).'">'."\n";
 			$table->setId(string2url($name));
-			echo $table->generate(self::read(DIR_WEBSITE.DS.$file, $id));
-			echo '</div>';
+			$buffer .= $table->generate(self::read(DIR_WEBSITE.DS.$file, $id));
+			$buffer .= '</div>'."\n";
 		}
 		// finalizar
-		echo '</div>';
+		$buffer .= '</div>'."\n";
 		// entregar buffer
 		return $buffer;
 	}
