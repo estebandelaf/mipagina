@@ -21,10 +21,21 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// clase que extiende este controlador
 App::uses('AppController', 'Controller');
 
+/**
+ * Controlador para módulos
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-05
+ */
 class ModuleController extends AppController {
 
+	/**
+	 * Método para autorizar la carga de index en caso que hay autenticación
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-05
+	 */
 	public function beforeFilter () {
 		$this->Auth->allow ('index');
 		parent::beforeFilter ();
@@ -32,6 +43,8 @@ class ModuleController extends AppController {
 
 	/**
 	 * Renderizará (sin autenticación) el archivo en View/index
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-05
 	 */
 	public function index () {
 		$this->autoRender = false;
@@ -40,28 +53,32 @@ class ModuleController extends AppController {
 
 	/**
 	 * Mostrar la página principal para el módulo (con sus opciones de menú)
-	 * @todo Verificar que se muestre un enlace solo si existen sus módulos
-	 * requeridos
-	 * @version 2013-06-14
+	 * @version 2014-02-05
 	 */
 	public function display () {
 		// desactivar renderizado automático
 		$this->autoRender = false;
 		// Si existe una vista para el index del modulo se usa
-		if(Module::fileLocation($this->request->params['module'], 'View/index')) {
-			$this->render('index');
+		if (Module::fileLocation(
+			$this->request->params['module'], 'View/index')
+		) {
+			$this->render ('index');
 		}
-		// Si no se incluye el archivo con el título y el menú para el módulo
+		// Si no se incluye el archivo con el título y el menú para el
+		// módulo
 		else {
 			// incluir menú del módulo
-			$nav_module = Configure::read('nav.module');
+			$nav_module = Configure::read ('nav.module');
 			if (!$nav_module) $nav_module = array();
 			// nombre del módulo para url
-			$module = Inflector::underscore($this->request->params['module']);
+			$module = Inflector::underscore (
+				$this->request->params['module']
+			);
 			// verificar permisos
 			foreach ($nav_module as $link=>&$info) {
-				// si info no es un arreglo es solo el nombre y se arma
-				if(!is_array($info)) {
+				// si info no es un arreglo es solo el nombre y
+				// se arma
+				if (!is_array($info)) {
 					$info = array(
 						'name' => $info,
 						'desc' => '',
@@ -78,15 +95,6 @@ class ModuleController extends AppController {
 						'need' => '',
 					), $info);
 				}
-				// Verificar que los módulos requeridos para ingresar a esta opción estén cargados
-/*				if(!empty($info['need'])) {
-					$modulos_requeridos = explode(',', $info['need']);
-					foreach($modulos_requeridos as $modulo_requerido) {
-						if(!Module::loaded($modulo_requerido)) {
-							unset($nav_module[$link]);
-						}
-					}
-				}*/
 				// Verificar permisos para acceder al enlace
 				if(!$this->Auth->check('/'.$module.$link)) {
 					unset($nav_module[$link]);
@@ -104,6 +112,7 @@ class ModuleController extends AppController {
 				'nav' => $nav_module,
 				'module' => $module,
 			));
+			unset ($title, $nav_module, $module);
 			// renderizar
 			$this->render('Module/index');
 		}
