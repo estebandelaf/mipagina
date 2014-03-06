@@ -1,6 +1,8 @@
 ﻿-- SCHEMA PARA MÓDULO: Sistema.Usuarios
 -- Base de datos: PostgreSQL
 
+BEGIN;
+
 -- tabla para usuarios
 DROP SEQUENCE IF EXISTS usuario_id_seq CASCADE;
 CREATE SEQUENCE usuario_id_seq
@@ -104,3 +106,5 @@ INSERT INTO usuario (nombre, usuario, email, contrasenia, hash) VALUES
 INSERT INTO usuario_grupo (usuario, grupo, primario) VALUES
     ((SELECT id FROM usuario WHERE usuario = 'admin'), (SELECT id FROM grupo WHERE grupo = 'sysadmin'), true)
 ;
+
+COMMIT;
