@@ -7,12 +7,12 @@ ejemplos de como llevar a cabo cada uno de los pasos.
 Requerimientos
 --------------
 
-Se asumirá instalación en GNU/Linux.
+Se asumirá instalación en GNU/Linux (para Microsoft Windows ver al final).
 
 1.	Obligatorios
 
 	- Servidor web Apache (con *mod_rewrite*).
-	- PHP 5.3 o superior.
+	- PHP 5.3 o superior (recomendado PHP 5.5 para usar OPCache)
 
 2.	Alternativamente (depende de lo que se quiera hacer):
 
@@ -22,25 +22,57 @@ Se asumirá instalación en GNU/Linux.
 Procedimiento
 -------------
 
-1.	Mover todos los archivos del directorio donde se encuentra este
-	fichero README (incluyendo) a /usr/share/mipagina. O dicho de
-	otra forma, mover el directorio que contiene este README a
-	*/usr/share/*
+### Necesario
 
-		# mv mipagina /usr/share/
+1.	Clonar el repositorio en */usr/share:
 
-	Aquí se asumió un ambiente de instalación compartido, si no se puede
-	o quiere instalar en */usr/share*, simplemente copiar todo el
-	directorio *mipagina* al servidor web y pasar al punto 4.
+		# cd /usr/share
+		# git clone https://github.com/estebandelaf/mipagina.git
 
-2.	Copiar directorio website a la ubicación donde se desea crear el
+	Se está asumiendo entorno compartido. Si no se desea esto, copiar donde
+	se estime conveniente. Se deberá modificar la ruta del directorio
+	estándar en webroot/index.php para indicar donde quedó el
+	framework (esto luego de ejecutar el punto 2).
+
+2.	Copiar directorio *website* a la ubicación donde se desea crear el
 	nuevo sitio web. Esta ubicación debe ser accesible mediante el
 	servidor web. Puede ser el DocummentRoot, o bien un subdirectorio
 	dentro del mismo.
 
 		$ cp -avr /usr/share/mipagina/website ~/www/delaf.cl/htdocs/www
 
-3.	Agregar dominio virtual a Apache (luego reiniciar el servicio):
+	EL directorio *~/www/delaf.cl/htdocs/www* es solo un ejemplo.
+
+3.	Editar los archivos .htaccess y webroot/.htacces descomentando las
+	líneas relacionadas con *mod_rewrite* de tal forma que queden así:
+
+		Options +FollowSymLinks
+		RewriteEngine On
+
+	Nota: esto por defecto viene comentado para que el usuario deba
+	verificar que su servidor tiene *mod_rewrite* activo para el dominio que
+	está utilizando.
+
+### Opcional
+
+*	El sistema base permite el uso de páginas en formato Markdown, si se
+	desea utilizar se debe instalar usando composer:
+
+		# cd /usr/share/mipagina/standard
+		# composer install
+
+	Nota: se requiere tener composer y git.
+
+*	Si se desea utilizar la extensión general, esta utiliza diversas
+	bibliotecas que se deben instalar mediante composer:
+
+		# cd /usr/share/mipagina/extensions/general
+		# composer install
+
+	Nota: se requiere tener composer, git y hg (mercurial).
+
+*	Agregar dominio virtual a Apache (luego reiniciar el
+	servicio):
 
 	Si esto ya existe, o bien se utilizará un subdirectorio dentro de
 	algún DocumentRoot ya definidio, omitir y pasar al punto 4.
@@ -52,11 +84,30 @@ Procedimiento
 			LogLevel warn
 		</VirtualHost>
 
-4.	Definir parámetros de configuración por defecto en el archivo
+*	Definir parámetros de configuración por defecto en el archivo
 	*config.php*, revisar archivo */usr/share/mipagina/standard/config.php*
 	para ver que opciones de configuración existen y sus valores por
 	defecto. Si no se define ninguno se utilizarán dichos valores.
 
-5.	Crear página de inicio *View/Pages/inicio.php*
+	Notar que si se cambia el Layout, este es asignado mediante una
+	variable de sesión por lo cual la sesión debe ser destruída para que el
+	cambio surta efecto (por ejemplo borrando las cookies para el sitio en
+	el navegador). La otra alternativa es cambiar el layout ingresando a la
+	url:
 
-		$ vim /home/delaf/www/delaf.cl/htdocs/www/pages/inicio.php
+		example.com/session/config/page.layout/NuevoLayout
+
+*	Crear página de inicio *View/Pages/inicio.php*
+
+Instalación en Microsoft Windows
+--------------------------------
+
+El procedimiento es similar, sin embargo se debe considerar que las rutas aquí
+cambiarán, por lo cual los pasos diferentes son:
+
+1.	Instalar el framework en el directorio C:\mipagina (u otro a elección).
+
+2.	Se debe editar el archivo *webroot/index.php* para reflejar la ruta
+	donde el framework fue instalado. O sea, quedará así:
+
+		define('DIR_STANDARD', 'C:\mipagina\standard');
