@@ -120,7 +120,7 @@ class TableHelper {
 		}
 		// Utilizar buffer para el dibujado, así lo retornaremos en vez
 		// de imprimir directamente
-		$buffer = '<div style="overflow:auto">'."\n";
+		$buffer = '<div style="overflow:auto;clear:both">'."\n";
 		// Crear iconos para exportar y ocultar/mostrar tabla
 		if ( $this->_id !==null ) {
 			$buffer .= '<div class="tableIcons" style="float:right">'."\n";
