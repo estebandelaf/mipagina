@@ -8,5 +8,5 @@ página web dejado de ser ejecutada. El error fue:
 problema:</p>
 <pre class="exception_trace"><?php echo $trace; ?></pre>
 
-<p>Por favor verifique que la dirección web que lo trajo a está página
+<p>Por favor verifique que la dirección web que lo trajo a esta página
 sea válida.</p>
