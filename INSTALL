@@ -16,15 +16,15 @@ Se asumirá instalación en GNU/Linux (para Microsoft Windows ver al final).
 
 2.	Alternativamente (depende de lo que se quiera hacer):
 
-	- PEAR: Mail, Mail_mime, Net_SMTP
-	- Base de datos: como PostgreSQL (recomendada versión 9.x)
+	- PEAR: Mail, Mail\_mime, Net_SMTP
+	- Base de datos, como: PostgreSQL (versión recomendada: >=9.1) o MariaDB
 
 Procedimiento
 -------------
 
 ### Necesario
 
-1.	Clonar el repositorio en */usr/share:
+1.	Clonar el repositorio en  */usr/share*:
 
 		# cd /usr/share
 		# git clone https://github.com/estebandelaf/mipagina.git
@@ -111,3 +111,33 @@ cambiarán, por lo cual los pasos diferentes son:
 	donde el framework fue instalado. O sea, quedará así:
 
 		define('DIR_STANDARD', 'C:\mipagina\standard');
+
+### Software recomendado
+
+*	Necesario:
+
+	*	[XAMPP](http://www.apachefriends.org/es/download.html)
+
+		Nota: PHP >=5.5 no es soportado por Microsoft Windows XP ni Microsoft Windows 2003
+
+
+*	Necesario dependiendo de que se quiera realizar:
+
+	*	Instalación de bibliotecas:
+
+		*	[Composer](https://getcomposer.org/doc/00-intro.md#using-the-installer)
+		*	[Git](http://git-scm.com/download/win)
+		*	[Mercurial](http://mercurial.selenic.com/wiki/Download#Windows)
+
+		Nota: git será obligatorio si se quiere clonar el framework y mantener actualizado a versión de desarrollo.
+
+	*	Bases de datos:
+	
+		*	[PostgreSQL](http://www.postgresql.org/download/windows)
+		*	[MariaDB](https://downloads.mariadb.org)
+
+*	Extra:
+
+	*	[Mozilla Firefox](http://www.mozilla.org/es-CL/firefox/new)
+	*	[Notepad++](http://notepad-plus-plus.org/download)
+	*	[7zip](http://www.7-zip.org)
