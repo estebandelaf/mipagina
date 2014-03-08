@@ -114,6 +114,8 @@ class BdController extends AppController {
 				if (isset($_POST['delete'])) {
 					$db->query ('DELETE FROM '.$table);
 				}
+				// variable para almacenar el ID más alto (en caso que exista para luego alterar la secuencia/autoincremental)
+				$id = 0;
 				// agregar (o actualizar) cada registro con cada
 				// una de las filas de la tabla
 				foreach ($data as &$row) {
@@ -148,8 +150,18 @@ class BdController extends AppController {
 						$db->query($insertQuery.' ('.implode(', ', $values).')');
 						$registros['insertados']++;
 					}
-					
+					// ir guarando el ID más grande
+					if (in_array('id', $info['pk'])) {
+						$id = max($id, $row[$cols['id']]);
+					}
 				}
+				// alterar secuencia
+				if (in_array('id', $info['pk']) && $id>0) {
+					if (get_class($db)=='PostgreSQL') {
+						$db->query ('SELECT SETVAL (\''.$table.'_id_seq\', '.$id.');');
+					}
+				}
+				// crear mensaje para esta tabla
 				$message[] = $_POST['database'].'.'.$table.
 					': existentes='.$registros['existentes'].
 					', actualizados='.$registros['actualizados'].
