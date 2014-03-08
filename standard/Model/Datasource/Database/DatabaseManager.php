@@ -57,9 +57,10 @@ abstract class DatabaseManager {
 	/**
 	 * Manejador de errores para la base de datos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-10
+	 * @version 2014-03-08
 	 */
 	final public function error ($msg) {
+		$this->rollback();
 		throw new DatabaseException(array(
 			'msg' => $msg
 		));
