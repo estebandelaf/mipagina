@@ -12,11 +12,11 @@ body {
 }
 a {
 	text-decoration:none;
-	color:#B4C835;
+	color: #4479ac;
 }
 a:hover {
 	text-decoration:none;
-	color:#6CC7DC;
+	color: #6CC7DC;
 }
 ul.list  {
 	list-style-image: url('../../img/list.png');
@@ -70,9 +70,12 @@ ul.list>li {
 	width:720px;
 	padding: 10px;
 	min-height: 400px;
+	
 }
 #footer {
 	clear:both;
+	font-size: 0.6em;
+	font-weight: bold;
 }
 
 /* Menu */

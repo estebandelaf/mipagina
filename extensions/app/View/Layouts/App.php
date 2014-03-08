@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="MiPaGiNa"/>
 		<title><?php echo $_header_title; ?></title>
 		<link rel="shortcut icon" href="<?php echo $_base; ?>/img/favicon.png" />
 		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" rel="stylesheet" />
@@ -72,10 +73,10 @@ if($message) echo '<div class="session_message">',$message,'</div>';
 			<div id="footer">
 				<div>
 					<div class="fleft" id="footer_left">
-						<?php echo Configure::read('page.footer.left'); ?>
+						<?php echo $_footer['left']; ?>
 					</div>
 					<div class="fright" id="footer_right">
-						<?php echo Configure::read('page.footer.right'); ?>
+						<?php echo $_footer['right']; ?>
 					</div>
 				</div>
 			</div>

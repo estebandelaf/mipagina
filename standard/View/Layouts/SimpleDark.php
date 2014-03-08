@@ -32,7 +32,7 @@ echo $_content;
 ?>
 			</div>
 			<div id="footer">
-				<?php echo $_footer; ?>
+				<?php echo is_array($_footer) ? implode (' ', $_footer): $_footer; ?>
 			</div>
 		</div>
 	</body>
