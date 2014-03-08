@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -374,25 +374,4 @@ abstract class DatabaseManager {
 	 */
 	abstract public function toCSV ($sql, $file, $cols);
 
-}
-
-// si existe MiException estamos en el framework MiPaGiNa y se extiende
-// dicha clase para generar la excepción
-if(class_exists('MiException')) {
-	class DatabaseException extends MiException {
-		protected $_messageTemplate = '%s';
-	}
-}
-// si no existe se crea una clase para la excepción basada en la clase
-// base y se utiliza el constructor de la clase MiException
-else {
-	class DatabaseException extends RuntimeException {
-		protected $_messageTemplate = '%s';
-		public function __construct($message, $code = 500) {
-			if (is_array($message)) {
-				$message = vsprintf($this->_messageTemplate, $message);
-			}
-			parent::__construct($message, $code);
-		}
-	}	
 }

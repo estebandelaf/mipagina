@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -25,7 +25,7 @@
  * Clase para trabajar con una base de datos MySQL
  * @todo Se deben completar los métodos para la clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-11-21
+ * @version 2014-03-08
  */
 class MySQL extends DatabaseManager {
 	
@@ -36,12 +36,12 @@ class MySQL extends DatabaseManager {
 	 * conexión
 	 * @param config Arreglo con los parámetros de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-11-21
+	 * @version 2014-03-08
 	 */
 	public function __construct ($config) {
 		// verificar que existe el soporte para MySQL en PHP
 		if (!function_exists('mysqli_init')) {
-			$this->error ('Unable to find the MySQL extension');
+			$this->error ('No se encontró la extensión de PHP para MySQL (mysqli)');
 		}
 		// definir configuración para el acceso a la base de datos
 		$this->config = array_merge(array(
@@ -54,15 +54,15 @@ class MySQL extends DatabaseManager {
 		$conexion = @mysqli_real_connect(
 			$this->link,
 			$this->config['host'],
-			$this->config['user'],
+			 $this->config['user'],
 			$this->config['pass'],
 			$this->config['name'],
 			$this->config['port']
 		);
 		if (!$conexion) {
 			$this->error(
-				'Can\'t connect to database!<br/>'.
-				'Error number: '.mysqli_connect_errno().'<br/>'.
+				'¡No fue posible conectar con la base de datos!<br/>'.
+				'Número de error: '.mysqli_connect_errno().'<br/>'.
 				'Error: '.mysqli_connect_error()
 				
 			);
@@ -92,12 +92,12 @@ class MySQL extends DatabaseManager {
 	 * @param multi =true se utilizara mysqli_multi_query
 	 * @return Resource Identificador de la consulta
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2014-03-08
 	 */
 	public function query ($sql, $multi = false) {
 		// verificar que exista una consulta
 		if(empty($sql)) {
-			$this->error('Query can not be empty!');
+			$this->error('¡Consulta no puede estar vacía!');
 		}
 		// realizar consulta
 		if ($multi) $queryId = mysqli_multi_query($this->link, $sql);
@@ -106,7 +106,7 @@ class MySQL extends DatabaseManager {
 		// script
 		if(!$queryId) {
 			$this->error(
-				'QUERY: '.$sql."\n".mysqli_error ($this->link)
+				$sql."\n".mysqli_error ($this->link)
 			);
 		}
 		// retornar identificador de la consulta
