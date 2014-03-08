@@ -44,7 +44,9 @@ final class UsuariosController extends UsuariosBaseController {
 		parent::beforeFilter();
 	}
 
-	public function ingresar () {
+	public function ingresar ($redirect = null) {
+		if ($redirect) $redirect = base64_decode ($redirect);
+		$this->set('redirect', $redirect);
 		$this->Auth->login($this);
 	}
 

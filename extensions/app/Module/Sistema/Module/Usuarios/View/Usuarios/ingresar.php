@@ -13,6 +13,11 @@ echo $form->input(array(
 	'label'=>'Contraseña',
 	'check'=>'notempty'
 ));
+echo $form->input(array(
+	'type'=>'hidden',
+	'name'=>'redirect',
+	'value'=>$redirect,
+));
 echo $form->end('Ingresar');
 ?>
 <p>¿No recuerda su usuario o contraseña?, <a href="<?php echo $_base;

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@ App::uses('Component', 'Controller/Component');
 /**
  * Componente para proveer de un sistema de autenticación y autorización
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-07
+ * @version 2014-03-08
  */
 class AuthComponent extends Component {
 
@@ -39,6 +39,7 @@ class AuthComponent extends Component {
 			'login' => '/',
 			'logout' => '/',
 			'error' => '/',
+			'form' => '/usuarios/ingresar',
 		),
 		'messages' => array(
 			'ok' => array(
@@ -48,6 +49,7 @@ class AuthComponent extends Component {
 				'logged' => 'Usuario <em>%s</em> tiene su sesión abierta'
 			),
 			'error' => array(
+				'nologin' => 'Debe iniciar sesión para tratar de acceder a <em>%s</em>',
 				'auth' => 'No dispone de permisos para acceder a <em>%s</em>',
 				'empty' => 'Debe especificar usuario y clave',
 				'invalid' => 'Usuario o clave inválida',
@@ -105,13 +107,17 @@ class AuthComponent extends Component {
 	 * Método que verifica si el usuario tiene permisos o bien da error
 	 * Wrapper para el método que hace la validación
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-13
+	 * @version 2014-03-08
 	 */
 	public function beforeFilter($controller) {
-		// Si no está autorizado se genera error y redirige
 		if (!$this->isAuthorized()) {
-			Session::message(sprintf($this->settings['messages']['error']['auth'], $this->request->request));
-			$controller->redirect($this->settings['redirect']['error']);
+			if (!self::logged()) {
+				Session::message(sprintf($this->settings['messages']['error']['nologin'], $this->request->request));
+				$controller->redirect($this->settings['redirect']['form'].'/'.base64_encode($this->request->request));
+			} else {
+				Session::message(sprintf($this->settings['messages']['error']['auth'], $this->request->request));
+				$controller->redirect($this->settings['redirect']['error']);
+			}
 		}
 	}
 
@@ -282,7 +288,8 @@ class AuthComponent extends Component {
 				// mensaje para mostrar
 				Session::message(sprintf($this->settings['messages']['ok']['login'], $$userModel->$userField).$lastlogin);
 				// redireccionar
-				$controller->redirect($this->settings['redirect']['login']);
+				if (isset($_POST['redirect'][0])) $controller->redirect($_POST['redirect']);
+				else $controller->redirect($this->settings['redirect']['login']);
 			}
 		}
 	}

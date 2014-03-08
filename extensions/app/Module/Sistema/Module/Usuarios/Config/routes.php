@@ -27,6 +27,12 @@ Router::connect('/usuarios/ingresar', array(
 	'action' => 'ingresar',
 ));
 
+Router::connect('/usuarios/ingresar/*', array(
+	'module' => 'Sistema.Usuarios',
+	'controller' => 'usuarios',
+	'action' => 'ingresar',
+));
+
 Router::connect('/usuarios/salir', array(
 	'module' => 'Sistema.Usuarios',
 	'controller' => 'usuarios',
