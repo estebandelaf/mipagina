@@ -24,7 +24,7 @@
 /**
  * Helper para la creación de tablas en HTML
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-02-23
+ * @version 2014-03-09
  */
 class TableHelper {
 
@@ -111,7 +111,7 @@ class TableHelper {
 	 * Método que genera la tabla en HTML a partir de un arreglo
 	 * @param table Tabla que se generará
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-20
+	 * @version 2014-03-09
 	 */
 	public function generate ($table, $thead = 1) {
 		// si el arreglo esta vacio o no es arreglo retornar nada
@@ -120,7 +120,7 @@ class TableHelper {
 		}
 		// Utilizar buffer para el dibujado, así lo retornaremos en vez
 		// de imprimir directamente
-		$buffer = '<div style="overflow:auto;clear:both">'."\n";
+		$buffer = '<div style="width:100%;overflow:auto">'."\n";
 		// Crear iconos para exportar y ocultar/mostrar tabla
 		if ( $this->_id !==null ) {
 			$buffer .= '<div class="tableIcons" style="float:right">'."\n";
