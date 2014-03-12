@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/estebandelaf/odsPhpGenerator.git",
-                "reference": "99de8212c6fd7df3cc7d288bc76c30ba5980e75c"
+                "reference": "f071ac0e0cbb1784c21fa727d8b6f915fe11f790"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/estebandelaf/odsPhpGenerator/zipball/99de8212c6fd7df3cc7d288bc76c30ba5980e75c",
-                "reference": "99de8212c6fd7df3cc7d288bc76c30ba5980e75c",
+                "url": "https://api.github.com/repos/estebandelaf/odsPhpGenerator/zipball/f071ac0e0cbb1784c21fa727d8b6f915fe11f790",
+                "reference": "f071ac0e0cbb1784c21fa727d8b6f915fe11f790",
                 "shasum": ""
             },
             "require": {
@@ -24,8 +24,11 @@
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
             "description": "The ods file generator in php",
-            "time": "2014-03-04 02:46:34"
+            "time": "2014-03-11 17:48:32"
         },
         {
             "name": "libchart/libchart",
