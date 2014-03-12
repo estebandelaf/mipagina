@@ -18,11 +18,11 @@
 				<div id="navigation" class="box">
 					<ul>
 <?php
-	foreach($_nav_website as $link => &$name) {
-		if($link[0]=='/') $link = $_base.$link;
-		if(is_array($name)) echo "\t\t\t\t\t\t",'<li class="level1"><a href="',$link,'" title="',$name['title'],'" class="wikilink1">',$name['name'],'</a></li>',"\n";
-		else echo "\t\t\t\t\t\t",'<li class="level1"><a href="',$link,'" class="wikilink1">',$name,'</a></li>',"\n";
-	}
+foreach($_nav_website as $link => &$name) {
+	if($link[0]=='/') $link = $_base.$link;
+	if(is_array($name)) echo "\t\t\t\t\t\t",'<li class="level1"><a href="',$link,'" title="',$name['title'],'" class="wikilink1">',$name['name'],'</a></li>',"\n";
+	else echo "\t\t\t\t\t\t",'<li class="level1"><a href="',$link,'" class="wikilink1">',$name,'</a></li>',"\n";
+}
 ?>
 					</ul>
 				</div>
@@ -49,7 +49,9 @@ echo $_content;
 				</div>
 				<a href="#top" class="top" accesskey="x" title="Ir hasta arriba [X]">Ir hasta arriba</a>
 			</div>
-			<div id="footer"><?php echo $_footer; ?></div>
+			<div id="footer">
+				<?php echo is_array($_footer) ? implode (' ', $_footer): $_footer; ?>
+			</div>
 		</div>
 	</body>
 </html>

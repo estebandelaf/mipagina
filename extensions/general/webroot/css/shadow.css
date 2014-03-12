@@ -2,24 +2,20 @@
 	text-shadow:1px 1px 1px #000;
 	filter:dropshadow(color=#000000,offx=1,offy=1)
 }
-
 .text-green-shadow {
 	text-shadow:1px 1px 1px #1c520a;
 	filter:dropshadow(color=#1c520a,offx=1,offy=1)
 }
-
 .box-dark-shadow {
 	-webkit-box-shadow:0 0 5px #171717;
 	-moz-box-shadow:0 0 5px #171717;
 	box-shadow:0 0 5px #171717
 }
-
 .box-medium-shadow {
 	-webkit-box-shadow:0 0 5px #ccc;
 	-moz-box-shadow:0 0 5px #ccc;
 	box-shadow:0 0 5px #ccc
 }
-
 .box-dark-inset-shadow {
 	-webkit-box-shadow:inset 0 0 5px #171717;
 	-moz-box-shadow:inset 0 0 5px #171717;

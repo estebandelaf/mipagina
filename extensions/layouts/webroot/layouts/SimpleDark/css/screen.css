@@ -12,11 +12,11 @@
 body {
 	margin:0;
 	padding:0;
-	background:#f2f2f2;
+	background:#111;
 }
 
 #header_container, #footer_container {
-	background:#0072c6;
+	background:black;
 	left:0;
 	position:fixed;
 	width:100%;
@@ -43,13 +43,20 @@ body {
 	font-size:2.5em;
 }
 
+#header .title_ascii {
+	font-family:monospace;
+	white-space:pre;
+	font-size:14px;
+	margin-left:10px;
+}
+
 #container {
 	overflow:auto;
 	margin-top:110px;
 	margin-bottom:60px;
 }
 #content {
-	color:#666;
+	color:#eee;
 }
 
 #footer_container {
@@ -62,27 +69,28 @@ body {
 }
 
 #footer a, #navigation a {
-	color:#44edff;
+	color:orange;
 	text-decoration:none;
 }
 
 #footer a:hover, #navigation a:hover {
+	color:red;
 	text-decoration:underline;
 }
 
 h1, h2, h3, h4, h5 {
-	color:#0072c6;
+	color:yellow;
 	font-weight:bold;
-	border-bottom:1px dashed #0072c6;
+	border-bottom:1px dashed yellow;
 }
 
 a {
-	color:#0072c6;
+	color:orange;
 	text-decoration:none;
 	
 }
 a:hover {
-	color:blue;
+	color:red;
 	text-decoration:underline;
 }
 
@@ -91,8 +99,8 @@ p {
 }
 
 pre, .session_message {
-	background:#cbdef0;
-	color:black;
+	background:#333;
+	color:white;
 }
 
 /* excepciones */
@@ -101,6 +109,7 @@ pre, .session_message {
 	padding:1em;
 	margin-bottom:1em;
 	overflow:auto;
+	color:black;
 }
 .exception_message {
 	background:#F6CECE;
@@ -115,19 +124,20 @@ pre, .session_message {
 	font-weight:bold;
 	text-align:center;
 	padding:0.5em;
+	color:white;
 }
 
 /* tablas */
 table {
 	border-right:0;
 	clear:both;
-	color:#333;
+	color:#eee;
 	margin-bottom:10px;
 	width:100%;
 }
 th {
 	border:0;
-	border-bottom:2px solid #555;
+	border-bottom:2px solid #666;
 	text-align:left;
 	padding:4px;
 }
@@ -135,10 +145,10 @@ table tr td {
 	padding:6px;
 	text-align:left;
 	vertical-align:top;
-	border-bottom:1px solid #ddd;
+	border-bottom:1px solid #666;
 }
 table tr:nth-child(even) {
-	background:#f9f9f9;
+	background:#333;
 }
 table.center th+th, table.center td+td {
 	text-align:center;
@@ -152,7 +162,7 @@ input, select, textarea {
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	border: 1px solid black;
+	border: 1px solid gray;
 }
 form .label {
 	width: 200px;
