@@ -43,7 +43,7 @@ Configure::write('language', 'es');
 Configure::write('page.globals', array());
 
 // Extensiones para las páginas que se desean renderizar
-Configure::write('page.extensions', array('php', 'markdown'));
+Configure::write('page.extensions', array('php', 'md'));
 
 // Página inicial
 Configure::write('homepage', 'inicio');

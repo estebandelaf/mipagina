@@ -28,9 +28,9 @@ App::import('Vendor/michelf/php-markdown/Michelf/Markdown');
 /**
  * Clase para cargar una página en formato Markdown
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2014-03-03
+ * @version 2014-03-12
  */
-class MarkdownPage {
+class MdPage {
 
 	/**
 	 * Método que renderiza una página en formato Markdown
