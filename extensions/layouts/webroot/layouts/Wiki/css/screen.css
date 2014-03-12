@@ -43,13 +43,13 @@ div.logo {
 #sidebar .box ul, #sidebar .box ol { margin-left: 0; }
 #sidebar .box ul li, #sidebar .box ol li { margin-left: -20px; }
 
-#container {padding-bottom:0.8em;position:absolute;left:170px;right:10px;}
+#container {padding-bottom:0.8em;position:absolute;left:170px;right:10px}
 
 .page { line-height:160%;margin:0;border:1px solid #8cacbb;padding:1em;background:#fff; }
 .page ul, .page ol { margin-left: 0px; }
 
 div.breadcrumbs{background-color:#f5f5f5;color:#666;font-size:80%;padding:0 0 0 4px;}
-#footer{padding:1em;margin:10px 0 1em 0;background:#fff;border:1px solid #8cacbb;text-align:center;}
+#footer{padding:1em;margin:30px 0 1em 0;background:#fff;border:1px solid #8cacbb;text-align:center;}
 
 h1, h2, h3, h4, h5 {
 	color: #436976;

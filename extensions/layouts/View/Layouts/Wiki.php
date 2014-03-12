@@ -1,6 +1,6 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!-- Design by https://www.dokuwiki.org/dokuwiki modified by http://delaf.cl -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es" dir="ltr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="MiPaGiNa" />
@@ -44,13 +44,14 @@ $message = Session::message();
 if($message) echo '<div class="session_message">',$message,'</div>';
 echo $_content;
 ?>
+				</div>
 				<div class="meta">
 					<div class="doc">Última modificación: <?php echo $_timestamp; ?></div>
 				</div>
 				<a href="#top" class="top" accesskey="x" title="Ir hasta arriba [X]">Ir hasta arriba</a>
-			</div>
-			<div id="footer">
-				<?php echo is_array($_footer) ? implode (' ', $_footer): $_footer; ?>
+				<div id="footer">
+					<?php echo is_array($_footer) ? implode (' ', $_footer): $_footer; ?>
+				</div>
 			</div>
 		</div>
 	</body>

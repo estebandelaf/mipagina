@@ -119,7 +119,7 @@ class FormHelper {
 	 * @param config Arreglo con la configuración para el elemento
 	 * @return String Código HTML de lo solicitado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2014-02-20
+	 * @version 2014-03-12
 	 */
 	private function _formatear ($field, $config) {
 		// si se debe aplicar estilo de mantenedor
@@ -152,9 +152,9 @@ class FormHelper {
 		else if (isset($config['align'])) {
 			$buffer = '<div style="text-align:'.$config['align'].'">'.$field.'</div>'."\n";
 		}
-		// si no se debe aplicar ningún formato solo agregar EOL
+		// si no se debe aplicar ningún formato solo agregar el campo dentro de un div y el EOL
 		else {
-			$buffer = $field."\n";
+			$buffer = '<div>'.$field.'</div>'."\n";
 		}
 		// retornar código formateado
 		return $buffer;

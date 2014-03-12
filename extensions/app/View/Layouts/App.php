@@ -1,5 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!-- Design by http://www.oswd.org/design/preview/id/3459 modified by http://delaf.cl -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -18,10 +18,17 @@
 	<body>
 		<div id="wrapper">
 			<div id="header">
-				<a href="<?php echo $_base; ?>/inicio">
-					<div class="img"><img src="<?php echo $_base; ?>/img/logo.png" alt="" /></div>
-					<div class="txt"><?php echo $_body_title; ?></div>
-				</a>
+				<div class="img">
+					<a href="<?php echo $_base; ?>/inicio">
+						<img src="<?php echo $_base; ?>/img/logo.png" alt="" />
+					</a>
+				</div>
+				<div class="txt">
+					<a href="<?php echo $_base; ?>/inicio">
+						<?php echo $_body_title; ?>
+					</a>
+				</div>
+				
 			</div>
 			<div id="navsite">
 				<ul>

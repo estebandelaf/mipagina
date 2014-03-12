@@ -130,7 +130,7 @@ class TableHelper {
 		}
 		// Iniciar tabla
 		$buffer .= '<div style="width:100%;overflow:auto">'."\n";
-		$buffer .= '<table class="'.$this->_class.'" id="'.$this->_id.'">'."\n";
+		$buffer .= '<table class="'.$this->_class.'"'.($this->_id?' id="'.$this->_id.'"':'').'>'."\n";
 		// Definir cabecera de la tabla
 		// títulos de columnas
 		$buffer .= "\t".'<thead>'."\n";
