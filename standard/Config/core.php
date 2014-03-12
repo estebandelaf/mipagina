@@ -24,7 +24,7 @@
 /**
  * @file core.php
  * Configuración estándar de las páginas o aplicaciones
- * @version 2014-02-24
+ * @version 2014-03-11
  */
 
 // Errores
@@ -51,5 +51,5 @@ Configure::write('homepage', 'inicio');
 // Textos de la página
 Configure::write(
 	'page.footer',
-	'powered by <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>'
+	'Página web generada utilizando el framework <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>'
 );
