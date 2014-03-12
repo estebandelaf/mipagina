@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -32,8 +32,8 @@ class MiException extends RuntimeException {
 
 	/**
 	 * Constructor para la excepción
-	 * @param string|array $message Un string con el error o bien un arreglo con atributos que son pasados al mensaje que se traducirá
-	 * @param string $code Código del error (default: 500)
+	 * @param message Un string con el error o bien un arreglo con atributos que son pasados al mensaje que se traducirá
+	 * @param code string Código del error (default: 500)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-27
 	 */

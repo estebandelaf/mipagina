@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@ App::uses('Component', 'Controller/Component');
 /**
  * Componente para proveer de un sistema de autenticación y autorización
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-30
+ * @version 2014-03-08
  */
 class AuthComponent extends Component {
 
@@ -39,17 +39,22 @@ class AuthComponent extends Component {
 			'login' => '/',
 			'logout' => '/',
 			'error' => '/',
+			'form' => '/usuarios/ingresar',
 		),
 		'messages' => array(
 			'ok' => array(
 				'login' => 'Usuario <em>%s</em> ha iniciado su sesión',
+				'lastlogin' => 'Último ingreso fue el <em>%s</em> desde <em>%s</em>',
 				'logout' => 'Usuario <em>%s</em> ha cerrado su sesión',
 				'logged' => 'Usuario <em>%s</em> tiene su sesión abierta'
 			),
 			'error' => array(
+				'nologin' => 'Debe iniciar sesión para tratar de acceder a <em>%s</em>',
 				'auth' => 'No dispone de permisos para acceder a <em>%s</em>',
 				'empty' => 'Debe especificar usuario y clave',
 				'invalid' => 'Usuario o clave inválida',
+				'inactive' => 'Cuenta de usuario no activa',
+				'newlogin' => 'Sesión cerrada, usuario <em>%s</em> tiene una más nueva en otro lugar',
 			),
 		),
 		'model' => array(
@@ -60,43 +65,59 @@ class AuthComponent extends Component {
 					'id' => 'id',
 					'user' => 'usuario',
 					'pass' => 'contrasenia',
+					'active' => 'activo',
+					'lastlogin_timestamp' => 'ultimo_ingreso_fecha_hora',
+					'lastlogin_from' => 'ultimo_ingreso_desde',
+					'lastlogin_hash' => 'ultimo_ingreso_hash',
 				),
 				'hash' => 'sha256',
 			),
 		)
 	);
 	public static $session = null; ///< Información de la sesión del usuario
+	private static $userModel; ///< Nombre del modelo que representa el usuario
+	private static $lastlogin_hash; ///< Variable estática para acceder al nombre de la columna que guarda el hash de la sesión
+	private static $newlogin_message; ///< Variable estática para acceder al error del mensaje al haber sesión nueva creada
 	public $allowedActions = array(); ///< Acciones sin login
 	public $allowedActionsWithLogin = array(); ///< Acciones con login
 
 	/**
 	 * Método que inicializa el componente y carga la sesión activa
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-12
+	 * @version 2014-02-07
 	 */
 	public function __construct(ComponentCollection $Components, $settings =
 		array()) {
 		// ejecutar el constructor padre
 		parent::__construct($Components, $settings);
-		// solicitar clase Auth
+		// solicitar clases Auth y el modelo del usuario
 		App::uses('Auth', $this->settings['model']['location']);
+		self::$userModel = Inflector::camelize($this->settings['model']['user']['table']);
+		App::uses(self::$userModel, $this->settings['model']['location']);
 		// Recuperar sesión
 		self::$session = Session::read(
 			$this->settings['session']['key']
 		);
+		// parches con variables estáticas para que funcionen métodos estáticos
+		self::$lastlogin_hash = $this->settings['model']['user']['columns']['lastlogin_hash'];
+		self::$newlogin_message = $this->settings['messages']['error']['newlogin'];
 	}
 	
 	/**
 	 * Método que verifica si el usuario tiene permisos o bien da error
 	 * Wrapper para el método que hace la validación
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-13
+	 * @version 2014-03-08
 	 */
 	public function beforeFilter($controller) {
-		// Si no está autorizado se genera error y redirige
 		if (!$this->isAuthorized()) {
-			Session::message(sprintf($this->settings['messages']['error']['auth'], $this->request->request));
-			$controller->redirect($this->settings['redirect']['error']);
+			if (!self::logged()) {
+				Session::message(sprintf($this->settings['messages']['error']['nologin'], $this->request->request));
+				$controller->redirect($this->settings['redirect']['form'].'/'.base64_encode($this->request->request));
+			} else {
+				Session::message(sprintf($this->settings['messages']['error']['auth'], $this->request->request));
+				$controller->redirect($this->settings['redirect']['error']);
+			}
 		}
 	}
 
@@ -150,11 +171,18 @@ class AuthComponent extends Component {
 	 * Indica si existe una sesión de un usuario creada
 	 * @todo Buscar método mejor para verificar que se está logueado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-13
+	 * @version 2014-02-07
 	 */
 	public static function logged () {
-		// si es un arreglo self::$session
-		if(is_array(self::$session) && isset(self::$session['id']) && isset(self::$session['usuario'])) {
+		// si es un arreglo self::$session se verifica el hash de la sesión
+		if(is_array(self::$session) && isset(self::$session['id']) && isset(self::$session['usuario']) && isset(self::$session['hash'])) {
+			$userModel = self::$userModel;
+			$$userModel = new $userModel(self::$session['id']);
+			if ($$userModel->{self::$lastlogin_hash} != self::$session['hash']) {
+				Session::destroy();
+				Session::message(sprintf(self::$newlogin_message, self::$session['usuario']));
+				return false;
+			}
 			return true;
 		}
 		// si se llegó acá entonces no se está logueado
@@ -182,7 +210,7 @@ class AuthComponent extends Component {
 	/**
 	 * Método que realiza el login del usuario
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-24
+	 * @version 2014-02-22
 	 */
 	public function login ($controller) {
 		// si ya está logueado se redirecciona
@@ -200,8 +228,7 @@ class AuthComponent extends Component {
 		// si se envió el formulario se procesa
 		if(isset($_POST['submit'])) {
 			// campos usuario y contraseña
-			$userModel = Inflector::camelize($this->settings['model']['user']['table']);
-			$usersModel = Inflector::camelize(Inflector::pluralize($this->settings['model']['user']['table']));
+			$idField = $this->settings['model']['user']['columns']['id'];
 			$userField = $this->settings['model']['user']['columns']['user'];
 			$passField = $this->settings['model']['user']['columns']['pass'];
 			// si el usuario o contraseña es vacio mensaje de error
@@ -209,35 +236,60 @@ class AuthComponent extends Component {
 				Session::message($this->settings['messages']['error']['empty']);
 				return;
 			}
-			// verificar si existe la tupla (usuario, hash(clave)) en la base de datos
-			App::uses(
-				$userModel,
-				$this->settings['model']['location']
-			);
-			$$usersModel = new $usersModel();
-			$$usersModel->setSelectStatement($this->settings['model']['user']['columns']['id']);
-			$$usersModel->setWhereStatement(
-				$userField.' = \''.$$usersModel->sanitize($_POST[$userField]).'\'
-				AND '.$passField.' = \''.$this->hash($_POST[$passField]).'\''
-			);
-			$userId = $$usersModel->getValue();
-			// si no existe error
-			if(!(boolean)$userId) {
+			// crear objeto del usuario con el nombre de usuario entregado
+			$userModel = self::$userModel;
+			$$userModel = new $userModel($_POST[$userField]);
+			// si las contraseñas no son iguales error (si el usuario no existe tambiém habrá error)
+			if ($$userModel->$passField != $this->hash($_POST[$passField])) {
 				Session::message($this->settings['messages']['error']['invalid']);
+				return;
+			}
+			if (
+				$$userModel->{$this->settings['model']['user']['columns']['active']} == 'f' ||
+				$$userModel->{$this->settings['model']['user']['columns']['active']} == '0'
+			) {
+
+				Session::message($this->settings['messages']['error']['inactive']);
 				return;
 			}
 			// si existe, crear sesión
 			else {
+				// hash de la sesión
+				$timestamp = date('Y-m-d H:i:s');
+				$ip = self::ip (true);
+				$hash = md5 ($ip.$timestamp.$this->hash($_POST[$passField]));
+				// registrar ingreso en la base de datos
+				// se asume que si está seteada una de las columnas lastlogin_* lo estarán todas
+				if (isset($this->settings['model']['user']['columns']['lastlogin_timestamp'][0])) {
+					if (isset($$userModel->{$this->settings['model']['user']['columns']['lastlogin_timestamp']}[0])) {
+						$lastlogin = '<br />'.sprintf(
+							$this->settings['messages']['ok']['lastlogin'],
+							$$userModel->{$this->settings['model']['user']['columns']['lastlogin_timestamp']},
+							$$userModel->{$this->settings['model']['user']['columns']['lastlogin_from']}
+						);
+					} else {
+						$lastlogin = '';
+					}
+					$$userModel->edit (array(
+						$this->settings['model']['user']['columns']['lastlogin_timestamp'] => $timestamp,
+						$this->settings['model']['user']['columns']['lastlogin_from'] => $ip,
+						$this->settings['model']['user']['columns']['lastlogin_hash'] => $hash
+					));
+				} else {
+					$lastlogin = '';
+				}
 				// crear info de la sesión
 				self::$session =  array(
-					'id' => $userId,
-					'usuario' => $_POST[$userField]
+					'id' => $$userModel->$idField,
+					'usuario' => $$userModel->$userField,
+					'hash' => $hash,
 				);
 				Session::write($this->settings['session']['key'], self::$session);
 				// mensaje para mostrar
-				Session::message(sprintf($this->settings['messages']['ok']['login'], $_POST[$userField]));
+				Session::message(sprintf($this->settings['messages']['ok']['login'], $$userModel->$userField).$lastlogin);
 				// redireccionar
-				$controller->redirect($this->settings['redirect']['login']);
+				if (isset($_POST['redirect'][0])) $controller->redirect($_POST['redirect']);
+				else $controller->redirect($this->settings['redirect']['login']);
 			}
 		}
 	}
@@ -249,13 +301,41 @@ class AuthComponent extends Component {
 	 */
 	public function logout ($controller) {
 		Session::destroy();
-		Session::message(sprintf($this->settings['messages']['ok']['logout'], self::$session[$this->settings['model']['user']['columns']['user']]));
+		Session::message(sprintf($this->settings['messages']['ok']['logout'], self::$session['usuario']));
 		self::$session = null;
 		$controller->redirect($this->settings['redirect']['logout']);
 	}
-	
+
+	/**
+	 * Método que calcula el hash de la contraseña utilizando el método
+	 * especificado
+	 */
 	public function hash ($string) {
 		return hash($this->settings['model']['user']['hash'], $string);
+	}
+
+	/**
+	 * Establecer ip del visitante
+	 * @return Ip del visitante
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-08
+	 */
+	public static function ip ($get_from_proxy = false) {
+		if ($get_from_proxy && getenv('HTTP_X_FORWARDED_FOR')) {
+			$ips = explode(', ', getenv('HTTP_X_FORWARDED_FOR'));
+			return $ips[count($ips)-1];
+		}
+		return $_SERVER['REMOTE_ADDR'];
+	}
+
+	/**
+	 * Establecer host del visitante
+	 * @return Host del visitante
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-08
+	 */
+	public static function host ($get_from_proxy = false) {
+		return gethostbyaddr(self::ip($get_from_proxy));
 	}
 
 }

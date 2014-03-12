@@ -1,5 +1,40 @@
 <?php
 
+/**
+ * MiPaGiNa (MP)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ *
+ * Este programa es software libre: usted puede redistribuirlo y/o
+ * modificarlo bajo los términos de la Licencia Pública General GNU
+ * publicada por la Fundación para el Software Libre, ya sea la versión
+ * 3 de la Licencia, o (a su elección) cualquier versión posterior de la
+ * misma.
+ *
+ * Este programa se distribuye con la esperanza de que sea útil, pero
+ * SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
+ * MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO.
+ * Consulte los detalles de la Licencia Pública General GNU para obtener
+ * una información más detallada.
+ *
+ * Debería haber recibido una copia de la Licencia Pública General GNU
+ * junto a este programa.
+ * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
+ */
+
+/**
+ * @file basics.php
+ * Funciones de la extensión aulavirtual
+ * @version 2014-02-26
+ */
+
+/**
+ * Función para crear los enaces para la sección "enlaces útiles" en el layout
+ * de la página
+ * @param linksName Links que se están renderizando
+ * @return Retorna un string con los enlaces
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-26
+ */
 function header_useful_links ($linksName) {
 	$useful_links = Configure::read($linksName);
 	if (is_array($useful_links) && count($useful_links)) {

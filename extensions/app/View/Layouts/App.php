@@ -1,14 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!-- Design by http://www.oswd.org/design/preview/id/3459 modified by http://delaf.cl -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="MiPaGiNa"/>
 		<title><?php echo $_header_title; ?></title>
 		<link rel="shortcut icon" href="<?php echo $_base; ?>/img/favicon.png" />
-		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" title="screen" rel="stylesheet" />
-		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/print.css" media="print" title="print" rel="stylesheet" />
+		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/screen.css" media="screen" rel="stylesheet" />
+		<link type="text/css" href="<?php echo $_base; ?>/layouts/<?php echo $_layout; ?>/css/print.css" media="print" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/jquery.js"></script>
-		<script type="text/javascript" src="<?php echo $_base; ?>/js/js.js"></script>
+		<script type="text/javascript" src="<?php echo $_base; ?>/js/app.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/form.js"></script>
 		<script type="text/javascript" src="<?php echo $_base; ?>/js/jquery-ui/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo $_base; ?>/js/jquery-ui/css/smoothness/jquery-ui.css" media="screen"/>
@@ -17,10 +18,17 @@
 	<body>
 		<div id="wrapper">
 			<div id="header">
-				<a href="<?php echo $_base; ?>/inicio">
-					<div class="img"><img src="<?php echo $_base; ?>/img/logo.png" alt="" /></div>
-					<div class="txt"><?php echo $_body_title; ?></div>
-				</a>
+				<div class="img">
+					<a href="<?php echo $_base; ?>/inicio">
+						<img src="<?php echo $_base; ?>/img/logo.png" alt="" />
+					</a>
+				</div>
+				<div class="txt">
+					<a href="<?php echo $_base; ?>/inicio">
+						<?php echo $_body_title; ?>
+					</a>
+				</div>
+				
 			</div>
 			<div id="navsite">
 				<ul>
@@ -63,7 +71,7 @@
 $message = Session::message();
 if($message) echo '<div class="session_message">',$message,'</div>';
 ?>
-<a href="javascript:print()" title="Imprimir página" class="fright">
+<a href="javascript:print()" title="Imprimir página" class="fright" id="printIcon">
 	<img src="<?php echo $_base; ?>/img/icons/16x16/actions/print.png"
 		alt="Imprimir página" />
 </a>
@@ -71,16 +79,11 @@ if($message) echo '<div class="session_message">',$message,'</div>';
 			</div>
 			<div id="footer">
 				<div>
-					<div class="fleft">
-						Desarrollado por:
-						<a href="http://sasco.cl"
-title="Sitio web y aplicación desarrollada por SASCO">SASCO </a>
+					<div class="fleft" id="footer_left">
+						<?php echo $_footer['left']; ?>
 					</div>
-					<div class="fright">
-						Con tecnología:
-						<a href="http://www.apache.org" title="Servidor web Apache">Apache</a>
-						<a href="http://www.php.net" title="Lenguaje de programación PHP">PHP</a>
-						<a href="http://www.postgresql.org" title="Base de datos PostgreSQL">PostgreSQL</a>
+					<div class="fright" id="footer_right">
+						<?php echo $_footer['right']; ?>
 					</div>
 				</div>
 			</div>

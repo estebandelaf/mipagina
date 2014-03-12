@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,19 +24,23 @@
 /**
  * @file core.php
  * Configuración estándar de las páginas o aplicaciones
+ * @version 2014-03-11
  */
 
 // Errores
 Configure::write('debug', true);
-Configure::write('error.level', E_ALL | E_STRICT);
+Configure::write('error.level', E_ALL);
 
 // Tiempo
 Configure::write('time.zone', 'America/Santiago');
 Configure::write('time.format', 'Y-m-d H:i:s');
 
+// Lenguaje de la página
+Configure::write('language', 'es');
+
 // Variables que deberán ser tratadas como globales al renderizar (si
 // es que existen, sino se omitirán)
-Configure::write('page.globals', array('db'));
+Configure::write('page.globals', array());
 
 // Extensiones para las páginas que se desean renderizar
 Configure::write('page.extensions', array('php', 'markdown'));
@@ -45,4 +49,7 @@ Configure::write('page.extensions', array('php', 'markdown'));
 Configure::write('homepage', 'inicio');
 
 // Textos de la página
-Configure::write('page.footer', 'powered by <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>');
+Configure::write(
+	'page.footer',
+	'Página web generada utilizando el framework <a href="http://mi.delaf.cl/mipagina">MiPaGiNa</a>'
+);

@@ -33,10 +33,10 @@ App::uses('UsuarioGrupoBase', 'Sistema.Usuarios.Model');
  */
 final class UsuarioGrupo extends UsuarioGrupoBase {
 
-	protected $fkModule = array(
+	public static $fkModule = array(
 		'Usuario' => 'Sistema.Usuarios.',
 		'Grupo' => 'Sistema.Usuarios.'
-	); ///< Modelos utilizados
+	); ///< Módulos que utiliza esta clase
 
 }
 

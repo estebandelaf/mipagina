@@ -33,7 +33,7 @@ App::uses('GrupoBase', 'Sistema.Usuarios.Model');
  */
 final class Grupo extends GrupoBase {
 
-	protected $fkModule = array(); ///< Modelos utilizados
+	public static $fkModule = array(); ///< Módulos que utiliza esta clase
 
 }
 

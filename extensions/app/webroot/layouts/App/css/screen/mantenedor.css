@@ -1,0 +1,22 @@
+table.mantenedor input[type="text"], table.mantenedor select {
+	border: 1px dashed gray;
+	padding: 0.3em;
+	width: 100px;
+	text-align: center;
+	color: #555;
+}
+table.mantenedor input[type="image"] {
+	border: 0;
+}
+table.mantenedor th, table.mantenedor td {
+	text-align: center;
+}
+table.mantenedor th:last-child, table.mantenedor td:last-child {
+	width: 50px;
+}
+table.mantenedor th a {
+	display: inline;
+} 
+table.mantenedor tbody tr:hover {
+	background: #ddd;
+}

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -21,23 +21,25 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// clases que se utilizarán
+App::uses('View', 'View');
+
 /**
  * Clase para manejar rutas de la aplicación
  * Las rutas conectan URLs con controladores y acciones
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-15
+ * @version 2014-02-09
  */
 class Router {
-	
-	public static $request; ///< Solicitud realizada a la aplicación
-	public static $routes = array(); ///< Rutas conectadas, "does the magic"
-	public static $autoStaticPages = false; ///< Permite cargar páginas estáticas desde /, sin usar /pages/
+
+	private static $routes = array(); ///< Rutas conectadas, "does the magic"
+	public static $autoStaticPages = true; ///< Permite cargar páginas estáticas desde /, sin usar /pages/
 
 	/**
-	 * Procesa la url indicando que es lo que se espera obtener según las rutas que existen conectadas
-	 * @todo Verificar que funcione para modulos
+	 * Procesa la url indicando que es lo que se espera obtener según las
+	 * rutas que existen conectadas
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
+	 * @version 2014-02-23
 	 */
 	public static function parse ($url) {
 		// La url requiere partir con "/", si no lo tiene se coloca
@@ -56,7 +58,7 @@ class Router {
 		}
 		// Se revisa si es una página estática
 		if(self::$autoStaticPages) {
-			$location = self::pageLocation($url);
+			$location = View::location('Pages'.$url);
 			if($location) {
 				$params['controller'] = 'pages';
 				$params['action'] = 'display';
@@ -67,7 +69,7 @@ class Router {
 		}
 		// Buscar alguna que sea parcial (:controller, :action o *)
 		foreach(self::$routes as $key=>$aux) {
-			$params = array_merge(array('module'=>null, 'controller'=>null, 'action'=>'index', 'pass'=>null), $aux);
+			$params = array_merge(array('module'=>null, 'controller'=>null, 'action'=>null, 'pass'=>null), $aux);
 			// Tiene :controller
 			$controller = strpos($key, ':controller');
 			if($controller) {
@@ -112,7 +114,7 @@ class Router {
 				}
 			}
 		}
-		// Arreglo por defecto para los datos de plugin, controlador, accion y parámetros pasados
+		// Arreglo por defecto para los datos de módulo, controlador, accion y parámetros pasados
 		$params = array('module'=>null, 'controller'=>null, 'action'=>'index', 'pass'=>null);
 		// Procesar la URL recibida, en el formato /modulo(s)/controlador/accion/parámetro1/parámetro2/etc
 		// Buscar componente de la url que corresponde al modulo (de existir)
@@ -141,56 +143,6 @@ class Router {
 	}
 
 	/**
-	 * Buscar el archivo correspondiente a una página
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
-	 */
-	public static function pageLocation ($page) {
-		App::uses('View', 'View');
-		return View::location('Pages'.$page);
-	}
-	
-	/**
-	 * Obtiene a partir de una url en formato controlador, acción (parámetros),
-	 * la url "real" (la que se usa en el navegador), usado generalmente para
-	 * los redireccionamientos.
-	 * @todo Verificar que haga lo que debería
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
-	 */
-	public static function normalize ($url = '/') {
-		// Si es arreglo se procesa
-		if(is_array($url)) {
-			// Opciones por defecto
-			$url = array_merge(self::$request->params, $url);
-			// Si es una página estática
-			if($url['controller']=='pages') {
-				$url = $url[0];
-			}
-			// Si no es una página estática, se debe armar la url
-			else {
-				$plugin = $url['module']!='' ? $url['module'].'/' : '';
-				$controller = $url['controller']!='' ? $url['controller'] : '';
-				$action = $url['action']!= '' ? ($url['action']!='index' ? '/'.$url['action'] : '') : '';
-				$pass = isset($url['pass'][0]) ? '/'.implode('/', $url['pass']) : '';
-				$url = $plugin.$controller.$action.$pass;
-			}
-		}
-		// Si no es arreglo se retorna tal cual
-		return self::$request->base.$url;
-	}	
-
-	/**
-	 * @deprecated
-	 * @todo Verificar que pueda ser quitado de la clase (que no este siendo usado)
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
-	 */	
-	public static function url ($url) {
-		return $url;
-	}
-
-	/**
 	 * Método para conectar nuevas rutas
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-15
@@ -198,15 +150,6 @@ class Router {
 	public static function connect ($from, $to = array()) {
 		self::$routes[$from] = $to;
 		krsort(self::$routes);
-	}
-
-	/**
-	 * Setear request info de manera estática
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
-	 */
-	public static function setRequestInfo(Request $request) {
-		self::$request = $request;
 	}
 
 }

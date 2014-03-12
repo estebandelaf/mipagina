@@ -26,10 +26,10 @@ App::uses('AppController', 'Controller');
 
 /**
  * Clase abstracta para el controlador asociado a la tabla auth de la base de datos
- * Comentario de la tabla: Tabla para asociar recursos a los que puede acceder un grupo
+ * Comentario de la tabla: Permisos de grupos para acceder a recursos
  * Esta clase permite controlar las acciones básicas entre el modelo y vista para la tabla auth, o sea implementa métodos CRUD
  * @author MiPaGiNa Code Generator
- * @version 2013-07-05 01:36:25
+ * @version 2014-02-23 23:52:13
  */
 abstract class AuthsBaseController extends AppController {
 
@@ -37,9 +37,8 @@ abstract class AuthsBaseController extends AppController {
 
 	/**
 	 * Controlador para listar los registros de tipo Auth
-	 * @todo Agregar condiciones para paginar los datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-23 23:52:13
 	 */
 	public function listar ($page = 1, $orderby = null, $order = 'A') {
 		// crear objeto
@@ -82,6 +81,7 @@ abstract class AuthsBaseController extends AppController {
 		}
 		// setear variables
 		$this->set(array(
+			'module_url' => $this->module_url,
 			'controller' => $this->request->params['controller'],
 			'page' => $page,
 			'orderby' => $orderby,
@@ -93,14 +93,14 @@ abstract class AuthsBaseController extends AppController {
 			'registers_total' => $registers_total,
 			'pages' => isset($pages) ? $pages : 0,
 			'linkEnd' => ($orderby ? '/'.$orderby.'/'.$order : '').$searchUrl,
+			'fkModule' => Auth::$fkModule,
 		));
 	}
 	
 	/**
 	 * Controlador para crear un registro de tipo Auth
-	 * @todo Permitir subir los archivo al crear el registro
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-23 23:52:13
 	 */
 	public function crear () {
 		// si se envió el formulario se procesa
@@ -108,7 +108,6 @@ abstract class AuthsBaseController extends AppController {
 			$Auth = new Auth();
 			$Auth->set($_POST);
 			$Auth->save();
-//			if(method_exists($this, 'u')) $this->u();
 			Session::message('Registro Auth creado');
 			$this->redirect(
 				$this->module_url.'auths/listar'
@@ -117,13 +116,14 @@ abstract class AuthsBaseController extends AppController {
 		// setear variables
 		$this->set(array(
 			'columnsInfo' => Auth::$columnsInfo,
+			'fkModule' => Auth::$fkModule,
 		));
 	}
 	
 	/**
 	 * Controlador para editar un registro de tipo Auth
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-23 23:52:13
 	 */
 	public function editar ($id) {
 		$Auth = new Auth($id);
@@ -139,6 +139,7 @@ abstract class AuthsBaseController extends AppController {
 			$this->set(array(
 				'Auth' => $Auth,
 				'columnsInfo' => Auth::$columnsInfo,
+				'fkModule' => Auth::$fkModule,
 			));
 		}
 		// si se envió el formulario se procesa
@@ -158,7 +159,7 @@ abstract class AuthsBaseController extends AppController {
 	/**
 	 * Controlador para eliminar un registro de tipo Auth
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-05 01:36:25
+	 * @version 2014-02-23 23:52:13
 	 */
 	public function eliminar ($id) {
 		$Auth = new Auth($id);

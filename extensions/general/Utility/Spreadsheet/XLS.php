@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -22,14 +22,14 @@
  */
 
 // Incluir biblioteca PHPExcel
-App::import('Vendor/PHPExcel/PHPExcel');
+App::import('Vendor/phpoffice/phpexcel/Classes/PHPExcel');
 
 /**
  * Manejar archivos en excel
  *
  * Esta clase permite leer y generar archivos en excel
  * @author DeLaF, esteban[at]delaf.cl
- * @version 2013-05-09
+ * @version 2014-02-20
  */
 final class XLS {
 
@@ -37,9 +37,8 @@ final class XLS {
 	 * Lee una planilla de cálculo
 	 * @param archivo archivo a leer (ejemplo celda tmp_name de un arreglo $_FILES)
 	 * @param hoja Hoja que se quiere devolver, comenzando por la 0
-	 * @todo Parchar clase Spreadsheet_Excel_Reader y quitar el parche de este método
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-05-09
+	 * @version 2014-02-23
 	 */
 	public static function read ($archivo = null, $hoja = 0, $type = 'Excel5') {
 		// Crear objeto para leer archivo
@@ -69,28 +68,41 @@ final class XLS {
 	 * @param id Identificador de la planilla
 	 * @param horizontal Indica si la hoja estara horizontalmente (true) o verticalmente (false)
 	 * @author DeLaF, esteban[at]delaf.cl
-	 * @version 2013-07-05
+	 * @version 2014-02-20
 	 */
 	public static function generate ($tabla, $id, $type = 'Excel5') {
 		// Crear objeto PHPExcel
 		$objPHPExcel = new PHPExcel();
-		// Seleccionar hoja
-		$objPHPExcel->setActiveSheetIndex(0);
-		// Colocar título a la hoja
-		$objPHPExcel->getActiveSheet()->setTitle($id);
-		// Colocar datos
-		$y=1; // fila
-		$x=0; // columna
-		foreach($tabla as &$fila) {
-			foreach($fila as &$celda) {
-				$objPHPExcel->getActiveSheet()->setCellValue(
-					PHPExcel_Cell::stringFromColumnIndex($x++).$y,
-					str_replace('<br />', "\n", $celda)
-				);
-			}
-			$x=0;
-			++$y;
+		// si las llaves de $table no son strings, entonces es solo una hoja
+		if (!is_string(array_keys($tabla)[0])) {
+			$tabla = array($id=>$tabla);
 		}
+		// generar hojas
+		$hoja = 0;
+		$n_hojas = count ($tabla);
+		foreach ($tabla as $name => &$sheet) {
+			// agregar hoja
+			$objWorkSheet = $objPHPExcel->setActiveSheetIndex($hoja);
+			// Colocar título a la hoja
+			$objWorkSheet->setTitle($name);
+			// Colocar datos
+			$y=1; // fila
+			$x=0; // columna
+			foreach($sheet as &$fila) {
+				foreach($fila as &$celda) {
+					$objWorkSheet->setCellValue(
+						PHPExcel_Cell::stringFromColumnIndex($x++).$y,
+						rtrim(str_replace('<br />', "\n", strip_tags($celda, '<br>')))
+					);
+				}
+				$x=0;
+				++$y;
+			}
+			++$hoja;
+			if ($hoja<$n_hojas)
+				$objPHPExcel->createSheet($hoja);
+		}
+		$objPHPExcel->setActiveSheetIndex(0);
 		// Generar archivo excel
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $type);
 		ob_end_clean();

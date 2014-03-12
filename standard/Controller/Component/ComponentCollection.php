@@ -38,20 +38,28 @@ class ComponentCollection extends ObjectCollection {
 	 * Método que inicializa la colección de componentes.
 	 * Cargará cada uno de los componentes creando un atributo en el
 	 * controlador con el nombre del componente
+	 * @param Controller Controlador para el que se usan los componentes
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
 	public function init (Controller $Controller) {
 		$this->_Controller = $Controller;
-		$components = ComponentCollection::normalizeObjectArray($Controller->components);
+		$components = ComponentCollection::normalizeObjectArray (
+			$Controller->components
+		);
 		foreach ($components as $name => $properties) {
-			$Controller->{$name} = $this->load($properties['class'], $properties['settings']);
+			$Controller->{$name} = $this->load (
+				$properties['class'], $properties['settings']
+			);
 		}
 	}
 
 	/**
 	 * Función que carga y construye el componente
 	 * @todo Cargar desde un módulo
+	 * @param component Componente que se quiere cargar
+	 * @param settins Opciones para el componente
+	 * @return Componente cargado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */
@@ -77,7 +85,10 @@ class ComponentCollection extends ObjectCollection {
 	}
 
 	/**
-	 * Lanzar métodos de todos los componentes cargados para el evento callback
+	 * Lanzar métodos de todos los componentes cargados para el evento
+	 * callback
+	 * @param callback Función que se debe ejecutar (ej: beforeRender)
+	 * @param params Parámetros que se pasarán a la función callback
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-06
 	 */	

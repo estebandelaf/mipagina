@@ -29,25 +29,30 @@ App::uses('AppModel', 'Model');
 
 /**
  * Clase abstracta para mapear la tabla usuario de la base de datos
- * Tabla para usuarios del sistema
+ * Usuarios de la aplicación
  * Esta clase permite trabajar sobre un registro de la tabla usuario
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-23 23:45:02
  */
 abstract class UsuarioBase extends AppModel {
 
 	// Atributos de la clase (columnas en la base de datos)
-	public $id; ///< Identificador del usuario: integer(32) NOT NULL DEFAULT 'nextval('usuario_id_seq'::regclass)' AUTO PK 
-	public $persona; ///< RUN de la persona asociada al usuario: integer(32) NOT NULL DEFAULT '' FK:persona.run
-	public $usuario; ///< Nombre único para identificar al usuario: character varying(20) NOT NULL DEFAULT '' 
-	public $contrasenia; ///< Contraseña encriptada utilizando SHA256: character(64) NULL DEFAULT '' 
-	public $activo; ///< Indica si el grupo está o no activo en el sistema: date() NOT NULL DEFAULT '2099-12-31' 
+	public $id; ///< Identificador (serial): integer(32) NOT NULL DEFAULT 'nextval('usuario_id_seq'::regclass)' AUTO PK 
+	public $nombre; ///< Nombre real del usuario: character varying(30) NOT NULL DEFAULT '' 
+	public $usuario; ///< Nombre de usuario: character varying(20) NOT NULL DEFAULT '' 
+	public $email; ///< Correo electrónico del usuario: character varying(20) NOT NULL DEFAULT '' 
+	public $contrasenia; ///< Contraseña del usuario: character(64) NOT NULL DEFAULT '' 
+	public $hash; ///< Hash único del usuario: character(32) NOT NULL DEFAULT '' 
+	public $activo; ///< Indica si el usuario está o no activo en la aplicación: boolean() NOT NULL DEFAULT 'true' 
+	public $ultimo_ingreso_fecha_hora; ///< Fecha y hora del último ingreso del usuario: timestamp without time zone() NULL DEFAULT '' 
+	public $ultimo_ingreso_desde; ///< Dirección IP del último ingreso del usuario: character varying(45) NULL DEFAULT '' 
+	public $ultimo_ingreso_hash; ///< Hash del último ingreso del usuario: character(32) NULL DEFAULT '' 
 
 	// Información de las columnas de la tabla en la base de datos
 	public static $columnsInfo = array(
 		'id' => array(
 			'name' => 'Id',
-			'comment' => 'Identificador del usuario',
+			'comment' => 'Identificador (serial)',
 			'type' => 'integer',
 			'length' => 32,
 			'null' => false,
@@ -56,20 +61,31 @@ abstract class UsuarioBase extends AppModel {
 			'pk' => true,
 			'fk' => null
 		),
-		'persona' => array(
-			'name' => 'Persona',
-			'comment' => 'RUN de la persona asociada al usuario',
-			'type' => 'integer',
-			'length' => 32,
+		'nombre' => array(
+			'name' => 'Nombre',
+			'comment' => 'Nombre real del usuario',
+			'type' => 'character varying',
+			'length' => 30,
 			'null' => false,
 			'default' => "",
 			'auto' => false,
 			'pk' => false,
-			'fk' => array('table' => 'persona', 'column' => 'run')
+			'fk' => null
 		),
 		'usuario' => array(
 			'name' => 'Usuario',
-			'comment' => 'Nombre único para identificar al usuario',
+			'comment' => 'Nombre de usuario',
+			'type' => 'character varying',
+			'length' => 20,
+			'null' => false,
+			'default' => "",
+			'auto' => false,
+			'pk' => false,
+			'fk' => null
+		),
+		'email' => array(
+			'name' => 'Email',
+			'comment' => 'Correo electrónico del usuario',
 			'type' => 'character varying',
 			'length' => 20,
 			'null' => false,
@@ -80,10 +96,21 @@ abstract class UsuarioBase extends AppModel {
 		),
 		'contrasenia' => array(
 			'name' => 'Contrasenia',
-			'comment' => 'Contraseña encriptada utilizando SHA256',
+			'comment' => 'Contraseña del usuario',
 			'type' => 'character',
 			'length' => 64,
-			'null' => true,
+			'null' => false,
+			'default' => "",
+			'auto' => false,
+			'pk' => false,
+			'fk' => null
+		),
+		'hash' => array(
+			'name' => 'Hash',
+			'comment' => 'Hash único del usuario',
+			'type' => 'character',
+			'length' => 32,
+			'null' => false,
 			'default' => "",
 			'auto' => false,
 			'pk' => false,
@@ -91,27 +118,59 @@ abstract class UsuarioBase extends AppModel {
 		),
 		'activo' => array(
 			'name' => 'Activo',
-			'comment' => 'Indica si el grupo está o no activo en el sistema',
-			'type' => 'date',
+			'comment' => 'Indica si el usuario está o no activo en la aplicación',
+			'type' => 'boolean',
 			'length' => null,
 			'null' => false,
-			'default' => "2099-12-31",
+			'default' => "true",
+			'auto' => false,
+			'pk' => false,
+			'fk' => null
+		),
+		'ultimo_ingreso_fecha_hora' => array(
+			'name' => 'Ultimo Ingreso Fecha Hora',
+			'comment' => 'Fecha y hora del último ingreso del usuario',
+			'type' => 'timestamp without time zone',
+			'length' => null,
+			'null' => true,
+			'default' => "",
+			'auto' => false,
+			'pk' => false,
+			'fk' => null
+		),
+		'ultimo_ingreso_desde' => array(
+			'name' => 'Ultimo Ingreso Desde',
+			'comment' => 'Dirección IP del último ingreso del usuario',
+			'type' => 'character varying',
+			'length' => 45,
+			'null' => true,
+			'default' => "",
+			'auto' => false,
+			'pk' => false,
+			'fk' => null
+		),
+		'ultimo_ingreso_hash' => array(
+			'name' => 'Ultimo Ingreso Hash',
+			'comment' => 'Hash del último ingreso del usuario',
+			'type' => 'character',
+			'length' => 32,
+			'null' => true,
+			'default' => "",
 			'auto' => false,
 			'pk' => false,
 			'fk' => null
 		),
 
 	);
+
+	public static $fkModule; ///< Modelos utilizados (se asigna en Usuario)
 	
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function __construct ($id = null) {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'usuario';
 		// ejecutar constructor de la clase padre
 		parent::__construct();
 		// setear todo a nulo
@@ -134,14 +193,19 @@ abstract class UsuarioBase extends AppModel {
 	 * Setea a null los atributos de la clase (los que sean columnas de
 	 * la tabla)
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function clear () {
 		$this->id = null;
-		$this->persona = null;
+		$this->nombre = null;
 		$this->usuario = null;
+		$this->email = null;
 		$this->contrasenia = null;
+		$this->hash = null;
 		$this->activo = null;
+		$this->ultimo_ingreso_fecha_hora = null;
+		$this->ultimo_ingreso_desde = null;
+		$this->ultimo_ingreso_hash = null;
 	}
 	
 	/**
@@ -174,32 +238,9 @@ abstract class UsuarioBase extends AppModel {
 	}
 	
 	/**
-	 * Setea los atributos del objeto UsuarioModel mediante un arreglo,
-	 * la key del arreglo es el nombre del atributo, si la key no existe
-	 * el campo quedará seteado a null
-	 * @param array Array Arreglo con la relacion columna=>valor
-	 * @param clear Boolean Verdadero para limpiar atributos antes de hacer el set
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function set ($array) {
-		// asignar atributos con los valores del arreglo
-		if(isset($array['id']))
-			$this->id = $array['id'];
-		if(isset($array['persona']))
-			$this->persona = $array['persona'];
-		if(isset($array['usuario']))
-			$this->usuario = $array['usuario'];
-		if(isset($array['contrasenia']))
-			$this->contrasenia = $array['contrasenia'];
-		if(isset($array['activo']))
-			$this->activo = $array['activo'];
-	}
-	
-	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function exists () {
 		// solo se ejecuta si la PK existe seteada
@@ -216,7 +257,7 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para borrar el objeto de la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function delete () {
 		$this->db->transaction();
@@ -233,22 +274,32 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para insertar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function insert () {
 		$this->db->transaction();
 		if(!$this->beforeInsert()) { $this->db->rollback(); return false; }
 		$this->db->query("
 			INSERT INTO usuario (
-				persona,
+				nombre,
 				usuario,
+				email,
 				contrasenia,
-				activo
+				hash,
+				activo,
+				ultimo_ingreso_fecha_hora,
+				ultimo_ingreso_desde,
+				ultimo_ingreso_hash
 			) VALUES (
-				".(!empty($this->persona) || $this->persona=='0' ? "'".$this->db->sanitize($this->persona)."'" : 'NULL').",
+				".(!empty($this->nombre) || $this->nombre=='0' ? "'".$this->db->sanitize($this->nombre)."'" : 'NULL').",
 				".(!empty($this->usuario) || $this->usuario=='0' ? "'".$this->db->sanitize($this->usuario)."'" : 'NULL').",
+				".(!empty($this->email) || $this->email=='0' ? "'".$this->db->sanitize($this->email)."'" : 'NULL').",
 				".(!empty($this->contrasenia) || $this->contrasenia=='0' ? "'".$this->db->sanitize($this->contrasenia)."'" : 'NULL').",
-				".(!empty($this->activo) || $this->activo=='0' ? "'".$this->db->sanitize($this->activo)."'" : 'NULL')."
+				".(!empty($this->hash) || $this->hash=='0' ? "'".$this->db->sanitize($this->hash)."'" : 'NULL').",
+				".(!empty($this->activo) || $this->activo=='0' ? "'".$this->db->sanitize($this->activo)."'" : 'NULL').",
+				".(!empty($this->ultimo_ingreso_fecha_hora) || $this->ultimo_ingreso_fecha_hora=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_fecha_hora)."'" : 'NULL').",
+				".(!empty($this->ultimo_ingreso_desde) || $this->ultimo_ingreso_desde=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_desde)."'" : 'NULL').",
+				".(!empty($this->ultimo_ingreso_hash) || $this->ultimo_ingreso_hash=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_hash)."'" : 'NULL')."
 			)
 		");
 		if(!$this->afterInsert()) { $this->db->rollback(); return false; }
@@ -259,17 +310,22 @@ abstract class UsuarioBase extends AppModel {
 	/**
 	 * Método para actualizar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function update () {
 		$this->db->transaction();
 		if(!$this->beforeUpdate()) { $this->db->rollback(); return false; }
 		$this->db->query("
 			UPDATE usuario SET
-				persona = ".(!empty($this->persona) || $this->persona=='0' ? "'".$this->db->sanitize($this->persona)."'" : 'NULL').",
+				nombre = ".(!empty($this->nombre) || $this->nombre=='0' ? "'".$this->db->sanitize($this->nombre)."'" : 'NULL').",
 				usuario = ".(!empty($this->usuario) || $this->usuario=='0' ? "'".$this->db->sanitize($this->usuario)."'" : 'NULL').",
+				email = ".(!empty($this->email) || $this->email=='0' ? "'".$this->db->sanitize($this->email)."'" : 'NULL').",
 				contrasenia = ".(!empty($this->contrasenia) || $this->contrasenia=='0' ? "'".$this->db->sanitize($this->contrasenia)."'" : 'NULL').",
-				activo = ".(!empty($this->activo) || $this->activo=='0' ? "'".$this->db->sanitize($this->activo)."'" : 'NULL')."
+				hash = ".(!empty($this->hash) || $this->hash=='0' ? "'".$this->db->sanitize($this->hash)."'" : 'NULL').",
+				activo = ".(!empty($this->activo) || $this->activo=='0' ? "'".$this->db->sanitize($this->activo)."'" : 'NULL').",
+				ultimo_ingreso_fecha_hora = ".(!empty($this->ultimo_ingreso_fecha_hora) || $this->ultimo_ingreso_fecha_hora=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_fecha_hora)."'" : 'NULL').",
+				ultimo_ingreso_desde = ".(!empty($this->ultimo_ingreso_desde) || $this->ultimo_ingreso_desde=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_desde)."'" : 'NULL').",
+				ultimo_ingreso_hash = ".(!empty($this->ultimo_ingreso_hash) || $this->ultimo_ingreso_hash=='0' ? "'".$this->db->sanitize($this->ultimo_ingreso_hash)."'" : 'NULL')."
 			WHERE
 				id = '".$this->db->sanitize($this->id)."'
 		");
@@ -278,26 +334,12 @@ abstract class UsuarioBase extends AppModel {
 		return true;
 	}
 
-	/**
-	 * Recupera un objeto de tipo Persona asociado al objeto Usuario
-	 * @return Persona Objeto de tipo Persona con datos seteados o null en caso de que no existe la asociación
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function getPersona () {
-		App::uses('Persona', $this->fkModule['Persona'].'Model');
-		$Persona = new Persona($this->persona);
-		if($Persona->exists()) {
-			return $Persona;
-		}
-		return null;
-	}
 
 
 	/**
 	 * Método que guarda un archivo en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function saveFile ($name, $file) {
 		$this->db->transaction();
@@ -326,24 +368,10 @@ abstract class UsuarioBase extends AppModel {
 
 /**
  * Clase abstracta para mapear la tabla usuario de la base de datos
- * Tabla para usuarios del sistema
+ * Usuarios de la aplicación
  * Esta clase permite trabajar sobre un conjunto de registros de la tabla usuario
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-23 23:45:02
  */
 abstract class UsuariosBase extends AppModels {
-	
-	/**
-	 * Constructor de la clase abstracta
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function __construct () {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'usuario';
-		// ejecutar constructor de la clase padre
-		parent::__construct();
-	}
-
 }

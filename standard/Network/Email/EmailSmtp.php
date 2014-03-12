@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -22,7 +22,7 @@
  */
 
 // desactivar errores (ya que Mail genera problemas al estar E_STRICT activo)
-ini_set('error_reporting', 0);
+ini_set('error_reporting', false);
 
 /**
  * Clase para enviar correo electrónico mediante SMTP
@@ -38,10 +38,10 @@ class EmailSmtp {
 
 	/**
 	 * Constructor de la clase
-	 * @config
-	 * @header
-	 * @data
-	 * @debug
+	 * @param config Arreglo con la configuración del correo a enviar
+	 * @param header Cabecerá del correo electrónico
+	 * @param data Datos (cuerpo) de correo electrónico
+	 * @param debug =true se muestra debug, =false modo silencioso
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2010-10-09
 	 */
@@ -63,11 +63,12 @@ class EmailSmtp {
 		// Datos
 		$this->_data = $data;
 	}
-	
+
 	/**
 	 * Método que envía el correo
+	 * @return Arreglo con los estados de retorno por cada correo enviado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2010-10-09
+	 * @version 2014-02-24
 	 */
 	public function send () {
 		// Crear correo
@@ -84,7 +85,7 @@ class EmailSmtp {
 		$mail->setHTMLBody($this->_data['html']);
 		// Si existen archivos adjuntos agregarlos
 		if(!empty($this->_data['attach'])) {
-			foreach($this->_data['attach'] as $file) {
+			foreach($this->_data['attach'] as &$file) {
 				$mail->addAttachment($file['tmp_name'], $file['type'], $file['name']);
 			}
 		}
@@ -98,7 +99,7 @@ class EmailSmtp {
 		));
 		// Enviar correo a todos los destinatarios
 		$status = array();
-		foreach($this->_header['to'] as $to) {
+		foreach($this->_header['to'] as &$to) {
 			// Enviar correo al destinatario
 			$mailer->send($mail->encodeRecipients($to), $headers, $body);
 			// Guardar estado de error en caso de que haya algún problema
@@ -106,7 +107,7 @@ class EmailSmtp {
 				$status[$to] = $mail->getMessage();
 			}
 		}
-		// Retornar estado del envío
+		// Retornar estado del envío (arreglo asociativo)
 		return $status;
 	}
 

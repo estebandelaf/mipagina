@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -53,6 +53,7 @@ class ShellDispatcher {
 	 * @param command Comando a ejecutar
 	 * @param args Argumentos que se pasarán al comando
 	 * @return Resultado de la ejecución del comando
+	 * @todo Utilizar shells que estén dentro de módulos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-09-14
 	 */

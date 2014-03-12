@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@
  * Define métodos que deberán ser implementados, clases específicas para
  * la conexión con X base de datos deberán extender esta clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-10-22
+ * @version 2013-11-27
  */
 abstract class DatabaseManager {
 	
@@ -57,9 +57,11 @@ abstract class DatabaseManager {
 	/**
 	 * Manejador de errores para la base de datos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-10
+	 * @version 2014-03-09
 	 */
 	final public function error ($msg) {
+		if ($this->link)
+			$this->rollback();
 		throw new DatabaseException(array(
 			'msg' => $msg
 		));
@@ -102,9 +104,9 @@ abstract class DatabaseManager {
 	 * @param table Tabla a buscar sus datos
 	 * @return Arreglo con los datos de la tabla
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-09
+	 * @version 2013-11-27
 	 */
-	public function getInfoFromTable ($tablename) {
+	final public function getInfoFromTable ($tablename) {
 		// nombre de la tabla
 		$table['name'] = $tablename;
 		// obtener comentario de la tabla
@@ -374,25 +376,4 @@ abstract class DatabaseManager {
 	 */
 	abstract public function toCSV ($sql, $file, $cols);
 
-}
-
-// si existe MiException estamos en el framework MiPaGiNa y se extiende
-// dicha clase para generar la excepción
-if(class_exists('MiException')) {
-	class DatabaseException extends MiException {
-		protected $_messageTemplate = '%s';
-	}
-}
-// si no existe se crea una clase para la excepción basada en la clase
-// base y se utiliza el constructor de la clase MiException
-else {
-	class DatabaseException extends RuntimeException {
-		protected $_messageTemplate = '%s';
-		public function __construct($message, $code = 500) {
-			if (is_array($message)) {
-				$message = vsprintf($this->_messageTemplate, $message);
-			}
-			parent::__construct($message, $code);
-		}
-	}	
 }

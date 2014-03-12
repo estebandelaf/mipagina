@@ -1,0 +1,23 @@
+.green-button {
+	background-image:-webkit-gradient(linear,50% 0%,50% 100%,color-stop(0%,#9dc282),color-stop(100%,#5c9a30));
+	background-image:-moz-linear-gradient(top,#9dc282,#5c9a30);
+	background-image:linear-gradient(top,#9dc282,#5c9a30);
+	border:1px solid #3F8C23;
+	color:#fff
+}
+
+.blue-button {
+	background-image:-webkit-gradient(linear,50% 0%,50% 100%,color-stop(0%,#80c1d8),color-stop(100%,#369ec1));
+	background-image:-moz-linear-gradient(top,#80c1d8,#369ec1);
+	background-image:linear-gradient(top,#80c1d8,#369ec1);
+	border:1px solid #369EC1;
+	color:#fff
+}
+
+.grey-button {
+	background-image:-webkit-gradient(linear,50% 0%,50% 100%,color-stop(0%,#eee),color-stop(100%,#fff));
+	background-image:-moz-linear-gradient(top,#eee,#fff);
+	background-image:linear-gradient(top,#eee,#fff);
+	border:1px solid #ccc;
+	color:#333
+} 

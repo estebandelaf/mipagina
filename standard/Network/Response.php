@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase para generar respuesta al cliente
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-03
+ * @version 2014-03-12
  */
 class Response {
 
@@ -69,31 +69,30 @@ class Response {
 	}
 
 	/**
-	 * Enviar cuerpo al cliente
-	 * @return Verdadero si fue enviado con exito
-	 * @toro Verificar que sea exito o no (por ahora siempre retorna true)
+	 * Enviar cuerpo al cliente (lo escribe)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-09-14
+	 * @version 2014-02-24
 	 */
 	public function send() {
 		echo $this->body();
-		return true;
 	}
 
 	/**
 	 * Enviar un archivo (estático) al cliente
 	 * @param file Archivo que se desea enviar al cliente o bien un arreglo con los campos: name, type, size y data
 	 * @param options Arreglo de opciones (indices: name, charset, disposition y exit)
-	 * @todo Confirmar si conviene más utilizar Last-Modified o Expires para controlar el cache de archivos 
+	 * @warning Archivos enviados con este método son siempre descargados, no se usa caché (¿?)
+	 * @todo Corregir problema de caché
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-03
+	 * @version 2014-03-12
 	 */
 	public function sendFile ($file, $options = array()) {
 		// opciones
 		$options = array_merge(array(
 			'charset' => 'utf-8',
 			'disposition' => 'inline', // inline o attachement
-			'exit' => 0
+			'exit' => 0,
+			'cache' => 86400,
 		), $options);
 		// si no es un arreglo se genera
 		if(!is_array($file)) {
@@ -108,11 +107,10 @@ class Response {
 		// limpiar buffer salida
 		ob_end_clean();
 		// Enviar cabeceras para el archivo
-		header('Content-Description: File Transfer');
-		header('Cache-control: private');
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Pragma: no-cache');
-		header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T',time()+3600));
+		header('Cache-Control: max-age='.$options['cache']);
+		header('Date: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+		header('Expires: '.gmdate('D, d M Y H:i:s', time()+$options['cache']).' GMT');
+		header('Pragma: cache');
 		header('Content-Type: '.$file['type'].'; charset='.$options['charset']);
 		header('Content-Length: '.$file['size']);
 		header('Content-Disposition: '.$options['disposition'].'; filename="'.$file['name'].'"');
@@ -136,6 +134,7 @@ class Response {
 	/**
 	 * Método estático para obtener un tipo mime de una extensión
 	 * @param ext Extensión
+	 * @return Mimetype correspondiente a la extensión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-09-23
 	 */

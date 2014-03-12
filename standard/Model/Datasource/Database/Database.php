@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@
  * Capa de abstracción para base de datos, la clase puede ser fácilmente
  * utilizada fuera del framework MiPaGiNa sin mayores modificaciones.
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-10-22
+ * @version 2014-03-08
  */
 final class Database {
 
@@ -43,9 +43,10 @@ final class Database {
 	 * datos la cual será utilizada para cargar la base de datos por
 	 * primera vez.
 	 * @param database La base de datos que se desea cargar,
-	 * @return Object Objeto con la base de datos seleccionada
+	 * @param config Configuración de la base de datos
+	 * @return Objeto con la base de datos seleccionada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2014-03-08
 	 */
 	public static function &get ($database = 'default', $config = array()) {
 		// si $database es un string entonces se asume que se está
@@ -70,19 +71,22 @@ final class Database {
 			if(is_string($database) && class_exists('Configure')) {
 				// se carga
 				$config = Configure::read('database.'.$database);
-				// si Configure no encontró la configuración se retorna
-				// falso
-				if(!is_array($config)) return false;
+				// si Configure no encontró la configuración se
+				// genera excepción ya que no se logró obtener
+				// una configuración válida para la base de datos
+				if(!is_array($config)) {
+					throw new DatabaseException(array(
+						'msg' => 'No se encontró configuración database.'.$database
+					));
+				}
 			}
-			// si la clase Configure no existe se retorna falso ya
+			// si la clase Configure no existe se genera excepción ya
 			// que no se logró obtener una configuración válida para
 			// la base de datos
 			else {
-				// la variable "false" es para evitar el mensaje
-				// "[Notice] Only variable references should be
-				// returned by reference"
-				$false = false;
-				return $false;
+				throw new DatabaseException(array(
+					'msg' => 'No se encontró configuración database.'.$database
+				));
 			}
 		}
 		// cargar la clase para la base de datos si no esta cargada
@@ -143,4 +147,25 @@ final class Database {
 		 }
 	 }
 	
+}
+
+// si existe MiException estamos en el framework MiPaGiNa y se extiende
+// dicha clase para generar la excepción
+if(class_exists('MiException')) {
+	class DatabaseException extends MiException {
+		protected $_messageTemplate = '%s';
+	}
+}
+// si no existe se crea una clase para la excepción basada en la clase
+// base y se utiliza el constructor de la clase MiException
+else {
+	class DatabaseException extends RuntimeException {
+		protected $_messageTemplate = '%s';
+		public function __construct($message, $code = 500) {
+			if (is_array($message)) {
+				$message = vsprintf($this->_messageTemplate, $message);
+			}
+			parent::__construct($message, $code);
+		}
+	}
 }

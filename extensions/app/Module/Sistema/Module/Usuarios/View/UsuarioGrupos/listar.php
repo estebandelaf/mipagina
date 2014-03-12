@@ -1,11 +1,8 @@
 <script type="text/javascript" src="<?php echo $_base; ?>/js/mantenedor.js"></script>
-<h1>Listado de UsuarioGrupos</h1>
+<h1>Listado de usuarios y sus grupos</h1>
 <p>Relación entre usuarios y los grupos a los que pertenecen.</p>
 
 <?php
-
-// url del módulo en caso que la vista pertenezca a uno
-$module_url = '/sistema/usuarios/';
 
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
@@ -23,7 +20,7 @@ foreach($columns as $column => &$name) {
 	}
 	// si es un campo normal
 	else {
-		$titles[] = $name.'<br>'.
+		$titles[] = $name.'<br />'.
 			'<a href="'.$_base.$module_url.$controller.'/listar/'.$page.'/'.$column.'/D'.$searchUrl.'" title="Ordenar descendentemente por '.$name.'"><img src="'.$_base.'/img/icons/16x16/actions/down.png" alt="" /></a>'.
 			'<a href="'.$_base.$module_url.$controller.'/listar/'.$page.'/'.$column.'/A'.$searchUrl.'" title="Ordenar ascendentemente por '.$name.'"><img src="'.$_base.'/img/icons/16x16/actions/up.png" alt="" /></a>'
 		;

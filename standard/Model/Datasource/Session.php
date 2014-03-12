@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -26,20 +26,14 @@ App::uses('Set', 'Utility');
 
 /**
  * Clase para escribir y recuperar datos desde una sesión
- * @todo Dos o más páginas en la misma ruta del servidor comparten la
- * sesión, por ejemplo los sitios: http://localhost/pagina1 y
- * http://localhost/pagina2 usan la misma sesión, esto es MUY malo ya
- * que al autenticar a un usuario en una página, aparecerá autenticado
- * en las otras. En el fondo cualquier variable seteada en una página
- * será seteada en la otra. ¡CORREGIR URGENTE!, por ejemplo escribir
- * la info de la sesión en el directorio tmp como lo hace CakePHP
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-12
+ * @version 2014-03-01
  */
 class Session {
 
 	public static $id = null; ///< Identificador de la sesión
 	public static $time = false; ///< Tiempo de inicio de la sesión
+	public static $config; ///< Configuración de la sesión del sitio
 	private static $_prefix = null; ///< Prefijo para la sesión
 	
 	/**
@@ -68,6 +62,22 @@ class Session {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Carga configuración del inicio de la sesión
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-01
+	 */
+	public static function configure () {
+		// idioma
+		if (!Session::read('config.language')) {
+			Session::write('config.language', Configure::read('language'));
+		}
+		// layout
+		if (!Session::read('config.page.layout')) {
+			Session::write('config.page.layout', Configure::read('page.layout'));
+		}
 	}
 
 	/**

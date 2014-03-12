@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -29,11 +29,12 @@
  * 
  * Para obtener SID de la base de datos desde comando SQL utilizar:
  *   select instance_name from v$instance;
- * 
+ *
+ * @todo Se deben completar los métodos para la clase
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-12-26
+ * @version 2014-03-08
  */
-final class Oracle extends DatabaseManager {
+class Oracle extends DatabaseManager {
 
 	/**
 	 * Constructor de la clase
@@ -42,12 +43,12 @@ final class Oracle extends DatabaseManager {
 	 * conexión
 	 * @param config Arreglo con los parámetros de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2014-03-08
 	 */
 	public function __construct ($config) {
 		// verificar que existe el soporte para Oracle en PHP
 		if (!function_exists('oci_connect')) {
-			$this->error('Unable to find the Oracle extension');
+			$this->error('No se encontró la extensión de PHP para Oracle (oci8)');
 		}
 		// definir configuración para el acceso a la base de datos
 		$this->config = array_merge(array(
@@ -88,12 +89,12 @@ final class Oracle extends DatabaseManager {
 	 * @param sql Consulta SQL que se desea realizar
 	 * @return Resource Identificador de la consulta
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-10-22
+	 * @version 2014-03-08
 	 */
 	public function query ($sql) {
 		// verificar que exista una consulta
 		if(empty($sql)) {
-			$this->error('Query can not be empty!');
+			$this->error('¡Consulta no puede estar vacía!');
 		}
 		// se prepara la consulta
 		$queryId = oci_parse($this->link, $sql);
@@ -349,18 +350,6 @@ final class Oracle extends DatabaseManager {
 	 * @version 2012-12-24
 	 */
 	public function getFksFromTable ($table) {
-		
-	}
-
-	/**
-	 * Entrega información de una tabla (nombre, comentario, columnas,
-	 * pks y fks)
-	 * @param table Tabla a buscar sus datos
-	 * @return Arreglo con los datos de la tabla
-	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-12-24
-	 */
-	public function getInfoFromTable ($tablename) {
 		
 	}
 

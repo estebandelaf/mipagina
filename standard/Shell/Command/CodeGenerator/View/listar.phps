@@ -4,9 +4,6 @@
 
 <?php
 
-// url del módulo en caso que la vista pertenezca a uno
-$module_url = '/{module_url}';
-
 // columnas que se utilizarán en la tabla que se desplegará
 $columns = array(
 	{columns}
@@ -21,7 +18,7 @@ foreach($columns as $column => &$name) {
 	}
 	// si es un campo normal
 	else {
-		$titles[] = $name.'<br>'.
+		$titles[] = $name.'<br />'.
 			'<a href="'.$_base.$module_url.$controller.'/listar/'.$page.'/'.$column.'/D'.$searchUrl.'" title="Ordenar descendentemente por '.$name.'"><img src="'.$_base.'/img/icons/16x16/actions/down.png" alt="" /></a>'.
 			'<a href="'.$_base.$module_url.$controller.'/listar/'.$page.'/'.$column.'/A'.$searchUrl.'" title="Ordenar ascendentemente por '.$name.'"><img src="'.$_base.'/img/icons/16x16/actions/up.png" alt="" /></a>'
 		;
@@ -49,7 +46,7 @@ foreach($columns as $column => &$name) {
 	else if($columnsInfo[$column]['fk']) {
 		$class = Inflector::camelize($columnsInfo[$column]['fk']['table']);
 		$classs = Inflector::camelize(Inflector::pluralize($columnsInfo[$column]['fk']['table']));
-		App::uses($class, '{module}Model');
+		App::uses($class, $fkModule[$class].'Model');
 		$objs = new $classs();
 		$options = $objs->getList();
 		array_unshift($options, array('', 'Seleccione una opción'));

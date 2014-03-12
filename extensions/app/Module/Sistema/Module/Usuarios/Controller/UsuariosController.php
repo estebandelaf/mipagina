@@ -39,12 +39,14 @@ final class UsuariosController extends UsuariosBaseController {
 	protected $module_url = '/sistema/usuarios/';
 
 	public function beforeFilter () {
-		$this->Auth->allow('ingresar', 'salir', 'imagen');
+		$this->Auth->allow('ingresar', 'salir', 'contrasenia_recuperar');
 		$this->Auth->allowWithLogin('perfil');
 		parent::beforeFilter();
 	}
 
-	public function ingresar () {
+	public function ingresar ($redirect = null) {
+		if ($redirect) $redirect = base64_decode ($redirect);
+		$this->set('redirect', $redirect);
 		$this->Auth->login($this);
 	}
 
@@ -52,21 +54,126 @@ final class UsuariosController extends UsuariosBaseController {
 		$this->Auth->logout($this);
 	}
 
+	public function contrasenia_recuperar ($usuario = null) {
+		$this->autoRender = false;
+		// pedir correo
+		if ($usuario == null) {
+			if (!isset($_POST['submit'])) {
+				$this->render ('Usuarios/contrasenia_recuperar_step1');
+			} else {
+				$Usuario = new Usuario ($_POST['id']);
+				if (!$Usuario->exists()) {
+					Session::message ('Usuario o email inválido');
+					$this->render ('Usuarios/contrasenia_recuperar_step1');
+				} else {
+					$this->contrasenia_recuperar_email (
+						$Usuario->email,
+						$Usuario->nombre,
+						$Usuario->usuario,
+						$this->Auth->hash($Usuario->contrasenia)
+					);
+					Session::message ('Se ha enviado un email con las instrucciones para recuperar su contraseña');
+					$this->redirect('/usuarios/ingresar');
+				}
+			}
+		}
+		// cambiar contraseña
+		else {
+			$Usuario = new Usuario ($usuario);
+			if (!$Usuario->exists()) {
+				Session::message ('Usuario inválido');
+				$this->redirect ('/usuarios/contrasenia/recuperar');
+			}
+			if (!isset($_POST['submit'])) {
+				$this->set('usuario', $usuario);
+				$this->render ('Usuarios/contrasenia_recuperar_step2');
+			} else {
+				if ($this->Auth->hash($Usuario->contrasenia)!=$_POST['codigo']) {
+					Session::message ('Código ingresado no es válido para el usuario');
+					$this->set('usuario', $usuario);
+					$this->render ('Usuarios/contrasenia_recuperar_step2');
+				}
+				else if (empty ($_POST['contrasenia1']) || empty ($_POST['contrasenia2']) || $_POST['contrasenia1']!=$_POST['contrasenia2']) {
+					Session::message ('Contraseña nueva inválida (en blanco o no coinciden)');
+					$this->set('usuario', $usuario);
+					$this->render ('Usuarios/contrasenia_recuperar_step2');
+				}
+				else {
+					$Usuario->saveContrasenia(
+						$_POST['contrasenia1'],
+						$this->Auth->settings['model']['user']['hash']
+					);
+					Session::message ('La contraseña para el usuario '.$usuario.' ha sido cambiada con éxito');
+					$this->redirect('/usuarios/ingresar');
+				}
+			}
+		}
+	}
+
+	private function contrasenia_recuperar_email ($correo, $nombre, $usuario, $hash) {
+		$this->layout = null;
+		$this->set (array(
+			'nombre'=>$nombre,
+			'usuario'=>$usuario,
+			'hash'=>$hash,
+			'ip'=>AuthComponent::ip(),
+		));
+		$msg = $this->render('Usuarios/contrasenia_recuperar_email')->body();
+		App::uses('Email', 'Network/Email');
+		$email = new Email();
+		$email->to($correo);
+		$email->subject('Recuperación de contraseña');
+		$email->send($msg);
+	}
+
 	public function crear () {
 		// si se envió el formulario se procesa
 		if(isset($_POST['submit'])) {
 			$Usuario = new Usuario();
 			$Usuario->set($_POST);
-			if(!empty($Usuario->contrasenia)) {
-				$Usuario->contrasenia =
-				$this->Auth->hash($Usuario->contrasenia);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
 			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
+			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/crear');
+			}
+			if (empty($Usuario->contrasenia)) {
+				$Usuario->contrasenia = string_random (8);
+			}
+			if (empty($Usuario->hash)) {
+				do {
+					$Usuario->hash = string_random (32);
+				} while ($Usuario->checkIfHashAlreadyExists ());
+			}
+			$layout = $this->layout;
+			$this->layout = null;
+			$this->set(array(
+				'nombre'=>$Usuario->nombre,
+				'usuario'=>$Usuario->usuario,
+				'contrasenia'=>$Usuario->contrasenia,
+			));
+			$msg = $this->render('Usuarios/crear_email')->body();
+			$this->layout = $layout;
+			$Usuario->contrasenia = $this->Auth->hash($Usuario->contrasenia);
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
-			Session::message('Registro Usuario creado');
+			App::uses('Email', 'Network/Email');
+			$email = new Email();
+			$email->to($Usuario->email);
+			$email->subject('Cuenta de usuario creada');
+			$email->send($msg);
+			Session::message('Registro Usuario creado (se envió email a '.$Usuario->email.' con los datos de acceso');
 			$this->redirect($this->module_url.'usuarios/listar');
 		}
 		// setear variables
+		Usuario::$columnsInfo['contrasenia']['null'] = true;
+		Usuario::$columnsInfo['hash']['null'] = true;
 		$this->set(array(
 			'columnsInfo' => Usuario::$columnsInfo,
 		));
@@ -84,6 +191,7 @@ final class UsuariosController extends UsuariosBaseController {
 		}
 		// si no se ha enviado el formulario se mostrará
 		if(!isset($_POST['submit'])) {
+			Usuario::$columnsInfo['contrasenia']['null'] = true;
 			$this->set(array(
 				'Usuario' => $Usuario,
 				'columnsInfo' => Usuario::$columnsInfo,
@@ -92,6 +200,18 @@ final class UsuariosController extends UsuariosBaseController {
 		// si se envió el formulario se procesa
 		else {
 			$Usuario->set($_POST);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
+			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
+			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/sistema/usuarios/usuarios/editar/'.$id);
+			}
 			$Usuario->save();
 //			if(method_exists($this, 'u')) $this->u();
 			if(!empty($_POST['contrasenia'])) {
@@ -111,13 +231,27 @@ final class UsuariosController extends UsuariosBaseController {
 		// obtener usuario
 		$Usuario = new Usuario(Session::read('auth.id'));
 		// procesar datos personales
-		if (isset($_POST['datosPersonales'])) {
+		if (isset($_POST['datosUsuario'])) {
 			// actualizar datos generales
-			$Persona = $Usuario->getPersona();
-			$Persona->set($_POST);
-			$Persona->save();
-			// guardar imagen
-			$this->saveImagen($Persona);
+			$Usuario->set($_POST);
+			if ($Usuario->checkIfUsuarioAlreadyExists ()) {
+				Session::message('Nombre de usuario '.$_POST['usuario'].' ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if ($Usuario->checkIfHashAlreadyExists ()) {
+				Session::message('Hash seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if ($Usuario->checkIfEmailAlreadyExists ()) {
+				Session::message('Email seleccionado ya está en uso');
+				$this->redirect('/usuarios/perfil');
+			}
+			if (empty($Usuario->hash)) {
+				do {
+					$Usuario->hash = string_random (32);
+				} while ($Usuario->checkIfHashAlreadyExists ());
+			}
+			$Usuario->save();
 			// mensaje de ok y redireccionar
 			Session::message('Perfil actualizado');
 			$this->redirect('/usuarios/perfil');
@@ -130,7 +264,7 @@ final class UsuariosController extends UsuariosBaseController {
 					$this->Auth->settings['model']['user']['hash']
 				);
 			} else {
-				Session::message('Error al actualizar la contraseña');
+				Session::message('Contraseñas no coinciden');
 				$this->redirect('/usuarios/perfil');
 			}
 			// mensaje de ok y redireccionar
@@ -141,72 +275,8 @@ final class UsuariosController extends UsuariosBaseController {
 		else {
 			$this->set(array(
 				'Usuario' => $Usuario,
-				'Persona' => $Usuario->getPersona(),
 			));
 		}
-	}
-
-	private function saveImagen (&$Persona) {
-		if(isset($_FILES['imagen']) && !$_FILES['imagen']['error']) {
-			// diferentes opciones para las imagenes
-			$mimetype = 'image/png image/jpeg image/gif';
-			$w = 256; $h = 256; $w_t = 48; $h_t = 48;
-			// clases que se utilizarán
-			App::uses('File', 'Utility');
-			App::uses('Image', 'Utility');
-			// cargar foto
-			$foto = File::upload(
-				$_FILES['imagen']
-				, explode(' ', $mimetype)
-				, null
-				, $w
-				, $h
-			);
-			// guardar solo si se leyó el archivo
-			if(is_array($foto)) {
-				$avatar = Image::face_thumbnail(
-					$_FILES['imagen']['tmp_name'],
-					$w_t,
-					$h_t
-				);
-				$Persona->saveImagen($foto, $avatar);
-			}
-		}
-	}
-
-	/**
-	 * Controlador para descargar la imagen de un usuario
-	 * @author Esteban De La Fuente Rubio
-	 * @version 2013-07-01
-	 */
-	public function imagen ($usuario, $tamanio = null) {
-		// crear usuario
-		$Usuario = new Usuario($usuario);
-		$Persona = $Usuario->getPersona();
-		// si existe la imagen se usa
-		if($Persona->imagen_size) {
-			// si se solicitó la imagen pequeña
-			if($tamanio=='small') {
-				$img['size'] = $Persona->imagen_t_size;
-				$img['data'] = $Persona->imagen_t_data;
-			}
-			// si se solicitó la imagen normal
-			else {
-				$img['size'] = $Persona->imagen_size;
-				$img['data'] = $Persona->imagen_data;
-			}
-			// datos comunes (independiente del tamaño)
-			$img['type'] = $Persona->imagen_type;
-			$img['name'] = $Persona->imagen_name;
-			$img['data'] = pg_unescape_bytea($img['data']);
-		}
-		// si no existe se busca una por defecto
-		else {
-			$img = App::location('webroot/img/usuarios/default_'.$tamanio.'.png');
-			if(!$img) $img = App::location('webroot/img/usuarios/default_normal.png');
-		}
-		// entregar imagen
-		$this->response->sendFile($img);
 	}
 
 }

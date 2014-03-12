@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -33,7 +33,11 @@ App::uses('{class}Base', '{module}Model');
  */
 final class {class} extends {class}Base {
 
-	protected $fkModule = array({fkModule}); ///< Modelos utilizados
+	// Datos para la conexión a la base de datos
+	protected $_database = '{database}'; ///< Base de datos del modelo
+	protected $_table = '{table}'; ///< Tabla del modelo
+
+	public static $fkModule = array({fkModule}); ///< Módulos que utiliza esta clase
 
 }
 
@@ -45,4 +49,9 @@ final class {class} extends {class}Base {
  * @version {version}
  */
 final class {classs} extends {classs}Base {
+
+	// Datos para la conexión a la base de datos
+	protected $_database = '{database}'; ///< Base de datos del modelo
+	protected $_table = '{table}'; ///< Tabla del modelo
+
 }

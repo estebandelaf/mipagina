@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,12 +27,14 @@ App::uses('AppController', 'Controller');
 /**
  * Clase para cargar una página y entregarla al usuario
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-19
+ * @version 2014-02-24
  */
 class PagesController extends AppController {
 
 	/**
 	 * Método a ejecutar antes de ejecutar la acción del controlador
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-24
 	 */
 	public function beforeFilter() {
 		if(isset($this->Auth))
@@ -42,6 +44,9 @@ class PagesController extends AppController {
 	
 	/**
 	 * Renderizar página
+	 * @page page Página que se desea renderizar ubicada en View/Pages
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-24
 	 */
 	public function display ($page) {
 		$this->autoRender = false;

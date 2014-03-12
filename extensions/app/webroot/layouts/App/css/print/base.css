@@ -1,0 +1,28 @@
+/* En realidad solo se hacen correcciones al css de screen para que se vea
+mejor al imprimir */
+
+body {
+	background: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: black;
+}
+
+#navsite, #sidebar, #printIcon, #footer_right, .tableIcons, form .helpIcon, input[type="submit"], .noPrint {
+	display: none;
+}
+
+#wrapper, #content {
+	width: 98%;
+}
+
+#wrapper {
+	border: 0;
+}
+
+#footer {
+	border-top: 2px solid gray;
+	margin-top: 1em;
+	padding-top: 1em;
+}

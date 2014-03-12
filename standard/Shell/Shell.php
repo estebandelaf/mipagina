@@ -39,7 +39,7 @@ class Shell {
 	 * @version 2012-09-14
 	 */
 	public function __construct () {
-			$this->stdout = new ConsoleOutput('php://stdout');
+		$this->stdout = new ConsoleOutput('php://stdout');
 	}	
 	
 	/**

@@ -1,0 +1,47 @@
+* {
+	margin:0;
+	padding:0;
+}
+img {
+	border: none;
+}
+p {
+	margin-bottom: 1em;
+	text-align: justify;
+}
+pre {
+	overflow: auto;
+}
+.center {
+	text-align: center;
+}
+.fleft {
+	float: left;
+}
+.fright {
+	float: right;
+}
+img.fleft {
+	margin-right: 1em;
+}
+img.fright {
+	margin-left: 1em;
+}
+.clear {
+	clear: both;
+}
+.border {
+        border: 1px solid black;
+}
+.padding {
+        padding: 10px 15px;
+}
+table span {
+        display: block;
+        font-style: italic;
+        font-size: 0.7em;
+}
+.twocolumn {
+        width: 50%;
+        float: left;
+}

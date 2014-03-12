@@ -1,6 +1,6 @@
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -76,6 +76,45 @@ Form.checkInteger = function (field) {
 	return true;
 }
 
+Form.checkDate = function (field) {
+	// se asume todo ok
+	var status = true;
+	// verificar en caso que no sea el formato
+	var filter = /^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])$/;
+	if (!filter.test(field.value)) {
+		var label = $(field).parent().parent().children('.label').text().replace('*', '');
+		alert('¡' + label + ' debe estar en formato AAAA-MM-DD!');
+		field.focus();
+		status = false;
+	}
+	// retornar
+	return status;
+}
+
+Form.checkRut = function (field) {
+	// se asume todo ok
+	var status = true;
+	var dv = field.value.charAt(field.value.length-1);
+	var rut = field.value.replace(/\./g, '').replace('-', '');
+	rut = rut.substr (0, rut.length-1);
+	// verificar en caso que no sea el formato (solo si existe la función rutDV)
+	if (typeof rutDV == 'function') {
+		if (dv!=rutDV(rut)) {
+			var label = $(field).parent().parent().children('.label').text().replace('*', '');
+			alert('¡' + label + ' es incorrecto!');
+			field.value = '';
+			field.focus();
+			status = false;
+		}
+	}
+	// asignar valor al campo rut
+	if (status) {
+		field.value = num(rut)+'-'+dv;
+	}
+	// retornar
+	return status;
+}
+
 Form.check = function (id) {
 	// asumir que todo está ok
 	var status = true;
@@ -101,6 +140,16 @@ Form.check = function (id) {
 			status = Form.checkInteger(field);
 			if(!status) return false;
 		}
+		// verificar si es una fecha
+		if($.inArray('date', check)>=0) {
+			status = Form.checkDate(field);
+			if(!status) return false;
+		}
+		// verificar rut (que corresponsa el DV)
+		if($.inArray('rut', check)>=0) {
+			status = Form.checkRut(field);
+			if(!status) return false;
+		}
 	});
 	return status;
 }
@@ -115,4 +164,14 @@ Form.checkSend = function (msg) {
 	} else {
 		return false;
 	}
+}
+
+Form.addJS = function (tableID) {
+	$('#'+tableID).append(window["inputsJS_"+tableID]);
+}
+
+Form.checkboxesSet = function (name, checked) {
+	$('input[name="'+name+'[]"]').each (function () {
+		this.checked = checked;
+	});
 }

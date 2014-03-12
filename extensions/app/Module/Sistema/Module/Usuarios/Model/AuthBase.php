@@ -29,23 +29,23 @@ App::uses('AppModel', 'Model');
 
 /**
  * Clase abstracta para mapear la tabla auth de la base de datos
- * Tabla para asociar recursos a los que puede acceder un grupo
+ * Permisos de grupos para acceder a recursos
  * Esta clase permite trabajar sobre un registro de la tabla auth
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-23 23:45:02
  */
 abstract class AuthBase extends AppModel {
 
 	// Atributos de la clase (columnas en la base de datos)
-	public $id; ///< integer(32) NOT NULL DEFAULT 'nextval('auth_id_seq'::regclass)' AUTO PK 
-	public $grupo; ///< ID del grupo: integer(32) NOT NULL DEFAULT '' FK:grupo.id
-	public $recurso; ///< Recurso al que se quiere acceder, generalmente una URI: character varying(300) NOT NULL DEFAULT '' 
+	public $id; ///< Identificador (serial): integer(32) NOT NULL DEFAULT 'nextval('auth_id_seq'::regclass)' AUTO PK 
+	public $grupo; ///< Grupo al que se le condede el permiso: integer(32) NOT NULL DEFAULT '' FK:grupo.id
+	public $recurso; ///< Recurso al que el grupo tiene acceso: character varying(300) NULL DEFAULT '' 
 
 	// Información de las columnas de la tabla en la base de datos
 	public static $columnsInfo = array(
 		'id' => array(
 			'name' => 'Id',
-			'comment' => '',
+			'comment' => 'Identificador (serial)',
 			'type' => 'integer',
 			'length' => 32,
 			'null' => false,
@@ -56,7 +56,7 @@ abstract class AuthBase extends AppModel {
 		),
 		'grupo' => array(
 			'name' => 'Grupo',
-			'comment' => 'ID del grupo',
+			'comment' => 'Grupo al que se le condede el permiso',
 			'type' => 'integer',
 			'length' => 32,
 			'null' => false,
@@ -67,10 +67,10 @@ abstract class AuthBase extends AppModel {
 		),
 		'recurso' => array(
 			'name' => 'Recurso',
-			'comment' => 'Recurso al que se quiere acceder, generalmente una URI',
+			'comment' => 'Recurso al que el grupo tiene acceso',
 			'type' => 'character varying',
 			'length' => 300,
-			'null' => false,
+			'null' => true,
 			'default' => "",
 			'auto' => false,
 			'pk' => false,
@@ -78,16 +78,15 @@ abstract class AuthBase extends AppModel {
 		),
 
 	);
+
+	public static $fkModule; ///< Modelos utilizados (se asigna en Auth)
 	
 	/**
 	 * Constructor de la clase abstracta
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function __construct ($id = null) {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'auth';
 		// ejecutar constructor de la clase padre
 		parent::__construct();
 		// setear todo a nulo
@@ -110,7 +109,7 @@ abstract class AuthBase extends AppModel {
 	 * Setea a null los atributos de la clase (los que sean columnas de
 	 * la tabla)
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function clear () {
 		$this->id = null;
@@ -148,28 +147,9 @@ abstract class AuthBase extends AppModel {
 	}
 	
 	/**
-	 * Setea los atributos del objeto AuthModel mediante un arreglo,
-	 * la key del arreglo es el nombre del atributo, si la key no existe
-	 * el campo quedará seteado a null
-	 * @param array Array Arreglo con la relacion columna=>valor
-	 * @param clear Boolean Verdadero para limpiar atributos antes de hacer el set
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function set ($array) {
-		// asignar atributos con los valores del arreglo
-		if(isset($array['id']))
-			$this->id = $array['id'];
-		if(isset($array['grupo']))
-			$this->grupo = $array['grupo'];
-		if(isset($array['recurso']))
-			$this->recurso = $array['recurso'];
-	}
-	
-	/**
 	 * Método para determinar si el objeto existe en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function exists () {
 		// solo se ejecuta si la PK existe seteada
@@ -186,7 +166,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para borrar el objeto de la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function delete () {
 		$this->db->transaction();
@@ -203,7 +183,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para insertar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function insert () {
 		$this->db->transaction();
@@ -225,7 +205,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método para actualizar el objeto en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	protected function update () {
 		$this->db->transaction();
@@ -246,10 +226,10 @@ abstract class AuthBase extends AppModel {
 	 * Recupera un objeto de tipo Grupo asociado al objeto Auth
 	 * @return Grupo Objeto de tipo Grupo con datos seteados o null en caso de que no existe la asociación
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function getGrupo () {
-		App::uses('Grupo', $this->fkModule['Grupo'].'Model');
+		App::uses('Grupo', Auth::$fkModule['Grupo'].'Model');
 		$Grupo = new Grupo($this->grupo);
 		if($Grupo->exists()) {
 			return $Grupo;
@@ -261,7 +241,7 @@ abstract class AuthBase extends AppModel {
 	/**
 	 * Método que guarda un archivo en la base de datos
 	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
+	 * @version 2014-02-23 23:45:02
 	 */
 	public function saveFile ($name, $file) {
 		$this->db->transaction();
@@ -290,24 +270,10 @@ abstract class AuthBase extends AppModel {
 
 /**
  * Clase abstracta para mapear la tabla auth de la base de datos
- * Tabla para asociar recursos a los que puede acceder un grupo
+ * Permisos de grupos para acceder a recursos
  * Esta clase permite trabajar sobre un conjunto de registros de la tabla auth
  * @author MiPaGiNa Code Generator
- * @version 2013-07-01 01:49:02
+ * @version 2014-02-23 23:45:02
  */
 abstract class AuthsBase extends AppModels {
-	
-	/**
-	 * Constructor de la clase abstracta
-	 * @author MiPaGiNa Code Generator
-	 * @version 2013-07-01 01:49:02
-	 */
-	public function __construct () {
-		// asignar base de datos y tabla
-		$this->_database = 'default';
-		$this->_table = 'auth';
-		// ejecutar constructor de la clase padre
-		parent::__construct();
-	}
-
 }

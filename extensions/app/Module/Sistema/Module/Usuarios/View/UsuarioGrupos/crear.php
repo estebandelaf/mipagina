@@ -1,4 +1,4 @@
-<h1>Crear UsuarioGrupo</h1>
+<h1>Añadir un usuario a un grupo</h1>
 
 <?php
 

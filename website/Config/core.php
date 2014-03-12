@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,6 +24,7 @@
 /**
  * @file core.php
  * Configuración propia de cada página o aplicación
+ * @version 2014-03-07
  */
 
 // Tema de la página (diseño)
@@ -37,3 +38,22 @@ Configure::write('page.body.title', 'MiPaGiNa');
 Configure::write('nav.website', array(
 	'/inicio'=>'Inicio',
 ));
+
+// Configuración para la base de datos
+/*Configure::write('database.default', array(
+	'type' => 'PostgreSQL',
+	'user' => '',
+	'pass' => '',
+	'name' => '',
+));*/
+
+// Configuración para el correo electrónico
+/*Configure::write('email.default', array(
+	'type' => 'smtp',
+	'host' => 'ssl://smtp.gmail.com',
+	'port' => 465,
+	'user' => '',
+	'pass' => '',
+	'from' => array('email'=>'', 'name'=>''),
+	'to' => '',
+));*/

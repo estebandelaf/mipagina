@@ -1,4 +1,4 @@
-<h1>Editar UsuarioGrupo</h1>
+<h1>Editar el grupo al que pertenece un usuario</h1>
 
 <?php
 

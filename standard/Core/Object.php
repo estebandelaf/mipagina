@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -31,6 +31,7 @@ class Object {
 	/**
 	 * Método para obtener los atributos del objeto y sus valores como
 	 * un arreglo
+	 * @return Arreglo asociativo con los atributos y valores del objeto
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-07
 	 */
@@ -44,6 +45,7 @@ class Object {
 
 	/**
 	 * Método que asigna múltiples atributos de un objeto
+	 * @param properties Arreglo asociativo con los atributos a asignar
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-29
 	 */

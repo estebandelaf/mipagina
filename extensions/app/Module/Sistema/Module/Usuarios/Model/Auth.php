@@ -29,17 +29,16 @@ App::uses('AuthBase', 'Sistema.Usuarios.Model');
  * Permisos de grupos sobre recursos en la aplicación
  * Esta clase permite trabajar sobre un registro de la tabla auth
  * @author MiPaGiNa Code Generator
- * @version 2012-11-12 13:05:38
+ * @version 2014-02-23
  */
 final class Auth extends AuthBase {
 
-	protected $fkModule = array(
+	public static $fkModule = array(
 		'Grupo' => 'Sistema.Usuarios.'
-	); ///< Modelos utilizados
+	); ///< Módulos que utiliza esta clase
 	
 	/**
 	 * Método que revisa los permisos de un usuario sobre un recurso
-	 * @todo Falta verificar por (modelo, controlador, accion, parametros)
 	 */
 	public function check ($usuario, $recurso) {
 		// limpiar parámetros

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,9 +27,9 @@
  *   Debian: php5-pgsql
  *   CentOS: php-pgsql
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-10-22
+ * @version 2014-03-08
  */
-final class PostgreSQL extends DatabaseManager {
+class PostgreSQL extends DatabaseManager {
 
 	/**
 	 * Constructor de la clase
@@ -38,14 +38,12 @@ final class PostgreSQL extends DatabaseManager {
 	 * conexión
 	 * @param config Arreglo con los parámetros de la conexión
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-09-21
+	 * @version 2014-03-08
 	 */
 	public function __construct ($config) {
 		// verificar que existe el soporte para PostgreSQL en PHP
 		if (!function_exists('pg_connect')) {
-			$this->error (
-				'Unable to find the PostgreSQL extension'
-			);
+			$this->error ('No se encontró la extensión de PHP para PostgreSQL (pgsql)');
 		}
 		// definir configuración para el acceso a la base de datos
 		$this->config = array_merge(array(
@@ -67,7 +65,7 @@ final class PostgreSQL extends DatabaseManager {
 		);
 		// si no se logró conectar => error
 		if (!$this->link) {
-			$this->error('Can\'t connect to database!');
+			$this->error('¡No fue posible conectar con la base de datos!');
 		}
 		// definir esquema que se utilizará (solo si es diferente a
 		// public)
@@ -100,12 +98,12 @@ final class PostgreSQL extends DatabaseManager {
 	 * @param sql Consulta SQL que se desea realizar
 	 * @return Resource Identificador de la consulta
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-10
+	 * @version 2014-03-08
 	 */
 	public function query($sql) {
 		// verificar que exista una consulta
 		if(empty($sql)) {
-			$this->error('Query can not be empty!');
+			$this->error('¡Consulta no puede estar vacía!');
 		}
 		// realizar consulta
 		$queryId = @pg_query($this->link, $sql);
@@ -113,7 +111,7 @@ final class PostgreSQL extends DatabaseManager {
 		// script
 		if(!$queryId) {
 			$this->error(
-				'QUERY: '.$sql."\n".pg_last_error($this->link)
+				$sql."\n".pg_last_error($this->link)
 			);
 		}
 		// retornar identificador de la consulta

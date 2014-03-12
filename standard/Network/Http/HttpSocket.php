@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase para manejar conexiones HTTP
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2010-10-09
+ * @version 2014-02-24
  */
 class HttpSocket {
 
@@ -34,9 +34,9 @@ class HttpSocket {
 	 * @param data Datos que se enviarán
 	 * @param header Cabecera que se enviará
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2010-10-09
+	 * @version 2014-02-24
 	 */
-	public function post ($url, $data = array(), $header = "Content-Type: application/x-www-form-urlencoded\n") {
+	public static function post ($url, $data = array(), $header = "Content-Type: application/x-www-form-urlencoded\n") {
 		// Generar contenido (variables) a enviar
 		$content = array();
 		foreach($data as $key=>&$value) {

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -37,7 +37,6 @@ abstract class {classs}BaseController extends AppController {
 
 	/**
 	 * Controlador para listar los registros de tipo {class}
-	 * @todo Agregar condiciones para paginar los datos
 	 * @author {author}
 	 * @version {version}
 	 */
@@ -82,6 +81,7 @@ abstract class {classs}BaseController extends AppController {
 		}
 		// setear variables
 		$this->set(array(
+			'module_url' => $this->module_url,
 			'controller' => $this->request->params['controller'],
 			'page' => $page,
 			'orderby' => $orderby,
@@ -93,12 +93,12 @@ abstract class {classs}BaseController extends AppController {
 			'registers_total' => $registers_total,
 			'pages' => isset($pages) ? $pages : 0,
 			'linkEnd' => ($orderby ? '/'.$orderby.'/'.$order : '').$searchUrl,
+			'fkModule' => {class}::$fkModule,
 		));
 	}
 	
 	/**
 	 * Controlador para crear un registro de tipo {class}
-	 * @todo Permitir subir los archivo al crear el registro
 	 * @author {author}
 	 * @version {version}
 	 */
@@ -108,7 +108,6 @@ abstract class {classs}BaseController extends AppController {
 			${class} = new {class}();
 			${class}->set($_POST);
 			${class}->save();
-//			if(method_exists($this, 'u')) $this->u();
 			Session::message('Registro {class} creado');
 			$this->redirect(
 				$this->module_url.'{controller}/listar'
@@ -117,6 +116,7 @@ abstract class {classs}BaseController extends AppController {
 		// setear variables
 		$this->set(array(
 			'columnsInfo' => {class}::$columnsInfo,
+			'fkModule' => {class}::$fkModule,
 		));
 	}
 	
@@ -139,6 +139,7 @@ abstract class {classs}BaseController extends AppController {
 			$this->set(array(
 				'{class}' => ${class},
 				'columnsInfo' => {class}::$columnsInfo,
+				'fkModule' => {class}::$fkModule,
 			));
 		}
 		// si se envió el formulario se procesa

@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -29,7 +29,7 @@ App::uses('Router', 'Routing');
 /**
  * Clase para despachar la página que se esté solicitando
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-10
+ * @version 2014-02-23
  */
 class Dispatcher {
 
@@ -38,7 +38,7 @@ class Dispatcher {
 	 * @param request Objeto Request
 	 * @param response Objeto Response
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-30
+	 * @version 2014-02-23
 	 */
 	public function dispatch(Request $request, Response $response) {
 		// Verificar si el recurso solicitado es un archivo físico dentro del directorio webroot
@@ -47,16 +47,15 @@ class Dispatcher {
 		}
 		// Parsear parámetros del request
 		$request->params = Router::parse($request->request);
-		// Si se solicita un modulo, verificar que este activo
+		// Si se solicita un modulo tratar de cargar y verificar que quede activo
 		if(!empty($request->params['module'])) {
+			Module::load($request->params['module']);
 			if(!Module::loaded($request->params['module'])) {
 				throw new MissingModuleException(array(
 						'module' => $request->params['module']
 				));
 			}
 		}
-		// Asignar solicitud al enrutador
-		Router::setRequestInfo($request);
 		// Obtener controlador
 		$controller = $this->_getController($request, $response);
 		// Verificar que lo obtenido sea una instancia de la clase Controller
@@ -76,7 +75,7 @@ class Dispatcher {
 	 * @return Verdadero si lo solicitado existe dentro de /webroot
 	 * @todo Revisar en paths de modulos
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2013-06-12
+	 * @version 2014-02-09
 	 */
 	private function _asset($url, Response $response) {
 		// Si la URL es vacía se retorna falso
@@ -92,7 +91,10 @@ class Dispatcher {
 		if($slashPos) {
 			// paths de plugins
 			$module = Module::find($url);
-			$paths = Module::paths($module);
+			if (isset($module[0])) {
+				Module::load($module);
+				$paths = Module::paths($module);
+			}
 			// si existe el módulo en los paths entonces si es un
 			// módulo lo que se está pidiendo, y es un módulo ya
 			// cargado. Si este no fuera el caso podría no ser
@@ -130,7 +132,7 @@ class Dispatcher {
 	/**
 	 * Método que obtiene el controlador
 	 */
-	protected function _getController(Request $request, Response $response) {
+	private function _getController(Request $request, Response $response) {
 		// Cargar clase del controlador
 		$controller = Inflector::camelize($request->params['controller']);
 		$class = $controller.'Controller';
@@ -149,13 +151,16 @@ class Dispatcher {
 	}
 	
 	/**
-	 * Método que se encarga de invocar a la acción del controlador y entregar la respuesta
+	 * Método que se encarga de invocar a la acción del controlador y
+	 * entregar la respuesta
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-24
 	 */
-	protected function _invoke(Controller $controller, Request $request, Response $response) {
+	private function _invoke(Controller $controller, Request $request, Response $response) {
 		// Iniciar el proceso
 		$controller->startupProcess();
 		// Ejecutar acción
-		$result = $controller->invokeAction($request);
+		$result = $controller->invokeAction();
 		// Renderizar proceso
 		if ($controller->autoRender) {
 			$response = $controller->render();

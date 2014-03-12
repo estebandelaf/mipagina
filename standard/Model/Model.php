@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -27,7 +27,7 @@ App::import('Model/ModelInterface');
 /**
  * Clase abstracta para todos los modelos
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2013-06-10
+ * @version 2013-11-27
  */
 abstract class Model extends Object implements ModelInterface {
 	
@@ -35,6 +35,9 @@ abstract class Model extends Object implements ModelInterface {
 	protected $_database = 'default'; ///< Base de datos del modelo
 	protected $_table; ///< Tabla del modelo
 	protected $db; ///< Conexión a base de datos
+
+	// Información de las columnas de la tabla en la base de datos
+	public static $columnsInfo = array();
 	
 	/**
 	 * Constructor de la clase abstracta
@@ -57,6 +60,7 @@ abstract class Model extends Object implements ModelInterface {
 	 * que tenga el mismo nombre que la tabla a la que está asociada
 	 * esta clase. Si no existe el atributo se devolverá el nombre de la
 	 * clase (en dicho caso, se debe sobreescribir en el modelo final)
+	 * @return Nombre de la tabla asociada al modelo o la clase misma
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-02
 	 */
@@ -65,9 +69,24 @@ abstract class Model extends Object implements ModelInterface {
 			return $this->{$this->_table};
 		else return get_class($this);
 	}
+
+	/**
+	 * Método para setear los atributos de la clase
+	 * @param array Arreglo con los datos que se deben asignar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-05
+	 */
+	public function set ($array) {
+		$class = get_class($this);
+		foreach ($class::$columnsInfo as $a => $data) {
+			if (isset($array[$a]))
+				$this->$a = $array[$a];
+		}
+	}
 	
 	/**
 	 * Método para guardar el objeto en la base de datos
+	 * @return =true si todo fue ok, =false si se hizo algún rollback
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-10-07
 	 */
@@ -86,7 +105,47 @@ abstract class Model extends Object implements ModelInterface {
 		$this->db->commit();
 		return true;
 	}
-	
+
+	/**
+	 * Método que permite editar una fila de la base de datos de manera
+	 * simple desde desde fuera del modelo.
+	 * @param columns Arreglo con las columnas a editar (como claves) y los nuevos valores
+	 * @param pks Arreglo con las columnas PK (como claves) y los valores para decidir que actualizar
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-02-07
+	 */
+	public function edit ($columns, $pks = null) {
+		// preparar set de la consulta
+		$querySet = array ();
+		foreach ($columns as $col => &$val) {
+			if ($val===null) $val = 'NULL';
+			else if ($val===true) $val = 'true';
+			else if ($val===false) $val = 'false';
+			else $val = '\''.$this->db->sanitize($val).'\'';
+			$querySet[] = $col.' = '.$val;
+		}
+		// preparar PK de la consulta
+		$queryPk = array();
+		if ($pks===null) {
+			$class = get_class($this);
+			foreach ($class::$columnsInfo as $col => &$info) {
+				if ($info['pk']) {
+					$queryPk[] = $col.' = \''.$this->db->sanitize($this->$col).'\'';
+				}
+			}
+		} else {
+			foreach ($pks as $pk => &$val) {
+				$queryPk[] = $pk.' = \''.$this->db->sanitize($val).'\'';
+			}
+		}
+		// realizar consulta
+		$this->db->query ('
+			UPDATE '.$this->_table.'
+			SET '.implode(', ', $querySet).'
+			WHERE '.implode(' AND ', $queryPk)
+		);
+	}
+
 	/**
 	 * Se ejecuta automáticamente antes del save
 	 * @return boolean Verdadero en caso de éxito
@@ -291,7 +350,7 @@ abstract class Models extends Object implements ModelsInterface {
 	
 	/**
 	 * Wrapper para el método sanitize de la Base de datos
-	 * @param string
+	 * @param string Valor que se desea limpiar
 	 * @return String sanitizado
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-11
@@ -513,13 +572,17 @@ abstract class Models extends Object implements ModelsInterface {
 	 * donde id es la PK. Si estos no son, el método deberá ser
 	 * reescrito en la clase final.
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-10-07
+	 * @version 2014-02-19
 	 */
 	public function getList () {
+		$class = Inflector::singularize (get_class($this));
+		$cols = array_keys($class::$columnsInfo);
+		$id = $cols[0];
+		$glosa = in_array($this->_table, $cols) ? $this->_table : $cols[1];
 		return $this->db->getTable('
-			SELECT id, '.$this->_table.'
+			SELECT '.$id.' AS id, '.$glosa.' AS glosa
 			FROM '.$this->_table.'
-			ORDER BY '.$this->_table
+			ORDER BY '.$glosa
 		);
 	}
 

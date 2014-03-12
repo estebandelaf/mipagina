@@ -1,0 +1,204 @@
+/**
+ * Layout: SimpleLight
+ * Se usó http://techtalk.virendrachandak.com/sticky-header-and-footer-using-css para dejar header y footer estáticos
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-11
+ */
+
+* {
+	font-family:"Helvetica";
+}
+
+body {
+	margin:0;
+	padding:0;
+	background:#111;
+}
+
+#header_container, #footer_container {
+	background:black;
+	left:0;
+	position:fixed;
+	width:100%;
+}
+
+#header, #footer, #container, #navigation {
+	width:80%;
+	margin:0 auto;
+}
+
+#header, #footer, #navigation {
+	color:white;
+	font-weight:bold;
+	text-align:center;
+}
+
+#header_container {
+	top:0;
+	border-bottom:1px solid #666;
+	padding:10px 0;
+}
+
+#header {
+	font-size:2.5em;
+}
+
+#header .title_ascii {
+	font-family:monospace;
+	white-space:pre;
+	font-size:14px;
+	margin-left:10px;
+}
+
+#container {
+	overflow:auto;
+	margin-top:110px;
+	margin-bottom:60px;
+}
+#content {
+	color:#eee;
+}
+
+#footer_container {
+	bottom:0;
+	border-top:1px solid #666;
+	padding:10px 0;
+}
+#footer {
+	font-size:0.7em;
+}
+
+#footer a, #navigation a {
+	color:orange;
+	text-decoration:none;
+}
+
+#footer a:hover, #navigation a:hover {
+	color:red;
+	text-decoration:underline;
+}
+
+h1, h2, h3, h4, h5 {
+	color:yellow;
+	font-weight:bold;
+	border-bottom:1px dashed yellow;
+}
+
+a {
+	color:orange;
+	text-decoration:none;
+	
+}
+a:hover {
+	color:red;
+	text-decoration:underline;
+}
+
+p {
+	text-align:justify;
+}
+
+pre, .session_message {
+	background:#333;
+	color:white;
+}
+
+/* excepciones */
+.exception_message, .exception_trace, pre, .session_message {
+	border:1px dashed gray;
+	padding:1em;
+	margin-bottom:1em;
+	overflow:auto;
+	color:black;
+}
+.exception_message {
+	background:#F6CECE;
+	font-weight:bold;
+}
+.exception_trace {
+	background:#BCF5A9;
+}
+
+/* mensaje de sesión */
+.session_message {
+	font-weight:bold;
+	text-align:center;
+	padding:0.5em;
+	color:white;
+}
+
+/* tablas */
+table {
+	border-right:0;
+	clear:both;
+	color:#eee;
+	margin-bottom:10px;
+	width:100%;
+}
+th {
+	border:0;
+	border-bottom:2px solid #666;
+	text-align:left;
+	padding:4px;
+}
+table tr td {
+	padding:6px;
+	text-align:left;
+	vertical-align:top;
+	border-bottom:1px solid #666;
+}
+table tr:nth-child(even) {
+	background:#333;
+}
+table.center th+th, table.center td+td {
+	text-align:center;
+}
+
+/* Formularios */
+form {
+	margin-bottom: 2em;
+}
+input, select, textarea {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid gray;
+}
+form .label {
+	width: 200px;
+	float: left;
+	text-align: right;
+}
+form .field {
+	margin-left: 212px;
+	margin-bottom: 1em;
+}
+input[type="text"], input[type="password"], textarea, select {
+	border: 1px solid black;
+	width: 400px;
+	padding: 0.5em;
+}
+input[type="submit"], input[type="button"] {
+	border: 1px solid black;
+	padding: 0.5em;
+}
+input[type="file"], input[type="image"] {
+	border: 0;
+}
+
+/* ajustes para tablasJS dentro de formularios */
+table.formTable input[type="text"], table.formTable textarea, table.formTable select {
+	border: 1px solid gray;
+	padding: 0.3em;
+	width: 100px;
+	color: #555;
+}
+table.formTable input[type="image"] {
+	border: 0;
+}
+table.formTable th, table.formTable td {
+	text-align: center;
+}
+table.formTable th:last-child, table.formTable td:last-child {
+	width: 50px;
+}

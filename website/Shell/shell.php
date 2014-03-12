@@ -3,7 +3,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -25,7 +25,7 @@
 /**
  * @file shell.php
  * Dispatcher para la shell
- * @version 2013-10-22
+ * @version 2014-02-24
  */
 
 // Directorio que contiene las funcionalidades estándares (entregadas
@@ -40,7 +40,10 @@ $_EXTENSIONS = array();
 
 // Cargar bootstrap ("arrancador") de la aplicación
 if (!@include(DIR_STANDARD.DIRECTORY_SEPARATOR.'bootstrap.php')) {
-	echo 'Bootstrap no ha podido ser ejecutado, revisar DIR_STANDARD en ',DIR_WEBSITE,DIRECTORY_SEPARATOR,'Shell',DIRECTORY_SEPARATOR,'shell.php';
+	echo 'Bootstrap no ha podido ser ejecutado, revisar DIR_STANDARD en ',
+		DIR_WEBSITE,DIRECTORY_SEPARATOR,'Shell',
+		DIRECTORY_SEPARATOR,'shell.php'
+	;
 	exit;
 }
 

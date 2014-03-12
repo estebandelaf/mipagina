@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -43,6 +43,8 @@ abstract class {class}Base extends AppModel {
 	public static $columnsInfo = array(
 {columnsInfo}
 	);
+
+	public static $fkModule; ///< Modelos utilizados (se asigna en {class})
 	
 	/**
 	 * Constructor de la clase abstracta
@@ -50,9 +52,6 @@ abstract class {class}Base extends AppModel {
 	 * @version {version}
 	 */
 	public function __construct ({pk_parameter}) {
-		// asignar base de datos y tabla
-		$this->_database = '{database}';
-		$this->_table = '{table}';
 		// ejecutar constructor de la clase padre
 		parent::__construct();
 		// setear todo a nulo
@@ -108,20 +107,6 @@ abstract class {class}Base extends AppModel {
 			// eliminar variable datos
 			unset($datos);
 		}
-	}
-	
-	/**
-	 * Setea los atributos del objeto {class}Model mediante un arreglo,
-	 * la key del arreglo es el nombre del atributo, si la key no existe
-	 * el campo quedará seteado a null
-	 * @param array Array Arreglo con la relacion columna=>valor
-	 * @param clear Boolean Verdadero para limpiar atributos antes de hacer el set
-	 * @author {author}
-	 * @version {version}
-	 */
-	public function set ($array) {
-		// asignar atributos con los valores del arreglo
-		{columns_set}
 	}
 	
 	/**
@@ -237,18 +222,4 @@ abstract class {class}Base extends AppModel {
  * @version {version}
  */
 abstract class {classs}Base extends AppModels {
-	
-	/**
-	 * Constructor de la clase abstracta
-	 * @author {author}
-	 * @version {version}
-	 */
-	public function __construct () {
-		// asignar base de datos y tabla
-		$this->_database = '{database}';
-		$this->_table = '{table}';
-		// ejecutar constructor de la clase padre
-		parent::__construct();
-	}
-
 }

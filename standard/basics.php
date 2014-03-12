@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -25,7 +25,7 @@
  * @file basics.php
  * Archivo de funciones generales para el sitio web
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-20
+ * @version 2014-02-23
  */
 
 /**
@@ -66,28 +66,36 @@ function debug ($var, $withtype = false) {
 }
 
 /**
- * Función para traducciones, casi un wrapper de I18n::translate()
- * Traduce el texto entregado al idioma de la aplicación
+ * Función para traducción de string singulares, en dominio master.
  * @param string Texto que se desea traducir
  * @param args Argumentos para reemplazar en el string, puede ser un arreglo o bien n argumentos a la función
  * @return Texto traducido
- * @author CakePHP
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-03
  */
-function __($string = null, $args = null) {
-	// si no se paso nada se retorna
-	if (!$string) return;
-	// traducir
-	$translated = I18n::translate($string);
+function __ ($string, $args = null) {
+	return __d ('master', $string, $args);
+}
+
+/**
+ * Función para traducción de string singulares, eligiendo dominio.
+ * @param string Texto que se desea traducir
+ * @param args Argumentos para reemplazar en el string, puede ser un arreglo o bien n argumentos a la función
+ * @return Texto traducido
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-03
+ */
+function __d ($dominio, $string, $args = null) {
 	// si no hay argumentos solo se retorna el texto traducido
-	if ($args === null) {
-		return $translated;
+	if (!$args) {
+		return I18n::translate($string, $dominio);
 	}
 	// si los argumentos no son un arreglo se obtiene arreglo a partir
 	// de los argumentos pasados a la función
 	if (!is_array($args)) {
-		$args = array_slice(func_get_args(), 1);
+		$args = array_slice(func_get_args(), 2);
 	}
-	return vsprintf($translated, $args);
+	return vsprintf(I18n::translate($string, $dominio), $args);
 }
 
 /**
@@ -107,18 +115,19 @@ function num ($n, $d=0) {
  *   Cadena normal: Esto es un texto
  *   Cadena convertida: esto-es-un-texto
  * @param string String a convertir
+ * @param encoding Codificación del string
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-10-19
+ * @version 2014-02-17
  */
-function string2url ($string) {
+function string2url ($string, $encoding = 'UTF-8') {
 	// tranformamos todo a minúsculas
-	$string = strtolower($string);
+	$string = mb_strtolower($string, $encoding);
 	// rememplazamos carácteres especiales latinos
 	$find = array('á', 'é', 'í', 'ó', 'ú', 'ñ');
 	$repl = array('a', 'e', 'i', 'o', 'u', 'n');
 	$string = str_replace($find, $repl, $string);
 	// añadimos los guiones
-	$find = array(' ', '&', '\r\n', '\n', '+');
+	$find = array(' ', '&', '\r\n', '\n', '+', '_');
 	$string = str_replace($find, '-', $string);
 	// eliminamos y reemplazamos otros caracteres especiales
 	$find = array('/[^a-z0-9\-<>]/', '/[\-]+/', '/<[^>]*>/');
@@ -134,12 +143,14 @@ function string2url ($string) {
  * @author http://www.lost-in-code.com/programming/php-code/php-random-string-with-numbers-and-letters
  */
 function string_random ($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-    $string = '';
-    for ($p = 0; $p < $length; $p++) {
-        $string .= $characters[mt_rand(0, strlen($characters)-1)];
-    }
-    return $string;
+	$characters = '0123456789';
+	$characters .= 'abcdefghijklmnopqrstuvwxyz';
+	$characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$string = '';
+	for ($p = 0; $p < $length; $p++) {
+		$string .= $characters[mt_rand(0, strlen($characters)-1)];
+	}
+	return $string;
 }
 
 /**
@@ -169,6 +180,13 @@ function array_merge_recursive_distinct ( array &$array1, array &$array2 ) {
 	return $merged;
 }
 
+/**
+ * Convierte una tabla de Nx2 (N filas 2 columnas) a un arreglo asociativo
+ * @param table Tabla de Nx2 (N filas 2 columnas) que se quiere convertir
+ * @return Arreglo convertido a asociativo
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-02-24
+ */
 function table2array ($table) {
 	$array = array();
 	foreach($table as &$row) {

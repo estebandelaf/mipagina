@@ -2,7 +2,7 @@
 
 /**
  * MiPaGiNa (MP)
- * Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
+ * Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]delaf.cl)
  * 
  * Este programa es software libre: usted puede redistribuirlo y/o
  * modificarlo bajo los términos de la Licencia Pública General GNU
@@ -24,7 +24,7 @@
 /**
  * Clase que renderizará las vistas de la aplicación
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
- * @version 2012-11-09
+ * @version 2014-02-23
  */
 class View {
 	
@@ -46,16 +46,17 @@ class View {
 		$this->request = $controller->request;
 		$this->response = $controller->response;
 		$this->viewVars = $controller->viewVars;
-		$this->layout = Configure::read('page.layout');
+		$this->layout = $controller->layout;
 	}
-	
+
 	/**
-	 * Método para renderizar una página.
+	 * Método para renderizar una página
 	 * El como renderizará dependerá de la extensión de la página encontrada
-	 * @todo Poder elegir extension que se quiere
-	 * @param Ubicación relativa de la página
+	 * @param page Ubicación relativa de la página
+	 * @param ext Extensión de la página que se está renderizando
+	 * @return Buffer de la página renderizada
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
-	 * @version 2012-11-09
+	 * @version 2014-02-23
 	 */
 	public function render ($page, $ext = null) {
 		// buscar página
@@ -78,6 +79,8 @@ class View {
 		$class = ucfirst($ext).'Page';
 		App::uses($class, 'View/Helper/Pages');
 		$page_content = $class::render($location, $this->viewVars);
+		if ($this->layout === null)
+			return $page_content;
 		// buscar archivo del tema que está seleccionado, si no existe
 		// se utilizará el tema por defecto
 		$layout = $this->getLayoutLocation($this->layout);
@@ -92,7 +95,7 @@ class View {
 		} else $page = '/inicio';
 		// renderizar layout de la página (con su contenido)
 		App::uses('PhpPage', 'View/Helper/Pages');
-		$this->response->body(PhpPage::render($layout, array_merge(array(
+		return PhpPage::render($layout, array_merge(array(
 			'_header_title' => Configure::read('page.header.title').': '.$page,
 			'_header_extra' => '<!-- MODIFICAR EN View.php -->',
 			'_body_title' => Configure::read('page.body.title'),
@@ -103,13 +106,11 @@ class View {
 			'_timestamp' => date(Configure::read('time.format'), filemtime($location)),
 			'_layout' => $this->layout,
 			'_content' => $page_content,
-		), $this->viewVars)));
-		
+		), $this->viewVars));
 	}
 
 	/**
 	 * Método que entrega la ubicación del tema que se está utilizando
-	 * @todo Poder elegir extension que se quiere
 	 * @param layout Tema que se quiere buscar su ubicación
 	 * @return Ubicación del tema (o falso si no se encontró)
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
@@ -129,6 +130,9 @@ class View {
 	/**
 	 * Método que busca la vista en las posibles rutas y para todas las posibles extensiones
 	 * @param view Nombre de la vista buscada (ejemplo: /inicio)
+	 * @param module Nombre del módulo en caso de pertenecer a uno
+	 * @param ext Extensión de la vista buscada
+	 * @return Ubicación de la vista que se busca
 	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
 	 * @version 2012-11-09
 	 */
