@@ -1,10 +1,9 @@
-MiPaGiNa
-========
+# MiPaGiNa
 
 MiPaGiNa es un ambiente de desarrollo para páginas web. Está diseñado para
 sitios web o pequeñas aplicaciones.
 
-Características:
+## Características:
 
 - Entrega una estructura estándar para el orden del código.
 - Permite compartir una base entre varias páginas, por lo cual mejoras
@@ -29,15 +28,14 @@ Este framework esta basado en CakePHP, tomando la estructura de directorios, los
 conceptos de las clases, incluso en algunos casos reutilizando el mismo código
 y/o clases completas de CakePHP.
 
-TODO
-====
+## TODO
 
 * Implementar namespace
 * Unificar metodo de carga
 * Manejar extensiones como vendors via composer
-=======
-Enlaces de interés
-------------------
+
+## Enlaces de interés
+
 
 *	Página web del proyecto:
 
