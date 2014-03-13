@@ -21,18 +21,35 @@
  * En caso contrario, consulte <http://www.gnu.org/licenses/gpl.html>.
  */
 
+// clase que extiende este controlador
 App::uses('AppController', 'Controller');
 
+/**
+ * Controlador para página de contacto
+ * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+ * @version 2014-03-13
+ */
 class ContactoController extends AppController {
 
+	/**
+	 * Método para autorizar la carga de index en caso que hay autenticación
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-13
+	 */
 	public function beforeFilter () {
 		if(isset($this->Auth)) {
 			$this->Auth->allow('index');
 		}
 	}
 
+	/**
+	 * Método que desplegará y procesará el formulario de contacto
+	 * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
+	 * @version 2014-03-13
+	 */
 	public function index () {
-		// si no hay datos para el envió del correo electrónico no permirir cargar página de contacto
+		// si no hay datos para el envió del correo electrónico no
+		// permirir cargar página de contacto
 		if(Configure::read('email.default')===NULL) {
 			Session::message('Página de contacto deshabilitada');
 			$this->redirect('/');
