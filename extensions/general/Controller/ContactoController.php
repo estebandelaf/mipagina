@@ -37,9 +37,6 @@ class ContactoController extends AppController {
 	 * @version 2014-03-13
 	 */
 	public function beforeFilter () {
-		if(isset($this->Auth)) {
-			$this->Auth->allow('index');
-		}
 	}
 
 	/**
