@@ -154,33 +154,6 @@ function string_random ($length = 10) {
 }
 
 /**
- * Une dos o más arrays recursivamente
- * @param array $array1
- * @param array $array2
- * @return array
- * @author Daniel <daniel (at) danielsmedegaardbuus (dot) dk>
- * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
- */
-function array_merge_recursive_distinct ( array &$array1, array &$array2 ) {
-	$merged = $array1;
-	foreach ( $array2 as $key => &$value ) {
-		if (
-			is_array ( $value )
-			&& isset ( $merged [$key] )
-			&& is_array ( $merged [$key] )
-		) {
-			$merged [$key] = array_merge_recursive_distinct (
-				$merged [$key],
-				$value
-			);
-		} else {
-			$merged [$key] = $value;
-		}
-	}
-	return $merged;
-}
-
-/**
  * Convierte una tabla de Nx2 (N filas 2 columnas) a un arreglo asociativo
  * @param table Tabla de Nx2 (N filas 2 columnas) que se quiere convertir
  * @return Arreglo convertido a asociativo

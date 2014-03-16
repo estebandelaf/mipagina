@@ -1,6 +1,11 @@
 MiPaGiNa
 ========
 
+<span style="color:red">**DEPRECATED**: se hizo fork del proyecto y ahora
+se está desarrollando bajo el nombre de
+[SowerPHP](https://github.com/SowerPHP). No utilizar este proyecto!! Se
+deja solo como referencia del origen de SowerPHP.</span>
+
 MiPaGiNa es un ambiente de desarrollo para páginas web. Está diseñado para
 sitios web o pequeñas aplicaciones.
 
@@ -28,26 +33,3 @@ MiPaGiNa esta compuesto por defecto de tres directorios:
 Este framework esta basado en CakePHP, tomando la estructura de directorios, los
 conceptos de las clases, incluso en algunos casos reutilizando el mismo código
 y/o clases completas de CakePHP.
-
-Enlaces de interés
-------------------
-
-*	Página web del proyecto:
-
-		<http://mi.delaf.cl/mipagina>
-
-*	Documentación de clases:
-
-		<http://mi.delaf.cl/archivos/mipagina/doc/html>
-
-*	Proyecto en GitHUB:
-
-		<https://github.com/estebandelaf/mipagina>
-
-*	Presentación con descripción, características y ejemplos del framework:
-
-		<http://mi.delaf.cl/archivos/mipagina/presentacion/mipagina.pdf>
-
-*	Código de ejemplo usados en la presentación anterior:
-
-		<http://mi.delaf.cl/archivos/mipagina/presentacion/mipagina-example.tar.gz>
